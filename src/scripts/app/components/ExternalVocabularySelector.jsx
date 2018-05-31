@@ -108,8 +108,8 @@ var ExternalVocabularySelector = React.createClass({
             <div className="external-vocabulary-items">
               {!this.state.loading && this.state.vocabularies.length == 0 && <strong>No vocabularies found</strong>}
               {this.state.vocabularies.map(function(item, idx){
-                var title = item['title@en'] || item['title'] || "[No title]";
-                var description = item['description@en'];
+                var title = item['dcterms_title@en'] || item['dcterms_title'] || "[No title]";
+                var description = item['dcterms_description@en'];
                 var vocabPageUrl = Config.vocabulariesUrl + '/vocabpage?id=' + item['uuid'];
                 var itemClasses = classnames('external-vocabulary-item', {
                   selected: this.state.selected && this.state.selected.uuid === item.uuid
