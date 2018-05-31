@@ -21,7 +21,7 @@ var mountFolder = function (connect, dir) {
 var webpackDistConfig = require('./webpack.dist.config.js'),
     webpackDevConfig = require('./webpack.config.js');
 
-var snapshot = true;
+var snapshot = false;
 
 var nexus = {
   repository: {
