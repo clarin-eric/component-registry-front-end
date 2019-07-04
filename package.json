@@ -70,7 +70,8 @@
     "clipboard": "^1.5.x",
     "ncname": "^1.0.x",
     "detect-browser": "1.3.1",
-    "papaparse": "^4.1.x"
+    "papaparse": "^4.1.x",
+    "snyk": "^1.189.0"
   },
   "description": "",
   "dist": "dist",
@@ -81,5 +82,10 @@
   "repository": "",
   "src": "src",
   "test": "test",
-  "version": "2.2.2"
+  "version": "2.2.2",
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
