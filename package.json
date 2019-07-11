@@ -64,7 +64,7 @@
     "classnames": "^2.2.x",
     "reactabular": "^5.0.x",
     "react-edit": "^4.1.x",
-    "lodash": "^3.10.x",
+    "lodash": "^4.17.12",
     "expose-loader": "^0.7.x",
     "loglevel": "^1.4.x",
     "clipboard": "^1.5.x",
