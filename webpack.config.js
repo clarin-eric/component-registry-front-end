@@ -8,14 +8,11 @@
 'use strict';
 
 var webpack = require('webpack');
-var bower_dir = __dirname + '/bower_components';
+var path = require('path');
+//var bower_dir = __dirname + '/bower_components';
+var bower_dir = path.resolve(__dirname, '/bower_components');
 
 var config = {
-  addVendor: function(name, path) {
-    this.resolve.alias[name] = path;
-    this.module.noParse.push(new RegExp(path));
-  },
-
   entry: [
       'webpack-dev-server/client?http://localhost:8000',
       'webpack/hot/only-dev-server',
@@ -28,7 +25,6 @@ var config = {
   },
 
   cache: true,
-  debug: true,
   devtool: "source-map",
 
   stats: {
@@ -45,42 +41,74 @@ var config = {
       'lodash/isEqual$': 'lodash/lang/isEqual',
       'lodash/find$': 'lodash/collection/find'
     },
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   },
 
   module: {
-    noParse: [],
-    preLoaders: [{
-      test: '\\.js$',
-      exclude: 'node_modules',
-      loader: 'jshint'
-    }],
-    loaders: [{
-      test: require.resolve("react"),
-      loader: "expose?React"
-    }, {
-      test: /\.jsx$/,
-      loader: 'react-hot!jsx-loader?harmony'
-    }, {
-      test: /\.json/,
-      loader: 'json-loader'
-    }, {
-      test: /\.(sass|scss)/,
-      loader: 'style-loader!css-loader!sass-loader'
-    }, {
-      test: /\.css$/,
-      loader: 'style-loader!css-loader'
-    }, {
-      test: /\.(png|jpg)$/,
-      loader: 'url-loader?limit=8192'
-    }
-  ]
+    rules: [
+        {
+          test: /.js$/,
+          enforce: 'pre',
+          exclude: [ path.resolve(__dirname, 'node_modules/') ],
+          use: [{ loader: 'jshint-loader' }]
+        }, {
+            test: require.resolve("react"),
+            use: [
+                {
+                    loader: 'expose',
+                    options: 'React'
+                }
+            ]
+        }, {
+          test: /\.jsx$/,
+          use: [
+            { loader: 'react-hot-loader' },
+            {
+                loader: 'jsx-loader',
+                options: 'harmony'
+            }
+          ]
+        }, {
+          test: /\.(sass|scss)$/,
+          use: [
+              { loader: 'style-loader'},
+              { loader: 'css-loader'},
+              {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: true,
+                  indentedSyntax: false,
+                  outputStyle: 'expanded'
+                }
+              }
+          ]
+        }, {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader']
+        }, {
+          test: /\.(png|jpg)$/,
+          use: [
+              {
+                  loader: 'url-loader',
+                  options: {
+                      limit: 8192
+                  }
+              }
+          ]
+        }
+    ]
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
-//    ,
-//    new webpack.NoErrorsPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+        debug: true,
+        console: true,
+        addVendor: function(name, thePath) {
+            this.resolve.alias[name] = thePath;
+            this.module.noParse.push(new RegExp(thePath));
+          }
+     })
   ]
 
 };
