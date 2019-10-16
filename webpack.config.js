@@ -66,7 +66,7 @@ var config = {
       loader: 'json-loader'
     }, {
       test: /\.(sass|scss)/,
-      loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
+      loader: 'style-loader!css-loader!sass-loader'
     }, {
       test: /\.css$/,
       loader: 'style-loader!css-loader'
@@ -78,8 +78,9 @@ var config = {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.HotModuleReplacementPlugin()
+//    ,
+//    new webpack.NoErrorsPlugin()
   ]
 
 };
