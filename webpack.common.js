@@ -24,6 +24,12 @@ module.exports = {
         exclude: ['/node_modules'],
         use: [{ loader: 'babel-loader' }],
       }, {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader'},
+          { loader: 'css-loader'}
+        ]
+    }, {
         test: /\.s(a|c)ss$/,
         use: [
           { loader: 'style-loader'},
@@ -35,6 +41,16 @@ module.exports = {
               indentedSyntax: false,
               outputStyle: 'expanded'
             }
+          }
+        ]
+    }, {
+        test: /\.(png|jpg)$/,
+        use: [
+          {
+              loader: 'url-loader',
+              options: {
+                  limit: 8192
+              }
           }
         ]
     }

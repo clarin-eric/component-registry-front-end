@@ -19,7 +19,8 @@
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.2",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "spinkit": "^1.2.x"
   },
   "dependencies": {
     "classnames": "^2.2.x",
