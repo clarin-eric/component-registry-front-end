@@ -12,7 +12,14 @@ module.exports = {
   },
   module: {
     rules: [
-      {
+    {
+        test: /\.jsx$/,
+        use: [
+        {
+          loader: 'jsx-loader',
+          options: 'harmony'
+        }]
+    }, {
         test: /\.js$/,
         exclude: ['/node_modules'],
         use: [{ loader: 'babel-loader' }],
