@@ -13,48 +13,56 @@ module.exports = {
   },
   module: {
     rules: [
-    {
-        test: /\.jsx$/,
-        use: [
         {
-          loader: 'jsx-loader',
-          options: 'harmony'
-        }]
-    }, {
-        test: /\.js$/,
-        exclude: ['/node_modules'],
-        use: [{ loader: 'babel-loader' }],
-      }, {
-        test: /\.css$/,
-        use: [
-          { loader: 'style-loader'},
-          { loader: 'css-loader'}
-        ]
-    }, {
-        test: /\.s(a|c)ss$/,
-        use: [
-          { loader: 'style-loader'},
-          { loader: 'css-loader'},
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-              indentedSyntax: false,
-              outputStyle: 'expanded'
-            }
-          }
-        ]
-    }, {
-        test: /\.(png|jpg)$/,
-        use: [
-          {
-              loader: 'url-loader',
-              options: {
-                  limit: 8192
+            test: /\.jsx$/,
+            use: [
+            {
+              loader: 'jsx-loader',
+              options: 'harmony'
+            }]
+        }, {
+            test: /\.js$/,
+            exclude: ['/node_modules'],
+            use: [{ loader: 'babel-loader' }],
+          }, {
+            test: /\.css$/,
+            use: [
+              { loader: 'style-loader'},
+              { loader: 'css-loader'}
+            ]
+        }, {
+            test: /\.s(a|c)ss$/,
+            use: [
+              { loader: 'style-loader'},
+              { loader: 'css-loader'},
+              {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: true,
+                  indentedSyntax: false,
+                  outputStyle: 'expanded'
+                }
               }
-          }
-        ]
-    }
+            ]
+        }, {
+            test: /\.(png|jpg)$/,
+            use: [
+              {
+                  loader: 'url-loader',
+                  options: {
+                      limit: 8192
+                  }
+              }
+            ]
+//         }, {
+//             test: /\.js$/,
+//             exclude: /node_modules/,
+//             loader: 'eslint-loader',
+//             options: {
+//               emitError: false,
+//               emitWarning: false
+//             }
+        }
     ]
   },
   resolve: {
