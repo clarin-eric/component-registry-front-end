@@ -8,6 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- jquery -->
   <script src="libjs/jquery-2.1.4/jquery-2.1.4.min.js"></script>
+  <!-- jsonix -->
+  <script src="libjs/jsonix/Jsonix-all.js"></script>
   <!-- bootstrap -->
   <script src="libjs/bootstrap-3.3.6/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="libjs/bootstrap-3.3.6/css/bootstrap.min.css">
@@ -51,10 +53,6 @@
       },
       error: function(jqxhr, status, error) {
         console.log("Configuration could not be loaded: " + error);
-      },
-      complete: function() {
-        // load the React main app
-        $.getScript('assets/main.js');
       }
     });
   </script>
