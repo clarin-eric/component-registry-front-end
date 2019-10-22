@@ -4,7 +4,7 @@ var log = require('loglevel');
 var _ = require('lodash');
 
 //JSONIX
-//var Jsonix = require('jsonix').Jsonix;
+var Jsonix = require('jsonix');
 var CMD = require('../../../mappings/Component').Component;
 var jsonixOptions = require('../../../mappings/jsonixOptions');
 var context = new Jsonix.Context([CMD], jsonixOptions);

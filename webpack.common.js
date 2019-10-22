@@ -11,6 +11,10 @@ module.exports = {
     filename: '[name].[hash].js',
     path: path.resolve('dist'),
   },
+  externals: {
+    "jquery": "jQuery",
+    "jsonix": "Jsonix"
+  },
   module: {
     rules: [
         {
@@ -24,7 +28,18 @@ module.exports = {
             test: /\.js$/,
             exclude: ['/node_modules'],
             use: [{ loader: 'babel-loader' }],
-          }, {
+        }, {
+            test: require.resolve('jquery'),
+            use: [
+                {
+                    loader: 'expose-loader',
+                    options: 'jQuery'
+                }, {
+                    loader: 'expose-loader',
+                    options: '$'
+                }
+            ]
+        }, {
             test: /\.css$/,
             use: [
               { loader: 'style-loader'},
