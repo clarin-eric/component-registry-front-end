@@ -34,28 +34,26 @@
       __REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__
     }
   </script>
-  <script type="text/javascript">
-    var configUrl = './compRegConfig.jsp' + window.location.search; //pass all query params
-
-    //external configuration may be available (should be provided by the back end)
-    var config = null; //we will set this later, if found
-    function getComponentRegistryConfig() {
-      return config;
-    }
-
-    //try to load the external configuration before starting the app
-    $.ajax({
-      url: configUrl,
-      dataType: "json",
-      success: function(result) {
-        config = result;
-        console.log("Read configuration from '" + configUrl + "': ", JSON.stringify(config));
-      },
-      error: function(jqxhr, status, error) {
-        console.log("Configuration could not be loaded: " + error);
-      }
-    });
-  </script>
+  <!-- <script type="text/javascript">
+    // var configUrl = './compRegConfig.jsp' + window.location.search; //pass all query params
+//
+//     //external configuration may be available (should be provided by the back end)
+//     function getComponentRegistryConfig() {
+//      return
+//         //try to load the external configuration before starting the app
+//         $.ajax({
+//           url: configUrl,
+//           dataType: "json",
+//           success: function(result) {
+//             config = result;
+//             console.log("Read configuration from '" + configUrl + "': ", JSON.stringify(config));
+//           },
+//           error: function(jqxhr, status, error) {
+//             console.log("Configuration could not be loaded: " + error);
+//           }
+//         });
+//     }
+  </script> -->
 
   <!-- Piwik -->
   <script type="text/javascript">

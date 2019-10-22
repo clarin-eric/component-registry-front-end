@@ -25,7 +25,7 @@ var ItemsStore = require("./stores/ItemsStore"),
 
 var actions = require("./actions");
 
-var Config = require('../config').Config;
+var configuration = require('../config');
 
 // main stylesheets
 require('../../styles/main.sass');
@@ -51,55 +51,61 @@ flux.setDispatchInterceptor(function(action, dispatch) {
 });
 window.flux = flux;
 
-/* Logging */
+configuration.loadingState.then(function() {
+  Config = configuration.Config;
+  
+  /* Logging */
 
-// global log level
-log.setLevel(Config.loglevel || log.levels.INFO);
+  // global log level
+  log.setLevel(Config.loglevel || log.levels.INFO);
 
-// register on dispatch events
-if(log.getLevel() <= log.levels.DEBUG) {
-  log.info("Logging Flux events at debug level");
-  flux.on("dispatch", function(type, payload) {
-    if (console && console.log) {
-      log.debug("[Dispatch]", type, payload);
+  // register on dispatch events
+  if(log.getLevel() <= log.levels.DEBUG) {
+    log.info("Logging Flux events at debug level");
+    flux.on("dispatch", function(type, payload) {
+      if (console && console.log) {
+        log.debug("[Dispatch]", type, payload);
+      }
+    });
+  }
+
+  /***
+  * NotFound - Display for a non-configured route
+  * @constructor
+  */
+  var NotFound = React.createClass({
+    render: function() {
+      return (
+        <div className="main"><h1>Not Found</h1></div>
+      );
     }
   });
-}
 
-/***
-* NotFound - Display for a non-configured route
-* @constructor
-*/
-var NotFound = React.createClass({
-  render: function() {
-    return (
-      <div className="main"><h1>Not Found</h1></div>
-    );
-  }
+  /* Routing */
+
+  var createFluxComponent = function(Component, props) {
+    return <Component {...props} flux={flux} />;
+  };
+
+  var routing = (
+    <Router createElement={createFluxComponent}>
+      <Route path="/" component={Main}>
+        <IndexRoute component={Browser} />
+        <Route path="browser" component={Browser} />
+        <Route path="import" component={NotFound /*Import*/} />
+        <Route path="editor/component/:space/:componentId" component={Editor} />
+        <Route path="editor/component/new/:space/:componentId" component={Editor} />
+        <Route path="editor/profile/:space/:profileId" component={Editor} />
+        <Route path="editor/profile/new/:space/:profileId" component={Editor} />
+        <Route path="editor/new/:space/:type" component={Editor} />
+        <Route path="*" component={NotFound}/>
+      </Route>
+    </Router>
+  );
+
+  // Start the React application by rendering the router into the container element
+  ReactDOM.render(routing, document.getElementById("app"));
+  log.info("Application started");
+}, function() {
+  alert('Loading of configuration failed')
 });
-
-/* Routing */
-
-var createFluxComponent = function(Component, props) {
-  return <Component {...props} flux={flux} />;
-};
-
-var routing = (
-  <Router createElement={createFluxComponent}>
-    <Route path="/" component={Main}>
-      <IndexRoute component={Browser} />
-      <Route path="browser" component={Browser} />
-      <Route path="import" component={NotFound /*Import*/} />
-      <Route path="editor/component/:space/:componentId" component={Editor} />
-      <Route path="editor/component/new/:space/:componentId" component={Editor} />
-      <Route path="editor/profile/:space/:profileId" component={Editor} />
-      <Route path="editor/profile/new/:space/:profileId" component={Editor} />
-      <Route path="editor/new/:space/:type" component={Editor} />
-      <Route path="*" component={NotFound}/>
-    </Route>
-  </Router>
-);
-
-// Start the React application by rendering the router into the container element
-ReactDOM.render(routing, document.getElementById("app"));
-log.info("Application started");

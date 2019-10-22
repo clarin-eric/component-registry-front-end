@@ -1,39 +1,54 @@
 /** @module General configuration for Component Registry REST service */
-var Config =
-  (typeof getComponentRegistryConfig == 'function' // function can provide external configuration
-    && getComponentRegistryConfig() != null) ? getComponentRegistryConfig() : {
-  //default config
-  //NOTE: changes here will only have effect if no configuration has been preloaded! (see index.html)
-  "loglevel": "info",
-  "cors": true,
-  "REST": {
-    "url": "http://localhost:8080/ComponentRegistry",
-    "auth": {  //needed in case of CORS
-      "username": "user",
-      "password": "passwd"
-    }
-  },
-  "deploy": {
-    "path": '/'
-  }
-}
 
-function getUrl() {
-  var trailingSlashPattern = /^(.*)(\/)$/;
-  if(trailingSlashPattern.test(Config.REST.url)) {
-    //remove the trailing slash
-    return Config.REST.url.replace(trailingSlashPattern, "$1");
-  } else {
-    return Config.REST.url;
+var Config = {};
+var _ccrUrl = "";
+var _vocabulariesUrl = "";
+var _vocabularyItemsUrl = "";
+var _restUrl = "";
+var _adminUrl = "";
+var _webappUrl = "";
+var _loadingState = $.Deferred();
+
+var configUrl = './compRegConfig.jsp' + window.location.search; //pass all query params
+
+var configRetrieval = $.ajax({
+  url: configUrl,
+  dataType: "json",
+  success: function(result) {
+    console.log("Read configuration from '" + configUrl + "': ", JSON.stringify(result));
+
+    var getUrl = function() {
+      var trailingSlashPattern = /^(.*)(\/)$/;
+      if(trailingSlashPattern.test(result.REST.url)) {
+        //remove the trailing slash
+        return result.REST.url.replace(trailingSlashPattern, "$1");
+      } else {
+        return result.REST.url;
+      }
+    };
+
+    Config = result;
+    _ccrUrl = getUrl() + "/ccr";
+    _vocabulariesUrl = getUrl() + "/vocabulary/conceptscheme";
+    _vocabularyItemsUrl = getUrl() + "/vocabulary/items";
+    _restUrl = getUrl() + "/rest";
+    _adminUrl = getUrl() + "/admin";
+    _webappUrl = getUrl();
+    _loadingState.resolve();
+  },
+  error: function(jqxhr, status, error) {
+    console.log("Configuration could not be loaded: " + error);
+    _loadingState.rejectWith(jqxhr, {status: status, error: error});
   }
-};
+});
 
 module.exports = {
+  loadingState: _loadingState,
   Config: Config,
-  ccrUrl: getUrl() + "/ccr",
-  vocabulariesUrl: getUrl() + "/vocabulary/conceptscheme",
-  vocabularyItemsUrl: getUrl() + "/vocabulary/items",
-  restUrl: getUrl() + "/rest",
-  adminUrl: getUrl() + "/admin",
-  webappUrl: getUrl()
+  ccrUrl: _ccrUrl,
+  vocabulariesUrl: _vocabulariesUrl,
+  vocabularyItemsUrl: _vocabularyItemsUrl,
+  restUrl: _restUrl,
+  adminUrl: _adminUrl,
+  webappUrl: _webappUrl
 };
