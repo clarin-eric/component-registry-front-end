@@ -94,7 +94,7 @@ var DataGrid = React.createClass({
           rowSelectAllowed={self.props.rowSelectAllowed}
           disabled={self.props.disabled}
           optionsMenu={optionsMenu}
-          domainMap={_.indexBy(domains, 'data')}
+          domainMap={_.keyBy(domains, 'data')}
           >
         </DataTablesRow>
      );
