@@ -51,9 +51,9 @@ flux.setDispatchInterceptor(function(action, dispatch) {
 });
 window.flux = flux;
 
-configuration.loadingState.then(function() {
-  Config = configuration.Config;
-  
+configuration().loadingState.then(function() {
+  Config = configuration().Config;
+
   /* Logging */
 
   // global log level

@@ -1,13 +1,17 @@
 /** @module General configuration for Component Registry REST service */
 
-var Config = {};
-var _ccrUrl = "";
-var _vocabulariesUrl = "";
-var _vocabularyItemsUrl = "";
-var _restUrl = "";
-var _adminUrl = "";
-var _webappUrl = "";
-var _loadingState = $.Deferred();
+
+var ConfigObject = {
+  Config: {},
+  ccrUrl: "",
+  vocabulariesUrl: "",
+  vocabularyItemsUrl: "",
+  restUrl: "",
+  adminUrl: "",
+  webappUrl: "",
+  loadingState: $.Deferred()
+}
+
 
 var configUrl = './compRegConfig.jsp' + window.location.search; //pass all query params
 
@@ -27,28 +31,21 @@ var configRetrieval = $.ajax({
       }
     };
 
-    Config = result;
-    _ccrUrl = getUrl() + "/ccr";
-    _vocabulariesUrl = getUrl() + "/vocabulary/conceptscheme";
-    _vocabularyItemsUrl = getUrl() + "/vocabulary/items";
-    _restUrl = getUrl() + "/rest";
-    _adminUrl = getUrl() + "/admin";
-    _webappUrl = getUrl();
-    _loadingState.resolve();
+    ConfigObject.Config = result;
+    ConfigObject.ccrUrl = getUrl() + "/ccr";
+    ConfigObject.vocabulariesUrl = getUrl() + "/vocabulary/conceptscheme";
+    ConfigObject.vocabularyItemsUrl = getUrl() + "/vocabulary/items";
+    ConfigObject.restUrl = getUrl() + "/rest";
+    ConfigObject.adminUrl = getUrl() + "/admin";
+    ConfigObject.webappUrl = getUrl();
+    ConfigObject.loadingState.resolve();
+
+    console.log("Configuration object constructed: " + JSON.stringify(ConfigObject));
   },
   error: function(jqxhr, status, error) {
     console.log("Configuration could not be loaded: " + error);
-    _loadingState.rejectWith(jqxhr, {status: status, error: error});
+    ConfigObject.loadingState.rejectWith(jqxhr, {status: status, error: error});
   }
 });
 
-module.exports = {
-  loadingState: _loadingState,
-  Config: Config,
-  ccrUrl: _ccrUrl,
-  vocabulariesUrl: _vocabulariesUrl,
-  vocabularyItemsUrl: _vocabularyItemsUrl,
-  restUrl: _restUrl,
-  adminUrl: _adminUrl,
-  webappUrl: _webappUrl
-};
+module.exports = function() {return ConfigObject;};

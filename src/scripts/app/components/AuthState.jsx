@@ -5,10 +5,7 @@ var log = require('loglevel');
 var React = require('react');
 
 // Config
-var Config = require('../../config');
-var adminUrl = require('../../config').adminUrl;
-var restUrl = require('../../config').restUrl;
-var authUrl = restUrl + "/authentication"
+var getConfiguration = require('../../config');
 
 //Bootstrap
 var Glyphicon = require('react-bootstrap/lib/Glyphicon');
@@ -30,6 +27,11 @@ var AuthState = React.createClass({
   },
 
   render: function () {
+    var config = getConfiguration();
+    var adminUrl = config.adminUrl;
+    var restUrl = config.restUrl;
+    var authUrl = restUrl + "/authentication"
+
     var authState = this.props.authState;
 
     var helpLink = (

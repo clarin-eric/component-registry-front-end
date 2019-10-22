@@ -11,10 +11,7 @@ var context = new Jsonix.Context([CMD], jsonixOptions);
 var marshaller = context.createMarshaller();
 
 var Constants = require("../constants");
-var Config = require('../../config').Config;
-var restUrl = require('../../config').restUrl;
-var authUrl = restUrl + "/authentication";
-var ccrUrl = require('../../config').ccrUrl;
+var getConfiguration = require('../../config');
 var vocabulariesUrl = require('../../config').vocabulariesUrl;
 var vocabularyItemsUrl = require('../../config').vocabularyItemsUrl;
 
@@ -27,12 +24,15 @@ var COMPONENTS_PATH = "components";
 var REGISTRY_ROOT = "/registry/1.x";
 var REGISTRY_ROOT_CMDI_1_1 = "/registry/1.1";
 
-var corsRequestParams = (Config.cors) ?
-  { username: Config.REST.auth.username,
-    password: Config.REST.auth.password,
-    xhrFields: {
-      withCredentials: true
-  }} : {};
+var corsRequestParams = function() {
+  return
+  (getConfiguration().Config.cors) ?
+    { username: getConfiguration().ConfigREST.auth.username,
+      password: getConfiguration().ConfigREST.auth.password,
+      xhrFields: {
+        withCredentials: true
+    }} : {};
+}
 
 var ComponentRegistryClient = {
 
@@ -48,7 +48,7 @@ var ComponentRegistryClient = {
       root = REGISTRY_ROOT;
     }
     var typepath = root + "/" + ((type === Constants.TYPE_PROFILE)?PROFILES_PATH:COMPONENTS_PATH);
-    var requestUrl = restUrl + typepath;
+    var requestUrl = getConfiguration().restUrl + typepath;
     if(id == null) {
       return requestUrl;
     } else {
@@ -116,7 +116,7 @@ var ComponentRegistryClient = {
      error: function(xhr, status, err) {
        handleFailure("Error loading data from " + requestUrl + ": " + err);
      }.bind(this)
-   }, corsRequestParams));
+   }, corsRequestParams()));
  },
 
  loadSpec: function(type, id, raw_type, handleSuccess, handleFailure) {
@@ -136,11 +136,11 @@ var ComponentRegistryClient = {
     error: function(xhr, status, err) {
       handleFailure("Error loading spec for " + id + ": " + err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 loadItem: function(id, handleSuccess, handleFailure) {
-  var requestUrl = restUrl + "/items/" + id;
+  var requestUrl = getConfiguration().restUrl + "/items/" + id;
   $.ajax($.extend({
     url: requestUrl,
     dataType: "json",
@@ -151,7 +151,7 @@ loadItem: function(id, handleSuccess, handleFailure) {
     error: function(xhr, status, err) {
       handleFailure("Error loading item information for " + id + ": " + err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 saveComponent: function(spec, item, profileId, update, publish, handleSuccess, handleFailure) {
@@ -190,7 +190,7 @@ saveComponent: function(spec, item, profileId, update, publish, handleSuccess, h
   fd.append('data', new Blob([ cmd_schema_xml ], { type: "application/xml" }));
 
   var typeSpace = ComponentSpec.isProfile(spec) ? PROFILES_PATH : COMPONENTS_PATH;
-  var url = restUrl + REGISTRY_ROOT + "/" + typeSpace;
+  var url = getConfiguration().restUrl + REGISTRY_ROOT + "/" + typeSpace;
   if(update) url += '/' + profileId + '/' + actionType;
 
   log.debug("POSTing to ", url);
@@ -220,7 +220,7 @@ saveComponent: function(spec, item, profileId, update, publish, handleSuccess, h
       error: function(xhr, status, err) {
         handleFailure("Error saving spec: " + err, data);
       }.bind(this)
-    }, corsRequestParams));
+    }, corsRequestParams()));
 },
 
 /**
@@ -384,11 +384,11 @@ deleteComponent: function(type, itemId, handleSuccess, handleFailure) {
     error: function(xhr, status, err) {
       handleFailure(err);
     }
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 transferComponent: function(itemId, teamId, handleSuccess, handleFailure) {
-  var url = restUrl + '/items/' + itemId + '/transferownership?groupId=' + teamId;
+  var url = getConfiguration().restUrl + '/items/' + itemId + '/transferownership?groupId=' + teamId;
   $.ajax($.extend({
     type: 'POST',
     data: {groupId: teamId},
@@ -402,14 +402,14 @@ transferComponent: function(itemId, teamId, handleSuccess, handleFailure) {
     error: function(xhr, status, err) {
       handleFailure("Failed to transfer component:" + err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 loadComments: function(componentId, type, success, failure) {
   var reg_type = (type === Constants.TYPE_PROFILE) ? PROFILES_PATH : COMPONENTS_PATH;
 
   $.ajax($.extend({
-    url: restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/comments',
+    url: getConfiguration().restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/comments',
     dataType: "json",
     success: function(data) {
       if(success && data != null) {
@@ -425,13 +425,13 @@ loadComments: function(componentId, type, success, failure) {
     error: function(xhr, status, err) {
       failure(err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 saveComment: function(componentId, type, comment, success, failure) {
   var comments_xml = "<comment><comments>" + comment + "</comments><commentDate/>";
   var reg_type = (type === Constants.TYPE_PROFILE) ? PROFILES_PATH : COMPONENTS_PATH;
-  var url = restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/comments/';
+  var url = getConfiguration().restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/comments/';
 
   var fd = new FormData();
 
@@ -463,12 +463,12 @@ saveComment: function(componentId, type, comment, success, failure) {
     error: function(xhr, status, err) {
       failure(err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 deleteComment: function(componentId, type, commentId, success, failure) {
   var reg_type = (type === Constants.TYPE_PROFILE) ? PROFILES_PATH : COMPONENTS_PATH;
-  var url = restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/comments/' + commentId;
+  var url = getConfiguration().restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/comments/' + commentId;
 
   $.ajax($.extend({
     type: 'POST',
@@ -480,13 +480,13 @@ deleteComment: function(componentId, type, commentId, success, failure) {
     error: function(xhr, status, err) {
       failure(err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 loadAllowedTypes: function(success, failure) {
   $.ajax($.extend({
     type: 'GET',
-    url: restUrl + '/allowedTypes',
+    url: getConfiguration().restUrl + '/allowedTypes',
     processData: false,
     contentType: false,
     dataType:'json',
@@ -497,13 +497,13 @@ loadAllowedTypes: function(success, failure) {
       log.error("Failed to retrieve allowed types", err);
       failure(err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 loadTeams: function(success, failure) {
   $.ajax($.extend({
     type: 'GET',
-    url: restUrl + '/groups/usermembership',
+    url: getConfiguration().restUrl + '/groups/usermembership',
     processData: false,
     contentType: false,
     dataType:'json',
@@ -517,13 +517,13 @@ loadTeams: function(success, failure) {
     error: function(xhr, status, err) {
       failure(err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 loadItemGroups: function(componentId, success, failure) {
   $.ajax($.extend({
     type: 'GET',
-    url: restUrl + '/items/' + componentId + '/groups',
+    url: getConfiguration().restUrl + '/items/' + componentId + '/groups',
     processData: false,
     contentType: false,
     dataType:'json',
@@ -537,11 +537,11 @@ loadItemGroups: function(componentId, success, failure) {
     error: function(xhr, status, err) {
       failure(err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 usageCheck: function(componentId, cb) {
-  var url = restUrl + REGISTRY_ROOT + '/components/usage/' + componentId;
+  var url = getConfiguration().restUrl + REGISTRY_ROOT + '/components/usage/' + componentId;
 
   $.ajax($.extend({
     type: 'GET',
@@ -555,12 +555,12 @@ usageCheck: function(componentId, cb) {
       log.error("Failed to perform usage check", err);
       cb(null);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 setStatus: function(componentId, type, targetStatus, success, failure) {
   var reg_type = (type === Constants.TYPE_PROFILE) ? PROFILES_PATH : COMPONENTS_PATH;
-  var url = restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/status';
+  var url = getConfiguration().restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/status';
 
   var fd = new FormData();
   if(targetStatus === Constants.STATUS_DEVELOPMENT) fd.append('status', "development");
@@ -582,13 +582,13 @@ setStatus: function(componentId, type, targetStatus, success, failure) {
     error: function(xhr, status, err) {
       failure(err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 
 setSuccessor: function(componentId, type, successorId, success, failure) {
   var reg_type = (type === Constants.TYPE_PROFILE) ? PROFILES_PATH : COMPONENTS_PATH;
-  var url = restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/successor';
+  var url = getConfiguration().restUrl + REGISTRY_ROOT + '/' + reg_type + '/' + componentId + '/successor';
 
   var fd = new FormData();
   fd.append('successor', successorId);
@@ -607,11 +607,11 @@ setSuccessor: function(componentId, type, successorId, success, failure) {
     error: function(xhr, status, err) {
       failure(err);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 queryCCR: function(searchQuery, cb) {
-  var url = ccrUrl + '?type=container&keywords=' + searchQuery;
+  var url = getConfiguration().ccrUrl + '?type=container&keywords=' + searchQuery;
 
   if(searchQuery != null || searchQuery != "")
     $.ajax($.extend({
@@ -627,7 +627,7 @@ queryCCR: function(searchQuery, cb) {
       error: function(xhr, status, err) {
         cb(null);
       }.bind(this)
-    }, corsRequestParams));
+    }, corsRequestParams()));
 },
 
 queryVocabularies: function(cb) {
@@ -644,7 +644,7 @@ queryVocabularies: function(cb) {
     error: function(xhr, status, err) {
       cb(null);
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 queryVocabularyItems: function(scheme, properties, success, failure, maxResults) {
@@ -663,12 +663,12 @@ queryVocabularyItems: function(scheme, properties, success, failure, maxResults)
         failure(err);
       }
     }.bind(this)
-  }, corsRequestParams));
+  }, corsRequestParams()));
 },
 
 getAuthState: function(handleSuccess, handleFailure) {
   return $.ajax($.extend({
-   url: authUrl,
+   url: getConfiguration().restUrl + "/authentication",
    type: 'GET',
    dataType: 'json',
    success: function (result){
@@ -685,7 +685,7 @@ getAuthState: function(handleSuccess, handleFailure) {
    error: function(xhr, status, err) {
      handleFailure("Could not check authentication state: " + err);
    }
-  }, corsRequestParams));
+  }, corsRequestParams()));
 }
 
 };

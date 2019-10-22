@@ -3,10 +3,11 @@ var log = require("loglevel");
 var React = require("react"),
     Constants = require("../constants");
 
-var Config = require("../../config").Config;
+var getConfig = require("../../config");
 
 var Main = React.createClass({
   render: function() {
+    var Config = getConfig().Config;
     return(
       <div className="aboutBox">
         <p>

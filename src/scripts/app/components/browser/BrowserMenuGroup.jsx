@@ -19,7 +19,6 @@ var ButtonModal = require('../ButtonModal');
 var PublishDropDown = require('../PublishDropDown');
 
 var Constants = require('../../constants');
-var Config = require('../../../config');
 
 //mixins
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
@@ -110,7 +109,7 @@ var BrowserMenuGroup = React.createClass({
       var isEditable =
         (this.props.userId == null || this.props.userId === singleItem.userId || this.props.space == Constants.SPACE_TEAM)
         && singleItem.status.toLowerCase() == Constants.STATUS_DEVELOPMENT.toLowerCase()
-        
+
       var editBtnLabel = isEditable ? "Edit" : "Edit as new";
 
       var editorRoute = null;

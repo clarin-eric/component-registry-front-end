@@ -22,7 +22,7 @@ var Glyphicon = require('react-bootstrap/lib/Glyphicon');
 
 var ReactAlert = require('../util/ReactAlert');
 
-var Config = require("../../config").Config;
+var getConfiguration = require("../../config");
 
 /***
 * Main - Default component and entry point to the application.
@@ -83,6 +83,8 @@ var Main = React.createClass({
     // check auth state every 30s
     this.authInterval = setInterval(this.checkAuthState, 30*1000);
 
+
+    var Config = getConfiguration().Config;
     // show message if version is alpha or beta
     if(Config.frontEndVersion != null
         && (Config.frontEndVersion.indexOf('alpha') >= 0
@@ -174,7 +176,7 @@ var Main = React.createClass({
           </div>
 
           <div className="footer">
-            <div className="version"><a title="About" onClick={this.showAbout}><Glyphicon glyph="info-sign" />&nbsp;Version {Config.backEndVersion}</a></div>
+            <div className="version"><a title="About" onClick={this.showAbout}><Glyphicon glyph="info-sign" />&nbsp;Version {getConfiguration().Config.backEndVersion}</a></div>
             <div className="logo">
               <a href="https://www.clarin.eu">
                 <img src="images/clarin.png" />

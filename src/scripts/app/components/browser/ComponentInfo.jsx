@@ -3,7 +3,7 @@ var log = require("loglevel");
 var React = require("react");
 var ReactDOM = require("react-dom");
 var Constants = require("../../constants");
-var Config = require('../../../config');
+var getConfiguration = require('../../../config');
 
 //bootstrap
 var Glyphicon = require('react-bootstrap/lib/Glyphicon');
@@ -96,7 +96,7 @@ var ComponentInfo = React.createClass({
     if(space === Constants.SPACE_TEAM) {
       query.groupId = this.props.team;
     }
-    var bookmarkLink = Config.webappUrl + this.props.history.createHref("/", query);
+    var bookmarkLink = getConfiguration().webappUrl + this.props.history.createHref("/", query);
 
     var xsdLink = type === Constants.TYPE_PROFILE ?
     {
