@@ -6,7 +6,7 @@ if [ "${VERSION}" ]; then
 		echo "Removing existing ${OUT_FILE}" >&2
 		rm ${OUT_FILE}
 	fi
-	tar zcvf "${VERSION}.tar.gz"  --exclude node_modules --exclude target --exclude .git --exclude "${OUT_FILE}" . >&2
+	tar zcvf "${VERSION}.tar.gz"  --exclude node_modules --exclude dist --exclude target --exclude .git --exclude "${OUT_FILE}" . >&2
 	echo "Done" >&2
 	echo "${OUT_FILE}"
 else
