@@ -23,7 +23,7 @@ var Main = React.createClass({
             </tr>
             <tr>
               <td>Front end version:</td>
-              <td>{Config.frontEndVersion || "unknown"}</td>
+              <td>{__FRONT_END_VERSION__ || "unknown"}</td>
             </tr>
             <tr>
               <td>License:</td>

@@ -1,7 +1,10 @@
+const webpack = require('webpack');
+const pkg = require('./package.json');
+
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   entry: {
@@ -92,6 +95,9 @@ module.exports = {
         {from: 'src/images', to: 'images'},
         {from: 'src/compRegConfig.jsp' }
     ]),
-    new CleanWebpackPlugin(),
+    new webpack.DefinePlugin({
+      __FRONT_END_VERSION__: JSON.stringify(pkg.version)
+    }),
+    new CleanWebpackPlugin()
   ]
 }
