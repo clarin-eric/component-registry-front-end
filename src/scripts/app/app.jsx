@@ -25,7 +25,7 @@ var ItemsStore = require("./stores/ItemsStore"),
 
 var actions = require("./actions");
 
-var configuration = require('../config');
+var getConfiguration = require('../config');
 
 // main stylesheets
 require('../../styles/main.sass');
@@ -51,8 +51,8 @@ flux.setDispatchInterceptor(function(action, dispatch) {
 });
 window.flux = flux;
 
-configuration().loadingState.then(function() {
-  Config = configuration().Config;
+getConfiguration().loadingState.then(function() {
+  Config = getConfiguration().Config;
 
   /* Logging */
 

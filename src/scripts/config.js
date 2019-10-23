@@ -38,9 +38,10 @@ var configRetrieval = $.ajax({
     ConfigObject.restUrl = getUrl() + "/rest";
     ConfigObject.adminUrl = getUrl() + "/admin";
     ConfigObject.webappUrl = getUrl();
-    ConfigObject.loadingState.resolve();
 
     console.log("Configuration object constructed: " + JSON.stringify(ConfigObject));
+
+    ConfigObject.loadingState.resolve();
   },
   error: function(jqxhr, status, error) {
     console.log("Configuration could not be loaded: " + error);

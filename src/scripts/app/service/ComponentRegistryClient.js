@@ -12,8 +12,6 @@ var marshaller = context.createMarshaller();
 
 var Constants = require("../constants");
 var getConfiguration = require('../../config');
-var vocabulariesUrl = require('../../config').vocabulariesUrl;
-var vocabularyItemsUrl = require('../../config').vocabularyItemsUrl;
 
 var Validation = require('./Validation');
 
@@ -25,10 +23,9 @@ var REGISTRY_ROOT = "/registry/1.x";
 var REGISTRY_ROOT_CMDI_1_1 = "/registry/1.1";
 
 var corsRequestParams = function() {
-  return
-  (getConfiguration().Config.cors) ?
-    { username: getConfiguration().ConfigREST.auth.username,
-      password: getConfiguration().ConfigREST.auth.password,
+  return (getConfiguration().Config.cors) ?
+    { username: getConfiguration().Config.REST.auth.username,
+      password: getConfiguration().Config.REST.auth.password,
       xhrFields: {
         withCredentials: true
     }} : {};
@@ -633,7 +630,7 @@ queryCCR: function(searchQuery, cb) {
 queryVocabularies: function(cb) {
   $.ajax($.extend({
     type: 'GET',
-    url: vocabulariesUrl,
+    url: getConfiguration().vocabulariesUrl,
     processData: false,
     contentType: false,
     dataType: "json",
@@ -650,7 +647,7 @@ queryVocabularies: function(cb) {
 queryVocabularyItems: function(scheme, properties, success, failure, maxResults) {
   $.ajax($.extend({
     type: 'GET',
-    url: vocabularyItemsUrl,
+    url: getConfiguration().vocabularyItemsUrl,
     data: {scheme: scheme, fields: 'uri,' + _.compact(properties).join(), maxResults: maxResults},
     contentType: false,
     dataType: "json",
