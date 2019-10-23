@@ -83,16 +83,18 @@ var Main = React.createClass({
     // check auth state every 30s
     this.authInterval = setInterval(this.checkAuthState, 30*1000);
 
-    // show message if version is alpha or beta
-    if(__FRONT_END_VERSION__ != null)
-    {
-      var fev = __FRONT_END_VERSION__.toUpperCase();
-      if(fev.includes('ALPHA') || fev.includes('BETA') || fev.includes('DEV')) {
-        log.debug("Development version alert!");
-        this.showTestingAlert();
+    // show message if version is alpha, beta or dev
+    if(process.env.NODE_ENV !== 'development') {
+      if(__FRONT_END_VERSION__ != null)
+      {
+        var fev = __FRONT_END_VERSION__.toUpperCase();
+        if(fev.includes('ALPHA') || fev.includes('BETA') || fev.includes('DEV')) {
+          log.debug("Development version alert!");
+          this.showTestingAlert();
+        }
+      } else {
+        log.warn('Front end version string not set');
       }
-    } else {
-      log.warn('Front end version string not set');
     }
   },
 

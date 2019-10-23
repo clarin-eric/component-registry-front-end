@@ -70,6 +70,7 @@ getConfiguration().loadingState.then(function() {
   }
 
   log.debug('Starting Component Registry front end version ' + __FRONT_END_VERSION__);
+  log.debug('Mode: ' + process.env.NODE_ENV);
 
   /***
   * NotFound - Display for a non-configured route
