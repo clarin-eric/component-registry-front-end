@@ -23,12 +23,7 @@ var Main = React.createClass({
             </tr>
             <tr>
               <td>Front end version:</td>
-              <td>
-                {__FRONT_END_VERSION__ || "unknown"}
-                {__FRONT_END_COMMITHASH__ != null &&
-                  <span> ({__FRONT_END_COMMITHASH__.substring(0,8)})</span>
-                }
-              </td>
+              <td>{__FRONT_END_VERSION__ || "unknown"}</td>
             </tr>
             <tr>
               <td>License:</td>

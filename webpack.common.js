@@ -4,10 +4,7 @@ const pkg = require('./package.json');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const path = require('path');
-
-const gitRevisionPlugin = new GitRevisionPlugin();
 
 module.exports = {
   entry: {
@@ -98,10 +95,8 @@ module.exports = {
         {from: 'src/images', to: 'images'},
         {from: 'src/compRegConfig.jsp' }
     ]),
-    gitRevisionPlugin,
     new webpack.DefinePlugin({
-      __FRONT_END_VERSION__: JSON.stringify(pkg.version),
-      __FRONT_END_COMMITHASH__: JSON.stringify(gitRevisionPlugin.commithash())
+      __FRONT_END_VERSION__: JSON.stringify(pkg.version)
     }),
     new CleanWebpackPlugin()
   ]
