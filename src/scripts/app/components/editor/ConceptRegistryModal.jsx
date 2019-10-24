@@ -5,7 +5,7 @@ var _ = require('lodash');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Table = require('reactabular').Table;
-var select = require('reactabular').select;
+var select = require('reactabular-select');
 var sortColumn = require('reactabular').sortColumn;
 
 //mixins
