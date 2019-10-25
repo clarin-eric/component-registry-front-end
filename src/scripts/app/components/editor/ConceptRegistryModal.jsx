@@ -5,8 +5,10 @@ var _ = require('lodash');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Table = require('reactabular').Table;
-var select = require('reactabular-select');
+var select = require('selectabular');
+var byArrowKeys = require('reactabular-select').byArrowKeys;
 var sortColumn = require('reactabular').sortColumn;
+
 
 //mixins
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
@@ -78,7 +80,7 @@ var ConceptRegistryModal = React.createClass({
     var selectedRowIndex = this.getSelectedRowIndex(this.state.selectedRow);
     var onRow = this.onRow;
 
-    return select.byArrowKeys({
+    return byArrowKeys({
           rows: this.state.rows,
           selectedRowIndex: selectedRowIndex,
           onSelectRow: this.onSelectRow
@@ -145,8 +147,12 @@ var ConceptRegistryModal = React.createClass({
     this.setState({ rows: [], selectedRow: {} });
     ComponentRegistryClient.queryCCR(this.state.inputSearch, function(data) {
       if(data != null) {
-        log.debug("CCR response", data);
-        self.setState({ rows: data, queryDone: true, queryError: null });
+        var indexedData =
+          _.map(data, function(row ,index) {
+            return _.merge(row, {index: index});
+          });
+        log.debug("CCR response", indexedData);
+        self.setState({ rows: indexedData, queryDone: true, queryError: null });
       } else {
         self.setState({rows: null, queryError: "Failed to query concept registry"})
         log.error("Failed to query CCR");
@@ -253,6 +259,7 @@ var ConceptRegistryModal = React.createClass({
   },
 
   onRow(row, extras) {
+    log.trace("On row ", row, "extras: ", extras);
     var selectedRow = this.state.selectedRow;
     return {
       className: classNames(
@@ -266,32 +273,34 @@ var ConceptRegistryModal = React.createClass({
   },
 
   onSelectRow(selectedRowIndex) {
-    log.debug("Select row", selectedRowIndex);
-    var rows = this.state.rows;
+    const filter = (row => row.index == selectedRowIndex);
 
-    log.debug(select.row({
-      rows,
-      selectedRowId: rows[selectedRowIndex].identifier
-    }));
+    //single selection so use all unselected rows as base
+    const rows = select.none(this.state.rows);
+    const selectionResult = select.rows(filter)(rows);
 
-    this.setState(
-      select.row({
-        rows,
-        selectedRowId: rows[selectedRowIndex].identifier,
-        isSelected: function(row, selectedRowId) {
-          return selectedRowId === row.identifier;
-        }
-      })
-    );
+    //single selection, so take head (there _should_ be exactly one item anyway)
+    const selectedRow = _.head(selectionResult.selectedRows);
+
+    if(selectedRow === undefined) {
+      log.error("Empty selection result on select row: ", selectedRows);
+    } else {
+      log.debug("Selected row", selectedRow);
+      this.setState({
+        //new rows list, only previous and new selection should have changed and thus updated
+        rows: selectionResult.rows,
+        //(first) selected item
+        selectedRow: selectedRow
+      });
+    }
   },
 
   getSelectedRowIndex(selectedRow) {
     if(selectedRow == null) {
       return -1;
+    } else {
+      return selectedRow.index;
     }
-    return _.findIndex(this.state.rows, {
-      identifier: selectedRow.identifier
-    });
   }
 });
 
