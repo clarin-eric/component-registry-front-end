@@ -20,9 +20,12 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var AuthState = React.createClass({
   mixins: [ImmutableRenderMixin],
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   propTypes: {
     authState: React.PropTypes.object.isRequired,
-    history: React.PropTypes.object.isRequired,
     location: React.PropTypes.object.isRequired
   },
 
@@ -53,7 +56,7 @@ var AuthState = React.createClass({
         </div>
       );
     } else {
-      var redirectUrl = Config.webappUrl + this.props.history.createHref(this.props.location.pathname + this.props.location.search);
+      var redirectUrl = Config.webappUrl + this.context.router.createHref(this.props.location.pathname + this.props.location.search);
       return (
         <div>
           <form id="login" className="login-form" ref="submitForm" action={authUrl + "?redirect=" + encodeURIComponent(redirectUrl) } method="POST">

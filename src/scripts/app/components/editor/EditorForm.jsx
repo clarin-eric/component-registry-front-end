@@ -20,7 +20,6 @@ var ComponentSpecForm = require("./ComponentSpecForm"),
 //mixins
 var ComponentUsageMixin = require('../../mixins/ComponentUsageMixin');
 var CmdiVersionModeMixin = require('../../mixins/CmdiVersionModeMixin');
-var History = require("react-router").History;
 
 //utils
 var _ = require('lodash');
@@ -35,7 +34,7 @@ var ComponentSpec = require('../../service/ComponentSpec');
 * @constructor
 */
 var EditorForm = React.createClass({
-  mixins: [FluxMixin, History, ComponentUsageMixin, CmdiVersionModeMixin],
+  mixins: [FluxMixin, ComponentUsageMixin, CmdiVersionModeMixin],
 
   propTypes: {
     item: React.PropTypes.object, /* can be null while loading */
@@ -56,6 +55,10 @@ var EditorForm = React.createClass({
     return {
       userHasSaveRights: true
     };
+  },
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
   },
 
   childContextTypes: {
@@ -242,7 +245,7 @@ var EditorForm = React.createClass({
   },
 
   afterSuccess: function() {
-    this.history.pushState(null, "/browser");
+    this.context.router.push("/browser");
   },
 
   setType: function(type) {

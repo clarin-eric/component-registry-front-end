@@ -28,10 +28,6 @@ require('../../../../styles/ComponentViewer.sass');
 var ComponentSpec = React.createClass({
   mixins: [ImmutableRenderMixin],
 
-  contextTypes: {
-    router: React.PropTypes.func,
-  },
-
   propTypes: {
     spec: React.PropTypes.object.isRequired,
     expansionState: React.PropTypes.object,

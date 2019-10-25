@@ -8,7 +8,6 @@ var React = require("react"),
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 var WindowFocusMixin = require('../mixins/WindowFocusMixin');
-var History = require('react-router').History;
 
 // Components
 var AuthState = require("./AuthState.jsx").AuthState;
@@ -30,7 +29,7 @@ var getConfiguration = require("../../config");
 */
 var Main = React.createClass({
 
-  mixins: [FluxMixin, StoreWatchMixin("AuthenticationStore", "MessageStore"), WindowFocusMixin, History],
+  mixins: [FluxMixin, StoreWatchMixin("AuthenticationStore", "MessageStore"), WindowFocusMixin],
 
   // Required by StoreWatchMixin
   getStateFromFlux: function() {
@@ -169,7 +168,6 @@ var Main = React.createClass({
             <div className="auth-login">
               <AuthState
                 authState={this.state.auth.authState}
-                history={this.history}
                 location={this.props.location} />
             </div>
           </div>

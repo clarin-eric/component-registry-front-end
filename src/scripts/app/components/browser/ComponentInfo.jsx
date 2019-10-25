@@ -26,8 +26,8 @@ var ComponentInfo = React.createClass({
     item: React.PropTypes.object.isRequired,
     space: React.PropTypes.string.isRequired,
     type: React.PropTypes.string.isRequired,
-    team: React.PropTypes.string,
-    history: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    team: React.PropTypes.string
   },
 
   getInitialState: function() {
@@ -96,13 +96,15 @@ var ComponentInfo = React.createClass({
     if(space === Constants.SPACE_TEAM) {
       query.groupId = this.props.team;
     }
-    var bookmarkLink = getConfiguration().webappUrl + this.props.history.createHref("/", query);
+    var bookmarkLink = getConfiguration().webappUrl + this.props.router.createHref("/", query);
 
     var xsdLink = type === Constants.TYPE_PROFILE ?
     {
       cmdi11: ComponentRegistryClient.getRegistryUrl(type, item.id, Constants.CMD_VERSION_1_1) + "/xsd",
       cmdi12: ComponentRegistryClient.getRegistryUrl(type, item.id, Constants.CMD_VERSION_1_2) + "/xsd"
     } : null;
+
+    log.debug("Router", this.props.router, "Query: ", query);
 
     return (
       <div id="componentInfoModal" className={this.props.className}>

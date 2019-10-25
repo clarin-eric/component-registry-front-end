@@ -4,18 +4,20 @@ var React = require('react');
 
 //bootstrap
 var Button = require('react-bootstrap/lib/Button');
-//router
-var History = require("react-router").History;
 
 /**
 * LinkButton
 * @constructor
 */
 var LinkButton = React.createClass({
-  mixins: [History],
-  navigate: function() {
-    this.history.pushState(null, this.props.to);
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
   },
+  
+  navigate: function() {
+    this.context.router.push(this.props.to);
+  },
+
   render: function() {
     var {to, onClick, ...other} = this.props;
     return (

@@ -1,20 +1,21 @@
-var log = require('loglevel');
+const log = require('loglevel');
 
-var React = require("react"),
+const React = require("react"),
     ReactDOM = require("react-dom"),
     Fluxxor = require("fluxxor");
 
-var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
-var IndexRoute = ReactRouter.IndexRoute;
+const ReactRouter = require('react-router');
+const Router = ReactRouter.Router,
+      Route = ReactRouter.Route,
+      IndexRoute = ReactRouter.IndexRoute,
+      hashHistory = ReactRouter.hashHistory;
 
-var Browser = require("./components/browser/Browser.jsx"),
+const Browser = require("./components/browser/Browser.jsx"),
     Main = require("./components/Main.jsx"),
     Editor = require("./components/editor/Editor.jsx");
     EditorForm = require("./components/editor/EditorForm.jsx");
 
-var ItemsStore = require("./stores/ItemsStore"),
+const ItemsStore = require("./stores/ItemsStore"),
     SelectionStore = require("./stores/SelectionStore"),
     ComponentDetailsStore = require("./stores/ComponentDetailsStore"),
     AuthenticationStore = require("./stores/AuthenticationStore"),
@@ -23,9 +24,9 @@ var ItemsStore = require("./stores/ItemsStore"),
     TeamStore = require("./stores/TeamStore"),
     ValueSchemeStore = require("./stores/ValueSchemeStore");
 
-var actions = require("./actions");
+const actions = require("./actions");
 
-var getConfiguration = require('../config');
+const getConfiguration = require('../config');
 
 // main stylesheets
 require('../../styles/main.sass');
@@ -91,7 +92,7 @@ getConfiguration().loadingState.then(function() {
   };
 
   var routing = (
-    <Router createElement={createFluxComponent}>
+    <Router createElement={createFluxComponent} history={hashHistory}>
       <Route path="/" component={Main}>
         <IndexRoute component={Browser} />
         <Route path="browser" component={Browser} />

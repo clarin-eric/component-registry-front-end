@@ -7,11 +7,11 @@ var React = require("react"),
     FluxMixin = Fluxxor.FluxMixin(React),
     StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
-var History = require('react-router').History;
-
 // Bootstrap
 var Button = require('react-bootstrap/lib/Button');
 var Modal = require('react-bootstrap/lib/Modal');
+
+var withRouter = require('react-router').withRouter;
 
 // Components
 var DataGrid = require("../datagrid/DataGrid.jsx");
@@ -34,11 +34,7 @@ var classNames = require('classnames');
 require('../../../../styles/Browser.sass');
 
 var Browser = React.createClass({
-  mixins: [FluxMixin, StoreWatchMixin("ItemsStore", "SelectionStore", "ComponentDetailsStore", "AuthenticationStore", "TeamStore"), History],
-
-  contextTypes: {
-    history: React.PropTypes.object
-  },
+  mixins: [FluxMixin, StoreWatchMixin("ItemsStore", "SelectionStore", "ComponentDetailsStore", "AuthenticationStore", "TeamStore")],
 
   // Required by StoreWatchMixin
   getStateFromFlux: function() {
@@ -484,7 +480,7 @@ var Browser = React.createClass({
           type={this.state.items.type}
           space={this.state.items.space}
           team={this.state.items.team}
-          history={this.history}
+          router={this.props.router}
            />
     );
   },

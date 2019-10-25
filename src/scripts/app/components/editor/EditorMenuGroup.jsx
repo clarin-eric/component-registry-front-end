@@ -4,9 +4,6 @@ var log = require('loglevel');
 
 var React = require('react');
 
-//router bootstrap
-var LinkButton = require('../LinkButton');
-
 //bootstrap
 var Button = require('react-bootstrap/lib/Button');
 var ButtonGroup = require('react-bootstrap/lib/ButtonGroup');
