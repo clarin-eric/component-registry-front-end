@@ -25,7 +25,6 @@ var CmdiVersionModeMixin = require('../../mixins/CmdiVersionModeMixin');
 
 //utils
 var classNames = require('classnames');
-var edit = require('react-edit');
 var cloneDeep = require('lodash/lang').cloneDeep;
 var findIndex = require('lodash/array').findIndex;
 
