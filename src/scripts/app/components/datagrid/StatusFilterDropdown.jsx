@@ -64,7 +64,7 @@ var StatusFilterDropdown = React.createClass({
     return (
       <MenuItem
         eventKey={status}
-        active={this.props.statusFilter != null && _.contains(this.props.statusFilter, status)
+        active={this.props.statusFilter != null && _.includes(this.props.statusFilter, status)
           || this.props.statusFilter == null && this.isInDefault(status)
         }>
         {icon && <Glyphicon glyph={icon}/>} {name}
