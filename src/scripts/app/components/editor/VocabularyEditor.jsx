@@ -25,8 +25,8 @@ var CmdiVersionModeMixin = require('../../mixins/CmdiVersionModeMixin');
 
 //utils
 var classNames = require('classnames');
-var cloneDeep = require('lodash/lang').cloneDeep;
-var findIndex = require('lodash/array').findIndex;
+var cloneDeep = require('lodash/cloneDeep');
+var findIndex = require('lodash/findIndex');
 
 //services
 var ComponentRegistryClient = require('../../service/ComponentRegistryClient');

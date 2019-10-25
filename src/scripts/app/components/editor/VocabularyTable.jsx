@@ -18,8 +18,8 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 //utils
 var _ = require('lodash');
 var edit = require('react-edit');
-var cloneDeep = require('lodash/lang').cloneDeep;
-var findIndex = require('lodash/array').findIndex;
+var cloneDeep = require('lodash/cloneDeep');
+var findIndex = require('lodash/findIndex');
 
 var TABKEY = 9;
 
