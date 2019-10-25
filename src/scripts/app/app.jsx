@@ -52,7 +52,14 @@ flux.setDispatchInterceptor(function(action, dispatch) {
 });
 window.flux = flux;
 
-getConfiguration().loadingState.then(function() {
+// Loading state promise (is deferred once configuration is loaded)
+const configurationLoaded = getConfiguration().loadingState;
+const configurationLoadingChecker = setInterval(function() {
+  log.info("Waiting for configuration... state: ", configurationLoaded.state());
+}, 1000);
+
+configurationLoaded.then(function() {
+  clearTimeout(configurationLoadingChecker);
   Config = getConfiguration().Config;
 
   /* Logging */
