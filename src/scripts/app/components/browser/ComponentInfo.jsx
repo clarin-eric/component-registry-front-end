@@ -96,7 +96,7 @@ var ComponentInfo = React.createClass({
     if(space === Constants.SPACE_TEAM) {
       query.groupId = this.props.team;
     }
-    var bookmarkLink = getConfiguration().webappUrl + this.props.router.createHref("/", query);
+    var bookmarkLink = getConfiguration().webappUrl + this.props.router.createHref({pathname: "/", query: query});
 
     var xsdLink = type === Constants.TYPE_PROFILE ?
     {

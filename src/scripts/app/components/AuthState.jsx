@@ -38,7 +38,7 @@ var AuthState = React.createClass({
     var authState = this.props.authState;
 
     var helpLink = (
-      <a target="_blank" href={Config.webappUrl + "/documentation.jsp"}><Glyphicon glyph="question-sign" />&nbsp;help</a>
+      <a target="_blank" href={config.webappUrl + "/documentation.jsp"}><Glyphicon glyph="question-sign" />&nbsp;help</a>
     );
 
     if(authState.authenticated) {
@@ -56,7 +56,12 @@ var AuthState = React.createClass({
         </div>
       );
     } else {
-      var redirectUrl = Config.webappUrl + this.context.router.createHref(this.props.location.pathname + this.props.location.search);
+      log.debug("router", this.context.router);
+      log.debug("opts", {pathname: this.props.location.pathname + this.props.location.search});
+
+      var redirectUrl = config.webappUrl + this.context.router.createHref({pathname: this.props.location.pathname + this.props.location.search});
+      log.debug("redirectUrl", redirectUrl);
+
       return (
         <div>
           <form id="login" className="login-form" ref="submitForm" action={authUrl + "?redirect=" + encodeURIComponent(redirectUrl) } method="POST">
