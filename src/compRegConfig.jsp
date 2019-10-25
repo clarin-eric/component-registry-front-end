@@ -2,10 +2,10 @@
   "loglevel": "debug",
   "cors": true,
   "REST": {
-    "url": "http://localhost:8080/ComponentRegistry",
+    "url": "http://localhost:3000",
     "auth": {
-      "username": "user",
-      "password": "passwd"
+      "username": "tomcat",
+      "password": "tomcat"
     }
   },
   "backEndVersion": "NOT SET",

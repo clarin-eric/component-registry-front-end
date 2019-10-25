@@ -9,6 +9,11 @@ module.exports = merge(common, {
     host: 'localhost',
     port: 3000,
     open: true,
-    contentBase: path.join(__dirname, 'dist')
+    contentBase: path.join(__dirname, 'dist'),
+    proxy: {
+      '/rest': 'http://localhost:85',
+      '/ccr': 'http://localhost:85',
+      '/vocabulary': 'http://localhost:85',
+    },
   }
 })
