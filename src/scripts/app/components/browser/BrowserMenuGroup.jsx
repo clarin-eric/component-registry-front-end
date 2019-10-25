@@ -64,7 +64,7 @@ var BrowserMenuGroup = React.createClass({
       <div>
         <ButtonGroup className="actionMenu">
 
-          <LinkContainer to={"/editor/new/"+this.props.space+"/"+this.props.type}
+          <LinkContainer to={{pathname: "/editor/new/"+this.props.space+"/"+this.props.type}}
             disabled={!this.props.loggedIn}>
             <Button title="Create a new component or profile"><Glyphicon glyph="plus" /> New</Button>
           </LinkContainer>
@@ -123,7 +123,7 @@ var BrowserMenuGroup = React.createClass({
 
       if(editorRoute != null) {
         return (
-          <LinkContainer to={editorRoute} disabled={!this.props.loggedIn}>
+          <LinkContainer to={{pathname: editorRoute}} disabled={!this.props.loggedIn}>
             <Button title="Edit selected (as new)" bsStyle="primary">
                 <Glyphicon glyph="pencil" /> {editBtnLabel}
             </Button>
