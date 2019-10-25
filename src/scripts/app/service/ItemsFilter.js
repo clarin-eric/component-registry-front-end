@@ -49,9 +49,9 @@ var ItemsFilter = {
     if(sortState == null || sortState.column == null) {
       return items.value();
     } else {
-      log.trace("Sort by", sortState.column, sortState.order);
+      log.debug("Sort items", items, "by", sortState.column, sortState.order);
       var order = (sortState.order === Constants.SORT_ORDER_DESC) ? 'desc':'asc';
-      return items.sortByOrder([sortState.column], [order]).value();
+      return items.orderBy([sortState.column], [order]).value();
     }
   }
 }
