@@ -114,10 +114,10 @@ var BrowserMenuGroup = React.createClass({
 
       var editorRoute = null;
       if(this.props.type === Constants.TYPE_PROFILE) {
-        editorRoute = "/editor/" + ((isEditable) ? "/profile/" : "profile/new/")
+        editorRoute = "/editor" + ((isEditable) ? "/profile/" : "/profile/new/")
           + this.props.space + "/" + singleItem.id;
       } else if(this.props.type === Constants.TYPE_COMPONENT) {
-        editorRoute = "/editor/" + ((isEditable) ? "/component/" : "component/new/")
+        editorRoute = "/editor" + ((isEditable) ? "/component/" : "/component/new/")
           + this.props.space + "/" + singleItem.id;
       }
 
