@@ -93,6 +93,7 @@ module.exports = {
     new CopyWebpackPlugin([
         {from: 'src/libjs', to: 'libjs'},
         {from: 'src/images', to: 'images'},
+        {from: 'src/favicon.ico' },
         {from: 'src/compRegConfig.jsp' }
     ]),
     new webpack.DefinePlugin({
