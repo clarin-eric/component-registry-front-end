@@ -1,5 +1,5 @@
 'use strict';
-
+var log = require('loglevel');
 var React = require('react');
 
 //mixins
@@ -17,7 +17,7 @@ var XmlPanel = React.createClass({
   },
 
   render: function () {
-    console.log("Showing xml");
+    log.debug("Showing xml");
     return (
       <pre><code ref="xmlcode" className="language-markup">{formatXml(this.props.xml.substring(55))}</code></pre>
     );

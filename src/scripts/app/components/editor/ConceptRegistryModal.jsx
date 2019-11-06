@@ -142,7 +142,7 @@ var ConceptRegistryModal = React.createClass({
   /*=== Event handlers ====*/
 
   inputSearchUpdate: function(evt) {
-    console.log('search query: ' + this.state.inputSearch);
+    log.debug('search query: ' + this.state.inputSearch);
     var self = this;
     this.setState({ rows: [], selectedRow: {} });
     ComponentRegistryClient.queryCCR(this.state.inputSearch, function(data) {
@@ -166,7 +166,7 @@ var ConceptRegistryModal = React.createClass({
 
   handleEnter: function(evt) {
     if(evt.keyCode == 13) {
-      console.log('enter: ' + this.state.inputSearch);
+      log.debug('enter: ' + this.state.inputSearch);
       this.inputSearchUpdate();
     }
   },

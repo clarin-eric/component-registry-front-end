@@ -67,7 +67,7 @@ var SpecFormUpdateMixin = {
       update(spec, { AttributeList: { $set: { Attribute: [newAttrObj] }} }) :
       update(spec, { AttributeList: { $set: { Attribute: update(attrList, { $push: [newAttrObj] }) } } });
 
-    console.log('new item after attr add: ' + JSON.stringify(spec));
+    log.debug('new item after attr add: ' + JSON.stringify(spec));
     if(this.state.spec != null)
       this.setState({ spec: spec });
   },
