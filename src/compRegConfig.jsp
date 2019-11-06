@@ -1,5 +1,5 @@
 {
-  "loglevel": "debug",
+  "loglevel": "info",
   "cors": true,
   "REST": {
     "url": "http://localhost:3000",
