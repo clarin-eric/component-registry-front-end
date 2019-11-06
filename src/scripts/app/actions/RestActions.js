@@ -180,7 +180,7 @@ var RestActions = {
   },
 
   deleteComponents: function(type, ids, componentInUsageCb) {
-    log.info("Requesting deletion of", ids);
+    log.debug("Requesting deletion of", ids);
     this.dispatch(Constants.DELETE_COMPONENTS, ids);
     deleteComponents(type, ids, function(deletedIds){
       this.dispatch(Constants.DELETE_COMPONENTS_SUCCESS, deletedIds);
@@ -204,7 +204,7 @@ var RestActions = {
   },
 
   moveComponentsToTeam: function(ids, teamId, successCb) {
-    log.info("Requesting moving of", ids);
+    log.debug("Requesting moving of", ids);
     this.dispatch(Constants.MOVE_TO_TEAM, ids);
     moveComponentsToTeam(ids, teamId, function(movedIds){
       this.dispatch(Constants.MOVE_TO_TEAM_SUCCESS, movedIds);
@@ -405,7 +405,7 @@ function loadComponentsById(ids, collected, callback) {
   } else {
     // load current id
     ComponentRegistryClient.loadSpec(Constants.TYPE_COMPONENT, id, "json", function(spec){
-        log.info("Loaded", id, ":", spec.Header.Name);
+        log.debug("Loaded", id, ":", spec.Header.Name);
 
         if(spec == undefined) {
           log.warn("LoadSpec returned undefined. Id:", id);
@@ -654,7 +654,7 @@ function updateSpecStatus(spec, status) {
 }
 
 function checkUpdateRights (dispatch, item, authState, onAllowed, onDisallowed) {
-  log.info("Checking wether user is allowed to change status of item", item);
+  log.debug("Checking wether user is allowed to change status of item", item);
   dispatch(Constants.SET_STATUS_PERMISSION_CHECK, item);
 
   handleAllowed = function() {
@@ -671,7 +671,7 @@ function checkUpdateRights (dispatch, item, authState, onAllowed, onDisallowed) 
     //current user is owner
     handleAllowed();
   } else {
-    log.info("User (", authState.userId, ") is not owner (", item.userId, "), checking whether teams overlap");
+    log.debug("User (", authState.userId, ") is not owner (", item.userId, "), checking whether teams overlap");
     //check if item is in any teams
     ComponentRegistryClient.loadItemGroups(item.id, function(itemTeams) {
       //make array if singleton
@@ -684,10 +684,10 @@ function checkUpdateRights (dispatch, item, authState, onAllowed, onDisallowed) 
           //make array if singleton
           userTeams = ensureArray(userTeams);
           if(userTeams != null && _.intersection(_.map(itemTeams,'id'), _.map(userTeams,'id')).length > 0) {
-            log.info("Team ids overlap, user can update status");
+            log.debug("Team ids overlap, user can update status");
             handleAllowed();
           } else {
-            log.info("No overlap between item teams and user teams");
+            log.debug("No overlap between item teams and user teams");
             handleDisallowed();
           }
         }, handleDisallowed);

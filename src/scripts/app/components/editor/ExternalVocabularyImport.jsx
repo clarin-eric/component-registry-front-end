@@ -170,12 +170,12 @@ var ExternalVocabularyImport = React.createClass({
         //try without language if not already tried
         if(language != null && item.hasOwnProperty(valueProp)) {
           value = item[valueProp];
-          log.info("Fallback to {", valueProp, "}, value", value);
+          log.debug("Fallback to {", valueProp, "}, value", value);
         }
         //try english if not preferred language
         else if(language != 'en' && item.hasOwnProperty(valueProp + '@en')) {
           value = item[valueProp + '@en'];
-          log.info("Fallback to english {", valueProp, "}, value", value);
+          log.debug("Fallback to english {", valueProp, "}, value", value);
         }
         //try any other language
         else {
@@ -185,7 +185,7 @@ var ExternalVocabularyImport = React.createClass({
           }).value();
           if(otherLanguageKey != null) {
             value = item[otherLanguageKey];
-            log.info("Fallback to key", otherLanguageKey, "value", value);
+            log.debug("Fallback to key", otherLanguageKey, "value", value);
           }
         }
       }
