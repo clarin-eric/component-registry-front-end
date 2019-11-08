@@ -30,7 +30,7 @@ var VocabularyCsvService = {
     //remove first line (header)
     data = _(data)
         .split(NEWLINE)
-        .rest()
+        .tail()
         .join(NEWLINE);
 
     log.debug("Serialized items:", data);
