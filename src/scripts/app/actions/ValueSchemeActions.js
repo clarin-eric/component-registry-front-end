@@ -49,9 +49,10 @@ var ValueSchemeActions = {
     });
 
     //set initial tab after data load
-    if (vocabulary != null) var tab = Constants.VALUE_SCHEME_TAB_VOCAB;
-    else if (pattern != null) var tab = Constants.VALUE_SCHEME_TAB_PATTERN;
-    else var tab = Constants.VALUE_SCHEME_TAB_TYPE;
+    var tab;
+    if (vocabulary != null) tab = Constants.VALUE_SCHEME_TAB_VOCAB;
+    else if (pattern != null) tab = Constants.VALUE_SCHEME_TAB_PATTERN;
+    else tab = Constants.VALUE_SCHEME_TAB_TYPE;
     this.dispatch(Constants.SET_VALUE_SCHEME_TAB, tab);
   },
 
@@ -104,10 +105,11 @@ var ValueSchemeActions = {
   addVocabularyItem: function(oldVocabulary) {
     log.debug("Add new item to vocabulary", oldVocabulary);
 
+    var vocab;
     if(oldVocabulary == null) {
-      var vocab = {};
+      vocab = {};
     } else {
-      var vocab = oldVocabulary;
+      vocab = oldVocabulary;
     }
 
     if(!vocab.enumeration || !vocab.enumeration.item) {
@@ -149,22 +151,25 @@ var ValueSchemeActions = {
   },
 
   setVocabularyUri: function(oldVocabulary, uri, valueProperty, valueLanguage) {
+    var newUri;
     if(uri == null || uri.trim() === '') {
-      var newUri = null;
+      newUri = null;
     } else {
-      var newUri = uri;
+      newUri = uri;
     }
 
+    var newValueProperty;
     if(valueProperty == null || valueProperty.trim() === '') {
-      var newValueProperty = null;
+      newValueProperty = null;
     } else {
-      var newValueProperty = valueProperty;
+      newValueProperty = valueProperty;
     }
 
+    var newValueLanguage;
     if(valueLanguage == null || valueLanguage.trim() === '') {
-      var newValueLanguage = null;
+      newValueLanguage = null;
     } else {
-      var newValueLanguage = valueLanguage;
+      newValueLanguage = valueLanguage;
     }
 
     var newValues = {
@@ -173,10 +178,11 @@ var ValueSchemeActions = {
       '@ValueLanguage': newValueLanguage
     };
 
+    var updatedVocab;
     if(oldVocabulary == null) {
-      var updatedVocab = newValues;
+      updatedVocab = newValues;
     } else {
-      var updatedVocab = update(oldVocabulary, {$merge: newValues});
+      updatedVocab = update(oldVocabulary, {$merge: newValues});
     }
     this.dispatch(Constants.UPDATE_VALUE_SCHEME, {
       vocabulary: updatedVocab
@@ -228,7 +234,7 @@ var ValueSchemeActions = {
     log.trace("Validating value scheme", valueScheme);
 
     //function to propagate feedback message from validator to store(s)
-    setValidationError = function(msg){
+    var setValidationError = function(msg){
       this.dispatch(Constants.SET_VALUE_SCHEME_VALIDATION_ERROR, msg);
     }.bind(this);
 

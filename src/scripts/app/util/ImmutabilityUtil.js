@@ -1,6 +1,5 @@
 'use strict';
 
-var React = require('react');
 var update = require('react-addons-update');
 
 module.exports = {

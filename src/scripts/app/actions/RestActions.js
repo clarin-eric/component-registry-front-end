@@ -657,12 +657,12 @@ function checkUpdateRights (dispatch, item, authState, onAllowed, onDisallowed) 
   log.debug("Checking wether user is allowed to change status of item", item);
   dispatch(Constants.SET_STATUS_PERMISSION_CHECK, item);
 
-  handleAllowed = function() {
+  var handleAllowed = function() {
     dispatch(Constants.SET_STATUS_PERMISSION_CHECK_DONE, item);
     onAllowed();
   }
 
-  handleDisallowed = function() {
+  var handleDisallowed = function() {
     dispatch(Constants.SET_STATUS_PERMISSION_CHECK_DONE, item);
     onDisallowed();
   }

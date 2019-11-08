@@ -1,4 +1,5 @@
 'use strict';
+var _ = require('lodash');
 var log = require('loglevel');
 var papaparse = require('papaparse');
 
