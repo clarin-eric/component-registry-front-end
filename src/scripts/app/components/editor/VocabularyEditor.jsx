@@ -288,7 +288,7 @@ var VocabularyEditor = React.createClass({
             <div className="error">An <em>external vocabulary</em> is defined for the present vocabulary. While in CMDI 1.1 editing mode, you can remove the link but not edit it or any of the related properties.</div>}
           <div>
             External vocabulary: {vocabUri &&
-              <span><a href="">{vocabUri}</a> <a className="remove" onClick={this.unsetExternalVocab} style={{cursor: 'pointer'}}>&#10007;</a></span>
+              <span><span className="disabledLink">{vocabUri}</span> <a className="remove" onClick={this.unsetExternalVocab} style={{cursor: 'pointer'}}>&#10007;</a></span>
             } {!vocabUri && "none"} &nbsp;
             <ModalTrigger bsSize="small"
               ref={function(modal) {
