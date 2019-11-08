@@ -220,13 +220,10 @@ var CMDElementForm = React.createClass({
       if(!this.props.checkDisplayPriorities()) {
         feedback('At least one element must have non-zero display priority');
         return false;
-      } else {
-        return true;
       }
-    } else {
-      return Validation.validateField('element', targetName, val, feedback)
-        && (targetName != '@name' || this.props.checkUniqueName(targetName, val, feedback));
     }
+    return Validation.validateField('element', targetName, val, feedback)
+      && (targetName != '@name' || this.props.checkUniqueName(targetName, val, feedback));
   }
 });
 

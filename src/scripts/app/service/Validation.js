@@ -34,6 +34,13 @@ var regex = function(expr, msg) {
   };
 }
 
+var minValue = function(lowBound) {
+  return {
+    test: function(v) { log.debug('test min val', v, lowBound); return v>= lowBound; },
+    message: "Minimal value: " + lowBound
+  }
+}
+
 var uriPattern = /^([^:\/?#]+):(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/;
 var conceptLinkUri = regex(uriPattern, "Must be a valid URI")
 
@@ -50,6 +57,7 @@ var validators = {
   element: {
     '@name': [requiredString, noSpaces, ncName],
     '@ConceptLink': [conceptLinkUri],
+    '@DisplayPriority': [minValue(0)],
     'AutoValue': [requiredString]
   },
   attribute: {
