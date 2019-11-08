@@ -20,6 +20,8 @@ var ComponentViewMixin = require('../../mixins/ComponentViewMixin');
 var AuthUtil = require('../AuthState').AuthUtil;
 var ReactAlert = require('../../util/ReactAlert');
 
+var withRouter = require('react-router').withRouter;
+
 var classNames = require('classnames');
 
 require('../../../../styles/ComponentEditor.sass');
@@ -49,6 +51,16 @@ var Editor = React.createClass({
   getInitialState: function() {
     return { expandedGrid: false };
   },
+
+/*
+  componentWillMount: function() {
+    // https://github.com/clarin-eric/component-registry-front-end/issues/17
+    this.props.router.setRouteLeaveHook(
+      this.props.route,
+      () => {return "Leave?"} //TODO: ok if on save, cancel or publish
+    )
+  },
+*/
 
   componentDidMount: function() {
     if(!this.isAuthenticated()) {
