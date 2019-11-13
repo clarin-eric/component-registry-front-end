@@ -186,7 +186,10 @@ var RestActions = {
       this.dispatch(Constants.DELETE_COMPONENTS_SUCCESS, deletedIds);
     }.bind(this), function(result) {
       if(result.message != null) {
-        log.error(result.message);
+        log.warn("Error while deleting: ", result);
+      }
+      if(result.message === null || _.trim(result.message) === "") {
+        result.message = "Could not delete";
       }
       this.dispatch(Constants.DELETE_COMPONENTS_FAILURE, result);
     }.bind(this), componentInUsageCb);

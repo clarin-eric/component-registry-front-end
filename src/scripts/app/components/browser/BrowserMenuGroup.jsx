@@ -177,8 +177,8 @@ var BrowserMenuGroup = React.createClass({
       <p>
         <strong>Note</strong>: deletion from the public space is only allowed
         by the owner of the item within one month after publication. If these
-        criteria are not met, you will get an error message that says
-        "forbidden".
+        criteria are not met, you will get an error message indicating a
+        failed or forbidden attempt to delete.
       </p>
     ):null;
 
