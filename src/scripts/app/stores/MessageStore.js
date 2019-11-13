@@ -4,6 +4,8 @@ var Fluxxor = require("fluxxor"),
     Constants = require("../constants"),
     React = require('react');
 
+var _ = require('lodash');
+
 var update = require('react-addons-update');
 var changeObj = require('../util/ImmutabilityUtil').changeObj;
 
@@ -42,6 +44,9 @@ var MessageStore = Fluxxor.createStore({
   },
 
   handleError: function(message) {
+    if(message === undefined || message === null || _.trim(message) === "") {
+      message = "Unspecified error";
+    }
     // update messages object
     this.messages = addMessage(this.messages, 'error', message);
     this.emit("change");
