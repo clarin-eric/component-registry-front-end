@@ -18,9 +18,9 @@ project). The main building blocks of this application are:
   - [Babel](https://babeljs.io)
   - [SCSS](https://sass-lang.com) ([sass-loader](https://www.npmjs.com/package/sass-loader) with [node-sass](https://www.npmjs.com/package/node-sass))
 
-To build, run `npm install`, then `npm start build`. 
+To build, run `npm install`, then `npm run build`. 
 
-To start a development server, run `npm start run`.
+To start a development server, run `npm run start`.
 
 More information, including UML diagrams, can be found in the project's [wiki](../../wiki).
 
