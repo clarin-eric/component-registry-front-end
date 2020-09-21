@@ -42,7 +42,7 @@
     "loglevel": "^1.6.x",
     "moment-timezone": "0.3.0",
     "ncname": "^1.0.x",
-    "papaparse": "~5.1.x",
+    "papaparse": "^5.3.0",
     "react": "^0.14.x",
     "react-addons-css-transition-group": "^0.14.x",
     "react-addons-linked-state-mixin": "^0.14.x",
