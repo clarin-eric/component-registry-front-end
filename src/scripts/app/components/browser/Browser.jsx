@@ -85,6 +85,7 @@ var Browser = React.createClass({
       "detailsMaximised": this.state.detailsMaximised
     });
     var selectedTeam = (this.state.items.space === Constants.SPACE_TEAM) ? this.state.items.team : null;
+    var recommendedTitle = 'Recommended ' + this.state.items.type;
     return (
         <section id="browser" className={classes}>
           <div className="browser row">
@@ -100,7 +101,8 @@ var Browser = React.createClass({
                     sortState={this.state.items.sortState}
                     onToggleSort={this.toggleSort}
                     multiSelect={this.state.selection.allowMultiple}
-                    itemOptionsDropdownCreator={this.createItemOptionsDropdown}>
+                    itemOptionsDropdownCreator={this.createItemOptionsDropdown}
+                    recommendedItemTitle={recommendedTitle}>
                     {!this.state.items.loading  /* show a message in the table if all results are excluded by filter */
                       && this.state.items.filteredSize == 0
                       && this.state.items.unfilteredSize != 0 && (

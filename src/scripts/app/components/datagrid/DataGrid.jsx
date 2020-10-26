@@ -34,7 +34,8 @@ var DataGrid = React.createClass({
     onToggleSort: React.PropTypes.func,
     sortState: React.PropTypes.object,
     disabled: React.PropTypes.bool,
-    itemOptionsDropdownCreator: React.PropTypes.func
+    itemOptionsDropdownCreator: React.PropTypes.func,
+    recommendedItemTitle:  React.PropTypes.string
   },
 
   componentDidUpdate: function() {
@@ -48,7 +49,8 @@ var DataGrid = React.createClass({
       selectedItems: {},
       rowSelectAllowed: true,
       editMode: false,
-      disabled: false
+      disabled: false,
+      recommendedItemTitle: 'Recommended'
     };
   },
 
@@ -95,6 +97,7 @@ var DataGrid = React.createClass({
           disabled={self.props.disabled}
           optionsMenu={optionsMenu}
           domainMap={_.keyBy(domains, 'data')}
+          recommendedItemTitle={self.props.recommendedItemTitle}
           >
         </DataTablesRow>
      );

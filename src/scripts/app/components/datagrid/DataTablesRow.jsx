@@ -26,10 +26,11 @@ var DataTablesRow = React.createClass({
     className: React.PropTypes.string,
     disabled: React.PropTypes.bool,
     optionsMenu: React.PropTypes.object,
-    domainMap: React.PropTypes.object
+    domainMap: React.PropTypes.object,
+    recommendedItemTitle:  React.PropTypes.string
   },
   getDefaultProps: function() {
-    return { buttonBefore: false, className: "unknown", rowSelectAllowed: true, disabled: false };
+    return { buttonBefore: false, className: "unknown", rowSelectAllowed: true, disabled: false, recommendedItemTitle: 'Recommended' };
   },
   rowClick: function(val, evt) {
     evt.preventDefault();
@@ -52,13 +53,16 @@ var DataTablesRow = React.createClass({
     var domain = this.props.domainMap[data.domainName];
     var domainName = (domain != null)? domain.label : data.domainName;
 
+    var recommendedGlyph=<span title={this.props.recommendedItemTitle} className="glyphicon glyphicon-star"></span>
+
     return (
       <tr
         data-compid={this.props.data.id}
         onClick={this.props.buttonBefore ? null : this.rowClick.bind(this, this.props.data)}
         key={this.props.data.id}
         className={classnames(this.props.className + " status-" + data.status, {
-          "selected": this.props.selected
+          "selected": this.props.selected,
+          "recommended": data.recommended === 'true'
         })}>
         {this.props.buttonBefore && (
           <td className="add">
@@ -71,6 +75,7 @@ var DataTablesRow = React.createClass({
           </td>
         )}
 
+        <td className="recommended">{data.recommended === 'true' ? recommendedGlyph : true}</td>
         <td className="name">{data.name}</td>
         <td className="groupName">{data.groupName}</td>
         <td className="domainName">{domainName}</td>

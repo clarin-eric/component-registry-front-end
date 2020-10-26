@@ -43,6 +43,7 @@ var DataTablesWrapper = React.createClass({
         <thead>
           <tr>
             {(this.props.editMode) && <th className="add"/> }
+            <th {...this.createHeaderProps('recommended')} title="Recommended"></th>
             <th {...this.createHeaderProps('name')}>Name</th>
             <th {...this.createHeaderProps('groupName')}>Group Name</th>
             <th {...this.createHeaderProps('domainName')}>Domain Name</th>
