@@ -51,7 +51,7 @@ var ItemsFilter = {
     } else {
       log.debug("Sort items", items, "by", sortState.column, sortState.order);
       var order = (sortState.order === Constants.SORT_ORDER_DESC) ? 'desc':'asc';
-      return items.orderBy([sortState.column], [order]).value();
+      return items.orderBy(['recommended', sortState.column], ['desc', order]).value();
     }
   }
 }
