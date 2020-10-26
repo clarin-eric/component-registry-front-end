@@ -2,7 +2,7 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const path = require('path');
 
-const compRegBase = 'http://localhost:85';
+const compRegBase = 'http://localhost:8080';
 
 module.exports = merge(common, {
   mode: 'development',
