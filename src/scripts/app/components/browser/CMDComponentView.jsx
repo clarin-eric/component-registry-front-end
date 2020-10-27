@@ -133,7 +133,11 @@ var CMDComponentView = React.createClass({
           </span> {!open && (<span>&nbsp;[{cardinality}]</span>)}
       </span>);
     var title = this.props.isLinked?
-      this.createActionButtons({title: titleText}) // add expansion controls
+      this.createActionButtons(
+        {
+          title: titleText,
+          isLinked: this.props.isLinked
+        }) // add expansion controls
       :titleText;
     var documentation = comp['Documentation'];
 
@@ -169,7 +173,7 @@ var CMDComponentView = React.createClass({
         {this.props.onReplaceWithSuccessor &&
         <div className="successor-available">
           <Button onClick={this.props.onReplaceWithSuccessor}><Glyphicon glyph="retweet"/> Replace with successor</Button><span> </span>
-          A successor is available for this component! Click the button to use this instead. 
+          A successor is available for this component! Click the button to use this instead.
           </div>}
         {open && this.props.formElements}
       </div>

@@ -132,7 +132,8 @@ var CMDComponentForm = React.createClass({
         <div className="panel-heading">
         {this.createActionButtons({
           title: title,
-          isSelected: this.isSelected()
+          isSelected: this.isSelected(),
+          isLinked: this.props.isLinked
         })}
         </div>
         {editableProps}
@@ -198,6 +199,7 @@ var CMDComponentForm = React.createClass({
         return (
           <div key={componentProperties.key + "_linkform"} className="linkedComponentForm">
             <CMDComponentView
+              isLinked={true}
               link={link}
               hideCardinality={true}
               formElements={formElements}

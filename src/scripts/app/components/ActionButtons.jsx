@@ -1,6 +1,7 @@
 'use strict';
 var log = require('loglevel');
 var React = require('react');
+var Glyphicon = require('react-bootstrap/lib/Glyphicon');
 
 require('../../../styles/ActionButtons.sass'); // TODO apply image styles to links
 
@@ -17,15 +18,22 @@ var ActionButtons = React.createClass({
     onToggleExpansion: React.PropTypes.func,
     isExpanded: React.PropTypes.bool,
     isSelected: React.PropTypes.bool,
+    isLinked:  React.PropTypes.bool,
     title: React.PropTypes.object
   },
   getDefaultProps: function() {
     return {
       moveUpEnabled: true,
-      moveDownEnabled: true
+      moveDownEnabled: true,
+      isLinked: false
     };
   },
   render: function() {
+
+    var linkGlyph = this.props.isLinked ?
+    <Glyphicon title="Linked component" glyph="link" />
+    : null;
+
     return (
       <div className="controlLinks">
         {this.props.onToggleExpansion && (
@@ -40,6 +48,7 @@ var ActionButtons = React.createClass({
         )}
         <div className="title">
           {this.props.title}
+          {linkGlyph}
         </div>
         <div className="moveRemove pull-right">
           {this.props.onMove &&
