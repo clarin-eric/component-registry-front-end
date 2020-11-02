@@ -89,9 +89,9 @@ var CMDElementView = React.createClass({
                 </li>
               )}
 
-              {elem.hasOwnProperty("@DisplayPriority") && (
+              {elem.hasOwnProperty("@cue:DisplayPriority") && (
                 <li className="attrElem"><span className="attrLabel">DisplayPriority:</span>
-                <span className="attrValue">{elem['@DisplayPriority']}</span>
+                <span className="attrValue">{elem['@cue:DisplayPriority']}</span>
                 </li>
               )}
 

@@ -57,7 +57,7 @@ var validators = {
   element: {
     '@name': [requiredString, noSpaces, ncName],
     '@ConceptLink': [conceptLinkUri],
-    '@DisplayPriority': [minValue(0)],
+    '@cue:DisplayPriority': [minValue(0)],
     'AutoValue': [requiredString]
   },
   attribute: {

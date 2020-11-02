@@ -66,7 +66,7 @@ var data2 = {
                 "@name": "resourceType",
                 "@CardinalityMin": "1",
                 "@CardinalityMax": "1",
-                "@DisplayPriority": "1",
+                "@cue:DisplayPriority": "1",
                 "ValueScheme": {"Vocabulary": {"enumeration": {"item": [{
                     "@ConceptLink": "",
                     "@AppInfo": "",

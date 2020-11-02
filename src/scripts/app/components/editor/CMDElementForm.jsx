@@ -111,8 +111,8 @@ var CMDElementForm = React.createClass({
                   name="Documentation" label="Documentation" value={elem['Documentation']} onChange={this.updateDocumentation}  labelClassName="editorFormLabel" wrapperClassName="editorFormField"
                   {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/}
                    />
-                <ValidatingTextInput type="number" name="@DisplayPriority" label="DisplayPriority"
-                  value={(elem['@DisplayPriority'] != null) ? elem['@DisplayPriority'] : 0}
+                <ValidatingTextInput type="number" name="@cue:DisplayPriority" label="DisplayPriority"
+                  value={(elem['@cue:DisplayPriority'] != null) ? elem['@cue:DisplayPriority'] : 0}
                   labelClassName="editorFormLabel" wrapperClassName="editorFormField"
                   onChange={this.updateElementValueWithDefault.bind(this, "0")} validate={this.validate}
                   min={0} max={10} step={1}
@@ -216,7 +216,7 @@ var CMDElementForm = React.createClass({
   /*=== Validation of field values ====*/
 
   validate: function(val, targetName, feedback) {
-    if(targetName == '@DisplayPriority') {
+    if(targetName == '@cue:DisplayPriority') {
       if(!this.props.checkDisplayPriorities()) {
         feedback('At least one element must have non-zero display priority');
         return false;
