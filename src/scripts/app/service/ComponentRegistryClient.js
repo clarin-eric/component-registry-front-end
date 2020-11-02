@@ -230,6 +230,11 @@ normaliseSpec: function(data) {
     return data;
   }
 
+  //unpack ComponentSpec root object
+  if(data.ComponentSpec != undefined) {
+    return this.normaliseSpec(data.ComponentSpec);
+  }
+
   //var rootComponent = (data.Header != undefined) ? data.Component : data;
   if (data.Header != undefined) {
     //root component
