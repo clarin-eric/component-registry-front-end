@@ -129,6 +129,13 @@ var CMDElementForm = React.createClass({
                   <div className="more">
                     <AutoValueEditor autoValue={elem.AutoValue} onChange={this.propagateValue.bind(this, "AutoValue")} validate={this.validate}
                       {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/} />
+                      <div>
+                        <strong>cues for tools</strong>
+                        cue
+                        <Input type="text" onChange={this.onCueAttributeChange.bind(this, 1)} />
+                        value
+                        <Input type="text" onChange={this.onCueValueChange.bind(this, 1)} />
+                      </div>
                   </div>
                 }
                 {this.renderMoreLessToggler({
@@ -174,6 +181,21 @@ var CMDElementForm = React.createClass({
   },
 
   /*=== Functions that handle changes (in this component and its children) ===*/
+
+  onCueAttributeChange: function(index, e) {
+    var attributeName = e.target.value;
+    log.debug('Cue attribute change: ', index, attributeName);
+
+    var otherAttributes = {};
+    otherAttributes['cue:' + attributeName] = 'test';
+
+    this.props.onElementChange({$merge: {'otherAttributes': otherAttributes}});
+    //this.props.onElementChange({$merge: changeObj('otherAttributes', otherAttributes)});
+  },
+
+  onCueValueChange: function(elem, index) {
+      log.debug('Cue value change: ', index, elem);
+  },
 
   propagateValue: function(field, value) {
     this.props.onElementChange({$merge: changeObj(field, value)});
