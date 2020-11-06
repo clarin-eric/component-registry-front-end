@@ -29,7 +29,14 @@ var corsRequestParams = function() {
       xhrFields: {
         withCredentials: true
     }} : {};
-}
+};
+
+// test that determines whether an attribute is considered an 'otherAttribute'
+// (i.e. free elements from cue namespace) and should be moved to the
+// 'otherAttribute' property of a component/element/attribute
+var isOtherAttribute = function(value, key) {
+  return key !== '@cue:DisplayPriority' && _.startsWith(key, '@cue:');
+};
 
 var ComponentRegistryClient = {
 
@@ -254,6 +261,9 @@ normaliseSpec: function(data) {
       //normalise 'Documentation' element (must be an array)
       data.Documentation = this.normaliseDocumentation(data.Documentation);
 
+      //normalise 'otherAttributes' (i.e. free elements from cue namespace)
+      this.normaliseOtherAttributes(data);
+
       if(childElems != undefined && childElems != null) {
         //if Element child(ren) exist, make sure it is an array
         var elemsArray;
@@ -265,6 +275,9 @@ normaliseSpec: function(data) {
 
         // normalise element children (attributes) and value scheme
         for(i=0; i<elemsArray.length; i++) {
+          //normalise 'otherAttributes' (i.e. free elements from cue namespace)
+          this.normaliseOtherAttributes(elemsArray[i]);
+
           this.normaliseAttributeList(elemsArray[i].AttributeList);
           this.normaliseValueScheme(elemsArray[i].ValueScheme);
           //normalise 'Documentation' element (must be an array supporting attributes)
@@ -296,6 +309,21 @@ normaliseSpec: function(data) {
   return data;
 },
 
+normaliseOtherAttributes: function(spec) {
+  // look for 'cue' attributes
+  var filtered = _(spec).pickBy(isOtherAttribute);
+
+  if(!filtered.isEmpty()) {
+    spec.otherAttributes = filtered.value();
+    log.debug("other attributes: ", spec.otherAttributes);
+
+    _.forEach(Object.keys(spec.otherAttributes), function(key) {
+      log.debug('Unsetting ', key)
+      _.unset(spec, key);
+    });
+  }
+},
+
 normaliseAttributeList: function(attrList) {
   if(attrList != null) {
     log.trace("Normalise attribute list", attrList);
@@ -312,6 +340,9 @@ normaliseAttributeList: function(attrList) {
 
       // normalise all value schemes in the attributes
       for(j=0; j<attrArray.length; j++) {
+        //normalise 'otherAttributes' (i.e. free elements from cue namespace)
+        this.normaliseOtherAttributes(attrArray[j]);
+
         this.normaliseValueScheme(attrArray[j].ValueScheme);
         //normalise 'Documentation' element (must be an array supporting attributes)
         attrArray[j].Documentation = this.normaliseDocumentation(attrArray[j].Documentation);
