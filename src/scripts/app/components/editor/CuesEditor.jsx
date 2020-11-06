@@ -71,7 +71,10 @@ var CuesEditor = React.createClass({
 
   onCueChange: function(key, e) {
     var value = e.target.value;
+    //TODO: validate value!
     log.debug("Change value for key ", key, " to ", value);
+    var change = changeObj(key, value);
+    this.props.onChange(update(this.props.otherAttributes, {$merge: change}));
   },
 
   render: function () {
