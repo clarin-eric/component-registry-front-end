@@ -1,7 +1,9 @@
 'use strict';
 
 var log = require('loglevel');
+
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 //components
 var ValidatingTextInput = require('./ValidatingTextInput');
@@ -17,6 +19,7 @@ var CmdiVersionModeMixin = require('../../mixins/CmdiVersionModeMixin');
 
 //utils
 var update = require('react-addons-update');
+var changeObj = require('../../util/ImmutabilityUtil').changeObj;
 
 /**
  * CuesEditor
@@ -30,25 +33,45 @@ var CuesEditor = React.createClass({
     onChange: React.PropTypes.func.isRequired
   },
 
-  // onCueAttributeChange: function(index, e) {
-  //   var attributeName = e.target.value;
-  //   log.debug('Cue attribute change: ', index, attributeName);
-  //
-  //   var otherAttributes = {};
-  //   otherAttributes['cue:' + attributeName] = 'test';
-  //
-  //   if(this.props.spec.otherAttributes) {
-  //     this.props.onElementChange({$merge: {'otherAttributes': otherAttributes}});
-  //   }
-  //   //this.props.onElementChange({$merge: changeObj('otherAttributes', otherAttributes)});
-  // },
-  //
-  // onCueValueChange: function(elem, index) {
-  //     log.debug('Cue value change: ', index, elem);
-  // },
-  //
-  addCue: function() {
+  componentDidUpdate: function(prevProps) {
+    if(this.props.otherAttributes !== prevProps.otherAttributes) {
+      log.debug('reset new cue name');
+      this.setState({newCueName: ''});
+    }
+  },
 
+  getInitialState: function() {
+    return {
+      newCueName: ''
+    };
+  },
+
+  addCue: function(nameInput) {
+    var newCueName = this.state.newCueName;
+    if (newCueName === null || newCueName === '') {
+      //TODO: validate properly!
+      log.warn('No new cue name provided');
+    } else {
+      log.debug("Add cue with name ", newCueName);
+      var newCueAttribute = '@cue:' + newCueName;
+      var change = changeObj(newCueAttribute, '');
+
+      var otherAttributes = this.props.otherAttributes;
+      if($.isPlainObject(otherAttributes)) {
+        if(otherAttributes.hasOwnProperty(newCueAttribute)) {
+          log.error("Cannot add property, already exists: ", newCueAttribute);
+        } else {
+          this.props.onChange(update(otherAttributes, {$merge: change}));
+        }
+      } else {
+        this.props.onChange(change);
+      }
+    }
+  },
+
+  onCueChange: function(key, e) {
+    var value = e.target.value;
+    log.debug("Change value for key ", key, " to ", value);
   },
 
   render: function () {
@@ -61,9 +84,9 @@ var CuesEditor = React.createClass({
                 var key = pair[0];
                 var value = pair[1];
                 return (
-                  <div>
+                  <div key={idx}>
                     <span>{key}</span>
-                    <Input type="text" value={value} />
+                    <Input type="text" value={value} onChange={this.onCueChange.bind(this, key)} />
                   </div>
                 );
                 // return (
@@ -78,8 +101,10 @@ var CuesEditor = React.createClass({
             <div>
               {this.isCmdi12Mode() ?
                 <div className="additional-cue">
+                  {(!this.props.otherAttributes || this.props.otherAttributes.length == 0) ? <span>Create a cue</span> : <span>Add a cue</span>}
+                    <Input type="text" value={this.state.newCueName} onChange={e=>{this.setState({newCueName: e.target.value});}} />
                     <a onClick={this.addCue}>
-                      {(!this.props.otherAttributes || this.props.otherAttributes.length == 0) ? <span>Create a cue</span> : <span>Add a cue</span>} <Glyphicon glyph="plus" />
+                      <Glyphicon glyph="plus" />
                     </a>
                 </div>
                 : <strong>Cues for tools are not supported in CMDI 1.1. Switch to CMDI 1.2 mode to edit.</strong>
