@@ -177,6 +177,7 @@ saveComponent: function(spec, item, profileId, update, publish, handleSuccess, h
 
   var cmd_schema_xml;
   try {
+    log.debug('Marshalling', { name: new Jsonix.XML.QName('ComponentSpec'), value: data });
     cmd_schema_xml = marshaller.marshalString({ name: new Jsonix.XML.QName('ComponentSpec'), value: data });
     log.debug('cmd schema: ', cmd_schema_xml);
   } catch(e) {
@@ -313,12 +314,27 @@ normaliseOtherAttributes: function(spec) {
   // look for 'cue' attributes
   var filtered = _(spec).pickBy(isOtherAttribute);
 
+  //if 'other attributes' are present, move to 'otherAttribute' property
   if(!filtered.isEmpty()) {
-    spec.otherAttributes = filtered.value();
+    //first copy to 'otherAttributes', removing @ prefix from keys
+    spec.otherAttributes
+      = filtered
+        .toPairs()
+        .map(function(p) {
+          if(_.startsWith(p[0], '@')) {
+            return [p[0].substring(1), p[1]];
+          } else {
+            return p;
+          }
+        })
+        .fromPairs()
+        .value();
+
     log.debug("other attributes: ", spec.otherAttributes);
 
-    _.forEach(Object.keys(spec.otherAttributes), function(key) {
-      log.debug('Unsetting ', key)
+    //then remove from spec object
+    filtered.keys().forEach(function(key) {
+      log.debug('Unsetting ', key);
       _.unset(spec, key);
     });
   }

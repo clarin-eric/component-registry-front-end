@@ -53,7 +53,7 @@ var CuesEditor = React.createClass({
       log.warn('No new cue name provided');
     } else {
       log.debug("Add cue with name ", newCueName);
-      var newCueAttribute = '@cue:' + newCueName;
+      var newCueAttribute = 'cue:' + newCueName;
       var change = changeObj(newCueAttribute, '');
 
       var otherAttributes = this.props.otherAttributes;
