@@ -1,6 +1,7 @@
 'use strict';
 
 var log = require('loglevel');
+var _ = require('lodash');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -77,28 +78,30 @@ var CuesEditor = React.createClass({
     this.props.onChange(update(this.props.otherAttributes, {$merge: change}));
   },
 
+  deleteCue: function(key, e) {
+    log.debug("Delete ", key);
+
+    this.props.onChange(_.omit(this.props.otherAttributes, [key]));
+  },
+
   render: function () {
     return (
       <div className="cues">
           <label className="control-label editorFormLabel">Cues for tools</label>
+
           <div className="form-groups">
             {$.isPlainObject(this.props.otherAttributes) &&
               _.toPairs(this.props.otherAttributes).map(function(pair, idx) {
                 var key = pair[0];
                 var value = pair[1];
                 return (
-                  <div key={idx}>
-                    <span>{key}</span>
-                    <Input type="text" value={value} onChange={this.onCueChange.bind(this, key)} />
+                  <div className="form-inline" key={idx}>
+                      <Input type="text" value={key} disabled={true} />
+                      <Input type="text" value={value} onChange={this.onCueChange.bind(this, key)}
+                        addonAfter={<a className="delete" onClick={this.deleteCue.bind(this, key)}><Glyphicon glyph="trash"/></a>}
+                      />
                   </div>
                 );
-                // return (
-                //   <ValidatingTextInput key={idx} name="AutoValue" type="text" value={value}
-                //     disabled={!this.isCmdi12Mode()}
-                //   wrapperClassName="editorFormField" onChange={this.updateAutoValueExpression.bind(this, idx)} validate={this.props.validate}
-                //   addonAfter={<a className="delete" onClick={this.removeAutoValueExpression.bind(this, idx)}><Glyphicon glyph="trash"/></a>}
-                //   />
-                // );
               }.bind(this))
             }
             <div>
