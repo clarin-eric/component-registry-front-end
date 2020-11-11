@@ -37,14 +37,19 @@ var CuesEditor = React.createClass({
   componentDidUpdate: function(prevProps) {
     if(this.props.otherAttributes !== prevProps.otherAttributes) {
       log.debug('reset new cue name');
-      this.setState({newCueName: ''});
+      this.setState({newCueName: '', addCueMode: false});
     }
   },
 
   getInitialState: function() {
     return {
-      newCueName: ''
+      newCueName: '',
+      addCueMode: false
     };
+  },
+
+  toggleAddCue: function() {
+    this.setState({addCueMode: !this.state.addCueMode});
   },
 
   addCue: function(nameInput) {
@@ -97,7 +102,8 @@ var CuesEditor = React.createClass({
                 return (
                   <div className="form-inline" key={idx}>
                       <Input type="text" value={key} disabled={true} />
-                      <Input type="text" value={value} onChange={this.onCueChange.bind(this, key)}
+                      <Input type="text" value={value} disabled={!this.isCmdi12Mode()}
+                        onChange={this.onCueChange.bind(this, key)}
                         addonAfter={<a className="delete" onClick={this.deleteCue.bind(this, key)}><Glyphicon glyph="trash"/></a>}
                       />
                   </div>
@@ -106,12 +112,25 @@ var CuesEditor = React.createClass({
             }
             <div>
               {this.isCmdi12Mode() ?
-                <div className="additional-cue">
-                  {(!this.props.otherAttributes || this.props.otherAttributes.length == 0) ? <span>Create a cue</span> : <span>Add a cue</span>}
+                <div className="form-inline additional-cue">
+                {!this.state.addCueMode &&
+                  <div className="additional-cue">
+                      <a onClick={this.toggleAddCue}>
+                        {(!this.props.otherAttributes || this.props.otherAttributes.length == 0) ? <span>Create a cue</span> : <span>Add a cue</span>} <Glyphicon glyph="plus" />
+                      </a>
+                  </div>
+                }
+                {this.state.addCueMode &&
+                  <div>
+                    <div className="form-group">cue:</div>
                     <Input type="text" value={this.state.newCueName} onChange={e=>{this.setState({newCueName: e.target.value});}} />
-                    <a onClick={this.addCue}>
-                      <Glyphicon glyph="plus" />
-                    </a>
+                    <div className="form-group">
+                      <a onClick={this.addCue} title="add"><Glyphicon glyph="ok" /></a>
+                      &nbsp;
+                      <a onClick={this.toggleAddCue} title="add"><Glyphicon glyph="remove" /></a>
+                    </div>
+                  </div>
+                }
                 </div>
                 : <strong>Cues for tools are not supported in CMDI 1.1. Switch to CMDI 1.2 mode to edit.</strong>
               }
