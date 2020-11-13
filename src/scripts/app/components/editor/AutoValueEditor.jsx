@@ -27,7 +27,7 @@ var AutoValueEditor = React.createClass({
   propTypes: {
     autoValue: React.PropTypes.array,
     onChange: React.PropTypes.func.isRequired,
-    validate: React.PropTypes.func.isRequired,
+    validate: React.PropTypes.func.isRequired
   },
 
   addAutoValueExpression: function() {

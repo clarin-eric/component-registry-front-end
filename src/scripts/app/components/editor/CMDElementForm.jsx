@@ -131,7 +131,7 @@ var CMDElementForm = React.createClass({
                     <AutoValueEditor autoValue={elem.AutoValue} onChange={this.propagateValue.bind(this, "AutoValue")} validate={this.validate}
                       {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/} />
                     <hr />
-                    <CuesEditor otherAttributes={elem.otherAttributes} onChange={this.onCuesChange}
+                    <CuesEditor otherAttributes={elem.otherAttributes} onChange={this.onCuesChange} validate={this.validate}
                       {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/} />
                   </div>
                 }

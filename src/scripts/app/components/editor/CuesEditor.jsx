@@ -31,7 +31,8 @@ var CuesEditor = React.createClass({
 
   propTypes: {
     otherAttributes: React.PropTypes.object,
-    onChange: React.PropTypes.func.isRequired
+    onChange: React.PropTypes.func.isRequired,
+    validate: React.PropTypes.func.isRequired
   },
 
   componentDidUpdate: function(prevProps) {
@@ -54,8 +55,7 @@ var CuesEditor = React.createClass({
 
   addCue: function(nameInput) {
     var newCueName = this.state.newCueName;
-    if (newCueName === null || newCueName === '') {
-      //TODO: validate properly!
+    if (!this.validateNewCueAttribute(newCueName)) {
       log.warn('No new cue name provided');
     } else {
       log.debug("Add cue with name ", newCueName);
@@ -87,6 +87,27 @@ var CuesEditor = React.createClass({
     log.debug("Delete ", key);
 
     this.props.onChange(_.omit(this.props.otherAttributes, [key]));
+  },
+
+  validateNewCueAttribute: function(val, targetName, feedback) {
+    log.debug('validateNewCueAttribute', val, targetName, feedback);
+    var cueAttributeExpr = /^[A-z][A-z0-9]*$/;
+
+    if(val != null && cueAttributeExpr.test(val)) {
+      var newCueAttribute = 'cue:' + val;
+      if(this.props.otherAttributes.hasOwnProperty(newCueAttribute)) {
+        if(feedback != undefined) {
+          feedback('Cue attribute name already used');
+        }
+      } else {
+        return true;
+      }
+    } else {
+      if(feedback != undefined) {
+        feedback('Not a valid attribute name');
+      }
+      return false;
+    }
   },
 
   render: function () {
@@ -123,7 +144,13 @@ var CuesEditor = React.createClass({
                 {this.state.addCueMode &&
                   <div>
                     <div className="form-group">cue:</div>
-                    <Input type="text" value={this.state.newCueName} onChange={e=>{this.setState({newCueName: e.target.value});}} />
+                    <ValidatingTextInput name="AutoValue" type="text"
+                      value={this.state.newCueName}
+                      onChange={e=>{this.setState({newCueName: e.target.value});}}
+                      validate={this.validateNewCueAttribute} />
+                    {
+                        /* <Input type="text" value={this.state.newCueName} onChange={e=>{this.setState({newCueName: e.target.value});}} /> */
+                    }
                     <div className="form-group">
                       <a onClick={this.addCue} title="add"><Glyphicon glyph="ok" /></a>
                       &nbsp;
