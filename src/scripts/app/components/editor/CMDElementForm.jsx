@@ -180,7 +180,6 @@ var CMDElementForm = React.createClass({
   /*=== Functions that handle changes (in this component and its children) ===*/
 
   onCuesChange: function(otherAttributes) {
-    log.debug("Cues change; new attributes: ", otherAttributes);
     this.props.onElementChange({'otherAttributes': {$set: otherAttributes}});
   },
 

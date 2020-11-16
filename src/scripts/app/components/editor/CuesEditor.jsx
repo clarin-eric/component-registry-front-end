@@ -96,7 +96,7 @@ var CuesEditor = React.createClass({
 
     if(val != null && cueAttributeExpr.test(val)) {
       var newCueAttribute = 'cue:' + val;
-      if(this.props.otherAttributes.hasOwnProperty(newCueAttribute)) {
+      if($.isPlainObject(this.props.otherAttributes) && this.props.otherAttributes.hasOwnProperty(newCueAttribute)) {
         if(feedback != undefined) {
           feedback('Cue attribute name already used');
         }

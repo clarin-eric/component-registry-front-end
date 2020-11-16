@@ -14,6 +14,7 @@ var SpecFormUpdateMixin = require('../../mixins/SpecFormUpdateMixin');
 var ActionButtonsMixin = require('../../mixins/ActionButtonsMixin');
 var CmdiVersionModeMixin = require('../../mixins/CmdiVersionModeMixin');
 var ValidatingComponentMixin = require('../../mixins/ValidatingComponentMixin');
+var MoreLessComponentMixin = require('../../mixins/MoreLessComponentMixin');
 
 //components
 var CMDElementForm = require('./CMDElementForm');
@@ -23,6 +24,7 @@ var ValidatingTextInput = require('./ValidatingTextInput');
 var ConceptLinkInput = require('./ConceptLinkInput');
 var DocumentationInput = require('./DocumentationInput');
 var CMDComponentView = require('../browser/CMDComponentView');
+var CuesEditor = require('./CuesEditor');
 
 //bootstrap
 var Dropdown = require('react-bootstrap/lib/Dropdown');
@@ -53,7 +55,8 @@ var CMDComponentForm = React.createClass({
             SpecFormUpdateMixin,
             ActionButtonsMixin,
             ValidatingComponentMixin,
-            CmdiVersionModeMixin],
+            CmdiVersionModeMixin,
+            MoreLessComponentMixin],
 
   propTypes: {
     onComponentChange: React.PropTypes.func.isRequired,
@@ -122,6 +125,16 @@ var CMDComponentForm = React.createClass({
           onChange={this.updateDocumentation}
           {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/}/>
         <CardinalityInput min={comp['@CardinalityMin']} max={comp['@CardinalityMax']} onValueChange={this.updateComponentValue} />
+        {this.isMoreShown() && /* MoreLessComponentMixin */
+          <div className="more">
+            <CuesEditor otherAttributes={comp.otherAttributes} onChange={this.onCuesChange} validate={this.validate}
+              {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/} />
+          </div>
+        }
+        {this.renderMoreLessToggler({
+          expandText: "Additional component options",
+          collapseText: "Hide additional component options"
+        })}
       </div>
     ) : null;
 
@@ -377,6 +390,10 @@ var CMDComponentForm = React.createClass({
     log.debug("Replace component", index, spec.Component[index], "with", newComponent);
     this.props.onComponentChange({Component: {$splice: [[index, 1, newComponent]]}});
     this.props.loadLinkedComponents([successorId]);
+  },
+
+  onCuesChange: function(otherAttributes) {
+    this.props.onComponentChange({'otherAttributes': {$set: otherAttributes}});
   },
 
   /*=== Functions that add new children ===*/
