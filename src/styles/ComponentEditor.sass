@@ -46,7 +46,7 @@
           line-height: 2.5;
         }
         .panel-body {
-          padding: 1em 0 0 1em;
+          padding: 1em 1.5em 0 1em;
 
           .has-feedback .form-control-feedback {
             right: 0px;
@@ -122,10 +122,8 @@
     .form-horizontal {
 
       .form-group {
-        /* override react style */
-        margin-right: auto;
-        margin-left: auto;
         margin-bottom: .5em;
+        padding-left: 1.5em;
       }
 
       .editorFormLabel, .control-label {
@@ -150,7 +148,7 @@
         }
       }
 
-      .auto-value, .cues {
+      .auto-value, .cues-form {
         div.additional-autovalue-expression, div.additional-cue {
           text-align: right;
         }
@@ -165,6 +163,14 @@
             }
           }
         }
+
+        .add-cue-form {
+
+          label.control-label {
+            width: auto;
+          }
+        }
+
       }
 
       .input-group-btn:last-child>.btn {

@@ -124,7 +124,7 @@ var CuesEditor = React.createClass({
 
   render: function () {
     return (
-      <div className="cues">
+      <div className="cues-form">
           <label className="control-label editorFormLabel">Cues for tools</label>
 
           <div className="form-groups">
@@ -145,7 +145,7 @@ var CuesEditor = React.createClass({
                 );
               }.bind(this))
             }
-            <div>
+            <div className="add-cue-form">
               {this.isCmdi12Mode() ?
                 <div className="form-inline additional-cue">
                 {!this.state.addCueMode &&
@@ -157,8 +157,8 @@ var CuesEditor = React.createClass({
                 }
                 {this.state.addCueMode &&
                   <div>
-                    <div className="form-group">cue:</div>
                     <ValidatingTextInput name="newCueName" type="text"
+                      label="cue:"
                       value={this.state.newCueName}
                       onChange={e=>{this.setState({newCueName: e.target.value});}}
                       validate={this.validateNewCueAttribute} />
