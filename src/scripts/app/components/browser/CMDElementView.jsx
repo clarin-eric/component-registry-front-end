@@ -1,6 +1,8 @@
 'use strict';
+var log = require('loglevel');
 
 var React = require('react');
+var ComponentSpec = require('../../service/ComponentSpec');
 
 //mixins
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
@@ -8,6 +10,7 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 //components
 var CMDAttributeView = require('./CMDAttributeView');
 var DocumentationView = require('./DocumentationView');
+var CuesView = require('./CuesView');
 var ValueScheme = require('../ValueScheme');
 
 require('../../../../styles/CMDElement.sass');
@@ -107,12 +110,15 @@ var CMDElementView = React.createClass({
 
               {$.isArray(elem.AutoValue) && (
                 <li className="attrElem">
-                  <span className="attrLabel">Automatic value expression(s):</span>
-                  <span className="attrValue">{elem.AutoValue.map(function(value, idx){
+                  <div className="attrLabel">Automatic value expression(s):</div>
+                  <div className="attrValue"><pre>{elem.AutoValue.map(function(value, idx){
                       return <div key={"autoValue-"+idx}>{value}</div>;
-                    })}</span>
+                    })}</pre></div>
                 </li>
               )}
+
+              <CuesView item={elem} />
+
             </ul>
           </div>
         </div>

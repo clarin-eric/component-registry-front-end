@@ -31,13 +31,6 @@ var corsRequestParams = function() {
     }} : {};
 };
 
-// test that determines whether an attribute is considered an 'otherAttribute'
-// (i.e. free elements from cue namespace) and should be moved to the
-// 'otherAttribute' property of a component/element/attribute
-var isOtherAttribute = function(value, key) {
-  return key !== '@cue:DisplayPriority' && _.startsWith(key, '@cue:');
-};
-
 var ComponentRegistryClient = {
 
   getRegistryUrl: function(type, id, version) {
@@ -312,7 +305,7 @@ normaliseSpec: function(data) {
 
 normaliseOtherAttributes: function(spec) {
   // look for 'cue' attributes
-  var filtered = _(spec).pickBy(isOtherAttribute);
+  var filtered = _(spec).pickBy(ComponentSpec.isOtherAttribute);
 
   //if 'other attributes' are present, move to 'otherAttribute' property
   if(!filtered.isEmpty()) {
