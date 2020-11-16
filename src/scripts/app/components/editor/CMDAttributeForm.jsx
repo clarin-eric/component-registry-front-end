@@ -24,6 +24,7 @@ var ValidatingTextInput = require('./ValidatingTextInput');
 var ConceptLinkInput = require('./ConceptLinkInput');
 var DocumentationInput = require('./DocumentationInput');
 var AutoValueEditor = require('./AutoValueEditor');
+var CuesEditor = require('./CuesEditor');
 
 //utils
 var classNames = require('classnames');
@@ -98,7 +99,11 @@ var CMDAttributeForm = React.createClass({
           <div className="more">
             <AutoValueEditor autoValue={attr.AutoValue} onChange={this.propagateValue.bind(this, "AutoValue")} validate={this.validate}
               {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/} />
+              <hr />
+            <CuesEditor otherAttributes={attr.otherAttributes} onChange={this.onCuesChange} validate={this.validate}
+                {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/} />
           </div>
+
         }
         {this.renderMoreLessToggler({
           expandText: "Additional element options",
@@ -154,6 +159,10 @@ var CMDAttributeForm = React.createClass({
        ValueScheme: valScheme
      }});
      //unlike elements, attributes cannot be multilingual (see method of same name in CMDElementForm)
+  },
+
+  onCuesChange: function(otherAttributes) {
+    this.props.onAttributeChange({'otherAttributes': {$set: otherAttributes}});
   },
 
   /*=== Validation of field values ====*/
