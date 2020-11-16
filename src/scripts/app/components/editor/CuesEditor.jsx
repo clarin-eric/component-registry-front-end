@@ -22,6 +22,8 @@ var CmdiVersionModeMixin = require('../../mixins/CmdiVersionModeMixin');
 var update = require('react-addons-update');
 var changeObj = require('../../util/ImmutabilityUtil').changeObj;
 
+const cueAttributeExpr = /^[A-z][A-z0-9]*$/;
+
 /**
  * CuesEditor
  * @type {[type]}
@@ -91,7 +93,6 @@ var CuesEditor = React.createClass({
 
   validateNewCueAttribute: function(val, targetName, feedback) {
     log.debug('validateNewCueAttribute', val, targetName, feedback);
-    var cueAttributeExpr = /^[A-z][A-z0-9]*$/;
 
     if(val != null && cueAttributeExpr.test(val)) {
       var newCueAttribute = 'cue:' + val;
@@ -110,6 +111,17 @@ var CuesEditor = React.createClass({
     }
   },
 
+  validateCueValue: function(val, targetName, feedback) {
+    if(val != null && val !== '') {
+      return true;
+    } else {
+      if(feedback != undefined) {
+        feedback('Cue attribute value cannot be empty');
+      }
+      return false;
+    }
+  },
+
   render: function () {
     return (
       <div className="cues">
@@ -123,10 +135,12 @@ var CuesEditor = React.createClass({
                 return (
                   <div className="form-inline" key={idx}>
                       <Input type="text" value={key} disabled={true} />
-                      <Input type="text" value={value} disabled={!this.isCmdi12Mode()}
+                      <ValidatingTextInput name="cueValue" type="text"
+                        value={value}
+                        disabled={!this.isCmdi12Mode()}
                         onChange={this.onCueChange.bind(this, key)}
                         addonAfter={<a className="delete" onClick={this.deleteCue.bind(this, key)}><Glyphicon glyph="trash"/></a>}
-                      />
+                        validate={this.validateCueValue} />
                   </div>
                 );
               }.bind(this))
@@ -144,13 +158,10 @@ var CuesEditor = React.createClass({
                 {this.state.addCueMode &&
                   <div>
                     <div className="form-group">cue:</div>
-                    <ValidatingTextInput name="AutoValue" type="text"
+                    <ValidatingTextInput name="newCueName" type="text"
                       value={this.state.newCueName}
                       onChange={e=>{this.setState({newCueName: e.target.value});}}
                       validate={this.validateNewCueAttribute} />
-                    {
-                        /* <Input type="text" value={this.state.newCueName} onChange={e=>{this.setState({newCueName: e.target.value});}} /> */
-                    }
                     <div className="form-group">
                       <a onClick={this.addCue} title="add"><Glyphicon glyph="ok" /></a>
                       &nbsp;

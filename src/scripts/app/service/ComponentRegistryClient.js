@@ -334,7 +334,7 @@ normaliseOtherAttributes: function(spec) {
 
     //then remove from spec object
     filtered.keys().forEach(function(key) {
-      log.debug('Unsetting ', key);
+      log.trace('Unsetting ', key);
       _.unset(spec, key);
     });
   }
