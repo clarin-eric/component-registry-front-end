@@ -10,6 +10,7 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var CMDAttributeView = require('./CMDAttributeView');
 var DocumentationView = require('./DocumentationView');
 var CuesView = require('./CuesView');
+var AutoValuesView = require('./AutoValuesView');
 var ValueScheme = require('../ValueScheme');
 
 require('../../../../styles/CMDElement.sass');
@@ -107,14 +108,7 @@ var CMDElementView = React.createClass({
                 </li>
               )}
 
-              {$.isArray(elem.AutoValue) && (
-                <li className="attrElem">
-                  <div className="attrLabel">Automatic value expression(s):</div>
-                  <div className="attrValue"><pre>{elem.AutoValue.map(function(value, idx){
-                      return <div key={"autoValue-"+idx}>{value}</div>;
-                    })}</pre></div>
-                </li>
-              )}
+              <AutoValuesView item={elem} />
 
               <CuesView item={elem} />
 
