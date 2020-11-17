@@ -76,7 +76,10 @@ var CMDElementView = React.createClass({
             <span className="elementName">{elem['@name']}</span>
           </div>
           <div className="panel-body">
-            <div className="valueScheme"><span className="attrLabel">Value scheme:</span>{valueScheme}</div>
+            <div className="valueScheme">
+              <span className="attrLabel">Value scheme:</span>
+              <span className="attrValue">{valueScheme}</span>
+            </div>
             <ul className="elemAttrs">
               {(elem.hasOwnProperty("@ConceptLink") && elem["@ConceptLink"] !== "") && (
                 <li className="attrElem"><span className="attrLabel">ConceptLink:</span>

@@ -155,7 +155,7 @@ var CMDComponentView = React.createClass({
 
                 <li className="attrElem">
                   <span className="attrLabel">Number of occurrences:</span>
-                  <span  lassName="attrValue">{cardinality}</span>
+                  <span className="attrValue">{cardinality}</span>
                 </li>
                   {conceptLink && conceptLink != '' && (
                     <li className="attrElem">

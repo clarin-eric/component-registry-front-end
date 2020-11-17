@@ -70,17 +70,19 @@
 
     span, div {
 
-      &.attrLabel {
-        vertical-align: top;
+      &.attrLabel, &.attrValue {
         display: inline-block;
+        vertical-align: top;
+        margin-top: .4em;
+      }
+
+      &.attrLabel {
         width: 40%;
         text-align: right;
         padding-right: 1em;
       }
 
       &.attrValue {
-        vertical-align: top;
-        display: inline-block;
         width: 60%;
       }
     }
