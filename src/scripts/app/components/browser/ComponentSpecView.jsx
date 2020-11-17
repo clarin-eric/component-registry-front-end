@@ -8,6 +8,7 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 //components
 var CMDComponentView = require('./CMDComponentView');
+var DocumentationView = require('./DocumentationView');
 var ItemLink = require('./ItemLink');
 
 //boostrap
@@ -85,14 +86,17 @@ var ComponentSpec = React.createClass({
             {this.renderStatusWarning(spec, type)}
             <div className="rootProperties">
               <ul>
-                <li><span>Name:</span> <b>{spec.Header.Name}</b></li>
-                <li><span>Description:</span> {spec.Header.Description}</li>
+                <li><span className="propertyLabel">Name:</span> <span><b>{spec.Header.Name}</b></span></li>
+                <li><span className="propertyLabel">Description:</span> <span>{spec.Header.Description}</span></li>
                 {conceptLink}
                 {spec.Header && spec.Header.DerivedFrom &&
-                  <li><span>Derived from: <ItemLink itemId={spec.Header.DerivedFrom} type={type}>{spec.Header.DerivedFrom}</ItemLink></span></li>
+                  <li><span className="propertyLabel">Derived from:</span> <span><ItemLink itemId={spec.Header.DerivedFrom} type={type}>{spec.Header.DerivedFrom}</ItemLink></span></li>
                 }
                 {spec.Header && spec.Header.Successor &&
-                  <li><span>Successor: <ItemLink itemId={spec.Header.Successor} type={type}>{spec.Header.Successor}</ItemLink></span></li>
+                  <li><span className="propertyLabel">Successor:</span> <span><ItemLink itemId={spec.Header.Successor} type={type}>{spec.Header.Successor}</ItemLink></span></li>
+                }
+                {rootSpec['Documentation'] &&
+                  <li><span className="propertyLabel">Documentation: </span><div className="rootSpecDocumentation"><DocumentationView value={rootSpec['Documentation']} /></div></li>
                 }
               </ul>
             </div>

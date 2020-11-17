@@ -3,6 +3,11 @@ var log = require('loglevel');
 
 var React = require('react');
 
+//mixins
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
+
+//components
+var Glyphicon = require('react-bootstrap/lib/Glyphicon');
 
 /**
 * ConceptLinkInput - Text input with button to trigger CCR search
@@ -10,6 +15,8 @@ var React = require('react');
 * @constructor
 */
 var ConceptLinkInput = React.createClass({
+  mixins: [ImmutableRenderMixin],
+
   propTypes: {
     value: React.PropTypes.array.isRequired
   },
