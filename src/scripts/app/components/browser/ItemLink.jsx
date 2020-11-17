@@ -2,7 +2,10 @@
 var log = require('loglevel');
 
 var React = require("react"),
-    Fluxxor = require("fluxxor"),
+    Fluxxor = require("fluxxor");
+
+//mixins
+var ImmutableRenderMixin = require('react-immutable-render-mixin'),
     FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
@@ -11,7 +14,7 @@ var React = require("react"),
 * @constructor
 */
 var ItemLink = React.createClass({
-  mixins: [FluxMixin],
+  mixins: [FluxMixin, ImmutableRenderMixin],
 
   propTypes: {
     itemId: React.PropTypes.string.isRequired,

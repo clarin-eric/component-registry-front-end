@@ -15,6 +15,7 @@ var CMDElementView = require('./CMDElementView');
 var CMDAttributeView = require('./CMDAttributeView');
 var DocumentationView = require('./DocumentationView');
 var ItemLink = require('./ItemLink');
+var CuesView = require('./CuesView');
 
 //bootstrap
 var Glyphicon = require('react-bootstrap/lib/Glyphicon');
@@ -150,25 +151,31 @@ var CMDComponentView = React.createClass({
               <div className="component-description">{description}</div>
             }
             {!this.props.hideCardinality &&
-              <div>
-                <div>
-                  Number of occurrences: {cardinality}
-                </div>
-                {conceptLink && conceptLink != '' && (
-                  <div>ConceptLink: <a href={conceptLink} target="_blank">{conceptLink}</a>
-                  </div>
-                )}
-                <div>
-                  {$.isArray(documentation) && documentation.length > 0 && documentation[0]['$'] != null && documentation[0]['$'] != '' && (
-                    <div>Documentation:
-                      <div>{<DocumentationView value={documentation} />}</div>
-                    </div>
+              <ul className="attrAttrs">
+
+                <li className="attrElem">
+                  <span className="attrLabel">Number of occurrences:</span>
+                  <span  lassName="attrValue">{cardinality}</span>
+                </li>
+                  {conceptLink && conceptLink != '' && (
+                    <li className="attrElem">
+                      <span className="attrLabel">ConceptLink:</span>
+                      <span  lassName="attrValue"><a href={conceptLink} target="_blank">{conceptLink}</a></span>
+                    </li>
                   )}
-                </div>
-              </div>
+
+                  {$.isArray(documentation) && documentation.length > 0 && documentation[0]['$'] != null && documentation[0]['$'] != '' && (
+                    <li className="attrElem">
+                      <span className="attrLabel">Documentation:</span>
+                      <span  lassName="attrValue">{<DocumentationView value={documentation} />}</span>
+                    </li>
+                  )}
+                </ul>
             }
-          </div>
-        }
+
+            <ul className="attrAttrs">
+              <CuesView item={comp} />
+            </ul>
 
         {this.props.onReplaceWithSuccessor &&
         <div className="successor-available">
@@ -177,8 +184,11 @@ var CMDComponentView = React.createClass({
           </div>}
         {open && this.props.formElements}
       </div>
-    );
-  }
+    }
+    </div>
+  );
+}
+
 });
 
 module.exports = CMDComponentView;

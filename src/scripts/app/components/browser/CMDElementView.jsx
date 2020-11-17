@@ -2,7 +2,6 @@
 var log = require('loglevel');
 
 var React = require('react');
-var ComponentSpec = require('../../service/ComponentSpec');
 
 //mixins
 var ImmutableRenderMixin = require('react-immutable-render-mixin');

@@ -8,6 +8,7 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 //components
 var ValueScheme = require('../ValueScheme');
 var DocumentationView = require('./DocumentationView');
+var CuesView = require('./CuesView');
 
 //require('../../styles/CMDAttribute.sass');
 
@@ -76,6 +77,9 @@ var CMDAttributeView = React.createClass({
                   })}</span>
               </li>
             )}
+
+            <CuesView item={attr} />
+
           </ul>
         </div>
       </div>
