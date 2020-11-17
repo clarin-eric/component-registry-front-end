@@ -14,6 +14,7 @@ var Input = require('react-bootstrap/lib/Input');
 var CMDComponentForm = require('./CMDComponentForm');
 var ValidatingTextInput = require('./ValidatingTextInput');
 var ConceptLinkInput = require('./ConceptLinkInput');
+var DocumentationInput = require('./DocumentationInput');
 var CMDComponentView = require('../browser/CMDComponentView');
 
 //mixins
@@ -117,6 +118,11 @@ var ComponentSpecForm = React.createClass({
               onChange={this.handleConceptLinkChange} validate={this.validate}
               updateConceptLink={this.updateConceptLinkValue}
               />
+            <DocumentationInput
+              name="Documentation" label="Documentation" value={rootComponent['Documentation']}
+              labelClassName="editorFormLabel" wrapperClassName="editorFormField"
+              onChange={this.updateDocumentation}
+              {... this.getCmdiVersionModeProps() /* from CmdiVersionModeMixin*/}/>
           </div>
           {this.props.onExpandAll && this.props.onCollapseAll &&
             <div>
@@ -188,6 +194,10 @@ var ComponentSpecForm = React.createClass({
 
   updateConceptLinkValue: function(val) {
     this.handleComponentChange({$merge: {'@ConceptLink': val}});
+  },
+
+  updateDocumentation: function(documentation) {
+    this.handleComponentChange({$merge: {"Documentation": documentation}});
   },
 
   /*=== Validation of field values ====*/

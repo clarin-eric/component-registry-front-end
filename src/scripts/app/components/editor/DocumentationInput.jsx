@@ -52,12 +52,17 @@ var DocumentationInput = React.createClass({
       //no documentation set yet - make a new array
       this.props.onChange([{'$': newValue}]);
     } else {
-      var currentDoc = doc[index];
-      var newDoc = {'$': newValue};
-      if(currentDoc != null) {
-        var newDoc = update(currentDoc, {$merge: newDoc});
+      if(newValue === '' && doc.length <= 1) {
+        log.debug('Documentation has become empty');
+        this.props.onChange(undefined);
+      } else {
+        var currentDoc = doc[index];
+        var newDoc = {'$': newValue};
+        if(currentDoc != null) {
+          var newDoc = update(currentDoc, {$merge: newDoc});
+        }
+        this.props.onChange(update(doc, {$splice: [[index, 1, newDoc]]}));
       }
-      this.props.onChange(update(doc, {$splice: [[index, 1, newDoc]]}));
     }
   },
 
