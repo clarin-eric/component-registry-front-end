@@ -1,4 +1,4 @@
-$row-height: 2.5em;
+@import './variables';
 
 .grid {
 
@@ -41,7 +41,7 @@ $row-height: 2.5em;
   thead {
       position: absolute;
       top: 0px;
-      height: $row-height;
+      height: $data-grid-row-height;
       width: 100%;
 
       // prevent tbody scrolling over header
@@ -53,9 +53,9 @@ $row-height: 2.5em;
       position: absolute;
       top: 0px;
       width: 100%;
-      margin-top: $row-height; /* counter height of table head */
+      margin-top: $data-grid-row-height; /* counter height of table head */
       height: 90%; /* fallback */
-      height: calc(100% - #{$row-height});
+      height: calc(100% - #{$data-grid-row-height});
       overflow-y: scroll;
   }
 
@@ -68,13 +68,13 @@ $row-height: 2.5em;
   tr.selected {
 
     &.even {
-      background-color: #b0bed9 !important;
-      color: #666;
+      background-color: $data-grid-background-color-selected-even !important;
+      color: $data-grid-color-selected-even;
     }
 
     &.odd {
-      background-color: #a0aec9 !important;
-      color: #333;
+      background-color: $data-grid-background-color-selected-odd !important;
+      color: $data-grid-color-selected-odd;
     }
   }
 
@@ -134,8 +134,8 @@ $row-height: 2.5em;
 
   tbody td, thead th {
       float: left;
-      height: $row-height;
-      line-height: $row-height;
+      height: $data-grid-row-height;
+      line-height: $data-grid-row-height;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -272,24 +272,45 @@ div.component-info {
   }
 }
 
+// row (cell) colours for items with a special status
+@mixin status-row-color($rowcolor) {
+  color: $rowcolor;
+
+  &.even {
+    color: lighten($rowcolor, 5%);
+  }
+
+  // if selected, colour should be adapted to changed background colour
+  &.selected {
+    &.even {
+      //mix with even row colour
+      color: mix($data-grid-color-selected-even, $rowcolor, 50%);
+    }
+
+    &.odd {
+      //mix with odd row colour
+      color: mix($data-grid-color-selected-odd, $rowcolor, 50%);
+    }
+  }
+}
+
 .grid tr.status-DEPRECATED {
-  color: #f00;
+  @include status-row-color($deprecated-status-item-color);
+
+  //strike through name
   td.name {
     text-decoration: line-through;
   }
 }
 
 .grid tr.status-DEVELOPMENT {
-  color: #55b;
-
-  &.selected {
-    color: #44b;
-    .even {
-      color: #33b;
-    }
-  }
+  @include status-row-color($development-status-item-color);
 
   td.name {
     font-style: italic;
   }
+}
+
+.grid tr.recommended {
+  @include status-row-color($recommended-item-color);
 }
