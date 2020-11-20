@@ -1,4 +1,5 @@
 'use strict';
+var log = require("loglevel");
 
 var React = require('react');
 var Constants = require('../../constants');
@@ -30,18 +31,21 @@ var ComponentSpec = React.createClass({
   mixins: [ImmutableRenderMixin],
 
   propTypes: {
+    item: React.PropTypes.object.isRequired,
     spec: React.PropTypes.object.isRequired,
     expansionState: React.PropTypes.object,
     linkedComponents: React.PropTypes.object,
     onComponentToggle: React.PropTypes.func,
     warnForDevelopment: React.PropTypes.bool,
-    warnForDeprecated: React.PropTypes.bool
+    warnForDeprecated: React.PropTypes.bool,
+    showNoticeIfRecommended: React.PropTypes.bool
   },
 
   getDefaultProps: function() {
     return {
       warnForDevelopment: true,
       warnForDeprecated: true,
+      showNoticeIfRecommended: true
     };
   },
 
@@ -83,6 +87,7 @@ var ComponentSpec = React.createClass({
 
       return (
           <div className={rootClasses}>
+            {this.renderRecommendedNotice(this.props.item, type)}
             {this.renderStatusWarning(spec, type)}
             <div className="rootProperties">
               <ul>
@@ -116,6 +121,25 @@ var ComponentSpec = React.createClass({
             <div className="end">&nbsp;</div>
           </div>
         );
+    }
+  },
+
+  renderRecommendedNotice: function(item, typeConst) {
+    var recommended = (item.recommended === 'true');
+    if(recommended && this.props.showNoticeIfRecommended) {
+      log.debug('Recommend item: ', item);
+      var typeName = (typeConst == Constants.TYPE_PROFILE) ? "profile":"component";
+      return (
+        <Alert bsStyle="info">
+          <Glyphicon glyph={Constants.STATUS_ICON_RECOMMENDED} /><span> </span>
+          This {typeName} has the <strong>recommended</strong> status.
+          If you can, consider using this {typeName} rather than using an alternative or making your own.
+          This ensures that the metadata based on the {typeName} can be used, displayed and processed optimally within the CLARIN infrastructure.
+        </Alert>
+      );
+    } else {
+      // not a recommended item
+      return null;
     }
   },
 

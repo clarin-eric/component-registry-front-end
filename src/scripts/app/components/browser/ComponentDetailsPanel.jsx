@@ -81,6 +81,7 @@ var ComponentDetailsPanel = React.createClass({
             {loadingSpinner}
             {spec != null &&
               <ComponentSpecView
+                item={item}
                 spec={spec}
                 onComponentToggle={this.doToggle /* from ComponentViewMixin */}
                 expansionState={this.state.details.expansionState}

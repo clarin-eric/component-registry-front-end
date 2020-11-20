@@ -1,6 +1,7 @@
 'use strict';
 var log = require('loglevel');
 var React = require('react');
+var Constants = require('../../constants');
 
 //bootstrap
 var Button = require('react-bootstrap/lib/Button');
@@ -53,7 +54,7 @@ var DataTablesRow = React.createClass({
     var domain = this.props.domainMap[data.domainName];
     var domainName = (domain != null)? domain.label : data.domainName;
 
-    var recommendedGlyph=<span title={this.props.recommendedItemTitle} className="glyphicon glyphicon-star"></span>
+    var recommendedGlyph=<span title={this.props.recommendedItemTitle} className={"glyphicon glyphicon-" + Constants.STATUS_ICON_RECOMMENDED}></span>
 
     return (
       <tr

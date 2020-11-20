@@ -173,6 +173,7 @@ module.exports = {
   STATUS_ICON_DEVELOPMENT: "wrench",
   STATUS_ICON_PRODUCTION: "ok-circle",
   STATUS_ICON_DEPRECATED: "ban-circle",
+  STATUS_ICON_RECOMMENDED: "star",
 
   /* INFO VIEWS */
   INFO_VIEW_SPEC: "INFO_VIEW_SPEC",
