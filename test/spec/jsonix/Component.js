@@ -34,7 +34,7 @@ var data1 = {
 };
 var expectedOut1 =`
   <ComponentSpec isProfile="true" CMDVersion="1.2" CMDOriginalVersion="1.1"
-    xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+    xmlns:cue="http://www.clarin.eu/cmd/cues/1">
     <Header>
       <ID>clarin.eu:cr1:p_1361876010587</ID>
       <Name>AnnotatedCorpusProfile-DLU</Name>
@@ -277,7 +277,7 @@ var data2 = {
 
 var expectedOut2 = `
   <ComponentSpec isProfile="true" CMDVersion="1.2" CMDOriginalVersion="1.1"
-    xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+    xmlns:cue="http://www.clarin.eu/cmd/cues/1">
     <Header>
       <ID>clarin.eu:cr1:p_1288172614014</ID>
       <Name>BamdesLexicalResource</Name>

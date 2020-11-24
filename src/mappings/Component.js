@@ -253,7 +253,7 @@ var Component_Module_Factory = function () {
             name: '@cue:DisplayPriority',
             attributeName: {
               localPart: 'DisplayPriority',
-              namespaceURI: 'http:\/\/www.clarin.eu\/cmdi\/cues\/1'
+              namespaceURI: 'http:\/\/www.clarin.eu\/cmd\/cues\/1'
             },
             type: 'attribute'
           }, {
