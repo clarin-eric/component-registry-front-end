@@ -22,7 +22,7 @@ var CmdiVersionModeMixin = require('../../mixins/CmdiVersionModeMixin');
 var update = require('react-addons-update');
 var changeObj = require('../../util/ImmutabilityUtil').changeObj;
 
-const cueAttributeExpr = /^[A-z][A-z0-9]*$/;
+const cueAttributeExpr = /^[A-Za-z][A-Za-z\d-]*_[A-Za-z\d-]+$/; // e.g. test-123_Abc-123
 
 /**
  * CuesEditor
@@ -154,6 +154,8 @@ var CuesEditor = React.createClass({
                         {(!this.props.otherAttributes || this.props.otherAttributes.length == 0) ? <span>Create a cue</span> : <span>Add a cue</span>} <Glyphicon glyph="plus" />
                       </a>
                   </div>
+
+
                 }
                 {this.state.addCueMode &&
                   <div>
@@ -167,6 +169,10 @@ var CuesEditor = React.createClass({
                       &nbsp;
                       <a onClick={this.toggleAddCue} title="add"><Glyphicon glyph="remove" /></a>
                     </div>
+                    <p className="help-block">
+                      Cue names must be <em>prefixed</em> with a string of alphanumeric characters, followed by an underscore: <tt>[prefix]_[name]</tt>.
+                      Please choose a sufficiently unique prefix and use it consistently within the chosen context.
+                    </p>
                   </div>
                 }
                 </div>
