@@ -76,6 +76,7 @@ docker_run() {
 		--name "${BUILD_CONTAINER_NAME}" \
 		-v "${SRC_DIR}":/var/src  \
 		-w /var/src \
+		-p 3000:3000 \
 		${DOCKER_OPTS} \
 		"${BUILD_IMAGE}" ${BUILD_CMD}
 }
