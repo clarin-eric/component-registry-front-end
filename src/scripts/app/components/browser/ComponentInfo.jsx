@@ -53,11 +53,15 @@ var ComponentInfo = React.createClass({
     //not setting onChange to the inputs will generate a warning unless readOnly
     //is set, which does not yield the desired behaviour, therefore a noop function is passed
     var noop = function() {};
+    var showXsdLink = (xsdLink != null && xsdLink[key] != null)
 
     return (
       <div id={"componentInfoModal" + key}>
+        {!showXsdLink &&
+          <div>XSD (XML Schema) link is only available for profiles</div>
+        }
         <div>
-          <a href={bookmarkLink}>Bookmark link:</a>
+          <a href={bookmarkLink} target="_blank">Bookmark link:</a>
           <div>
             <input id={"bookmarkLink" + key} type="text" value={bookmarkLink} onChange={noop} />
             <button type="button" className="btn btn-default" data-clipboard-target={"#bookmarkLink" + key} title="Copy to clipboard">
@@ -65,9 +69,9 @@ var ComponentInfo = React.createClass({
             </button>
           </div>
         </div>
-        {xsdLink != null && xsdLink[key] != null && (
+        {showXsdLink && (
           <div>
-            <a href={xsdLink[key]}>Link to xsd:</a>
+            <a href={xsdLink[key]}>Link to XSD (XML Schema):</a>
             <div>
               <input id={"xsdLink" + key} type="text" value={xsdLink[key]} onChange={noop} />
               <button type="button" className="btn btn-default" data-clipboard-target={"#xsdLink" + key} title="Copy to clipboard">
@@ -108,8 +112,11 @@ var ComponentInfo = React.createClass({
 
     return (
       <div id="componentInfoModal" className={this.props.className}>
+      <h5>Type</h5>{type === Constants.TYPE_PROFILE ? 'Profile' : 'Component'}
+      <h5>Identifier</h5>{item.id}
+      <h5>Links</h5>
+        {/* if there are xsd links, show tabs because the links will be different for CMDI 1.1 and 1.2 */}
         {xsdLink == null ? this.createTabContent(bookmarkLink) :
-          // if there are xsd links, show tabs because the links will be different for CMDI 1.1 and 1.2
             <Tabs activeKey={this.state.currentTab}
               onSelect={this.onTabSelect}>
               <Tab eventKey="cmdi11" title="CMDI 1.1">
