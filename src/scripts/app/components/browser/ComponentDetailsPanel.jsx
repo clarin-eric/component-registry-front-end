@@ -47,7 +47,8 @@ var ComponentDetailsPanel = React.createClass({
     item: React.PropTypes.object,
     type: React.PropTypes.string,
     space: React.PropTypes.string,
-    collapsed: React.PropTypes.bool
+    collapsed: React.PropTypes.bool,
+    router: React.PropTypes.object.isRequired
   },
 
   getDefaultProps: function() {
@@ -82,12 +83,14 @@ var ComponentDetailsPanel = React.createClass({
             {spec != null &&
               <ComponentSpecView
                 item={item}
+                items={this.props.items}
                 spec={spec}
                 onComponentToggle={this.doToggle /* from ComponentViewMixin */}
                 expansionState={this.state.details.expansionState}
                 linkedComponents={this.state.details.linkedComponents}
                 warnForDevelopment={this.props.space === Constants.SPACE_PUBLISHED}
                 warnForDeprecated={true}
+                router={this.props.router}
                 />}
           </Tab>
           <Tab id="xmlTab" eventKey={Constants.INFO_VIEW_XML} title="xml" disabled={loading}>

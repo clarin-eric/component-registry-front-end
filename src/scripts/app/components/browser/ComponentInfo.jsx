@@ -57,9 +57,6 @@ var ComponentInfo = React.createClass({
 
     return (
       <div id={"componentInfoModal" + key}>
-        {!showXsdLink &&
-          <div>XSD (XML Schema) link is only available for profiles</div>
-        }
         <div>
           <a href={bookmarkLink} target="_blank">Bookmark link:</a>
           <div>
@@ -80,6 +77,9 @@ var ComponentInfo = React.createClass({
             </div>
           </div>
         )}
+        {!showXsdLink &&
+          <div>XSD (XML Schema) link is only available for profiles</div>
+        }
       </div>
     );
   },

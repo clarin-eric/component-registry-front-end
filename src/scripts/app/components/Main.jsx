@@ -174,6 +174,7 @@ var Main = React.createClass({
 
           <div className="main container-fluid">
             <AlertsView messages={this.state.messages.messages} onDismiss={this.handleDismissMessage} />
+            {/* children are added in component definition (see ../app.jsx) */}
             {this.props.children}
           </div>
 

@@ -3,14 +3,19 @@ var log = require("loglevel");
 
 var React = require('react');
 var Constants = require('../../constants');
+var Fluxxor = require("fluxxor");
+var FluxMixin = Fluxxor.FluxMixin(React);
 
 //mixins
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 //components
 var CMDComponentView = require('./CMDComponentView');
+var ComponentInfo = require('./ComponentInfo')
 var DocumentationView = require('./DocumentationView');
 var ItemLink = require('./ItemLink');
+
+var ReactAlert = require('../../util/ReactAlert');
 
 //boostrap
 var Alert = require('react-bootstrap/lib/Alert');
@@ -28,17 +33,19 @@ require('../../../../styles/ComponentViewer.sass');
 * @constructor
 */
 var ComponentSpec = React.createClass({
-  mixins: [ImmutableRenderMixin],
+  mixins: [FluxMixin, ImmutableRenderMixin],
 
   propTypes: {
     item: React.PropTypes.object.isRequired,
+    items: React.PropTypes.object.isRequired,
     spec: React.PropTypes.object.isRequired,
     expansionState: React.PropTypes.object,
     linkedComponents: React.PropTypes.object,
     onComponentToggle: React.PropTypes.func,
     warnForDevelopment: React.PropTypes.bool,
     warnForDeprecated: React.PropTypes.bool,
-    showNoticeIfRecommended: React.PropTypes.bool
+    showNoticeIfRecommended: React.PropTypes.bool,
+    router: React.PropTypes.object.isRequired
   },
 
   getDefaultProps: function() {
@@ -53,6 +60,20 @@ var ComponentSpec = React.createClass({
     return { childElements: null,
              childComponents: null
     };
+  },
+
+  showComponentInfo: function() {
+    ReactAlert.showModalAlert(
+      "Info for " + this.props.item.name,
+      <ComponentInfo
+          className="modal-desc component-info"
+          item={this.props.item}
+          type={this.props.items.type}
+          space={this.props.items.space}
+          team={this.props.items.team}
+          router={this.props.router}
+           />
+    );
   },
 
   render: function() {
@@ -83,7 +104,7 @@ var ComponentSpec = React.createClass({
       }
 
       // Display properties
-      var conceptLink = (rootComponent && rootComponent['@ConceptLink'] != null) ? <li><span>ConceptLink:</span> <a href={rootComponent['@ConceptLink']}>{rootComponent['@ConceptLink']}</a></li> : null;
+      var conceptLink = (rootComponent && rootComponent['@ConceptLink'] != null) ? <li><span className="propertyLabel">ConceptLink: </span><span><a href={rootComponent['@ConceptLink']}>{rootComponent['@ConceptLink']}</a></span></li> : null;
 
       return (
           <div className={rootClasses}>
@@ -103,6 +124,7 @@ var ComponentSpec = React.createClass({
                 {rootSpec['Documentation'] &&
                   <li><span className="propertyLabel">Documentation: </span><div className="rootSpecDocumentation"><DocumentationView value={rootSpec['Documentation']} /></div></li>
                 }
+                <li><span className="propertyLabel">Info &amp; links: </span> <span><a onClick={this.showComponentInfo}><Glyphicon glyph="info-sign" /></a></span></li>
               </ul>
             </div>
             {rootSpec == null ? (
