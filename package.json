@@ -47,7 +47,7 @@
     "react-addons-css-transition-group": "^0.14.x",
     "react-addons-linked-state-mixin": "^0.14.x",
     "react-addons-update": "^0.14.x",
-    "react-bootstrap": "^0.28.x",
+    "react-bootstrap": "^0.33.1",
     "react-dom": "^0.14.x",
     "react-edit": "^4.1.x",
     "react-immutable-render-mixin": "^0.8.1",
