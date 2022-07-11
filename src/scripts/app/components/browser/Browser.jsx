@@ -11,8 +11,6 @@ var React = require("react"),
 var Button = require('react-bootstrap/lib/Button');
 var Modal = require('react-bootstrap/lib/Modal');
 
-var withRouter = require('react-router').withRouter;
-
 // Components
 var DataGrid = require("../datagrid/DataGrid.jsx");
 var ItemOptionsDropdown = require('./ItemOptionsDropdown');
@@ -35,6 +33,10 @@ require('../../../../styles/Browser.sass');
 
 var Browser = React.createClass({
   mixins: [FluxMixin, StoreWatchMixin("ItemsStore", "SelectionStore", "ComponentDetailsStore", "AuthenticationStore", "TeamStore")],
+
+  propTypes: {
+    router: React.PropTypes.object.isRequired //automatically set if managed by Router
+  },
 
   // Required by StoreWatchMixin
   getStateFromFlux: function() {
@@ -166,12 +168,14 @@ var Browser = React.createClass({
               <ComponentDetailsPanel
                 ref="details"
                 item={item}
+                items={this.state.items}
                 type={this.state.items.type}
                 space={this.state.items.space}
                 loadSpec={this.loadSpec}
                 loadSpecXml={this.loadXml}
                 loadComments={this.loadComments}
                 collapsed={this.state.detailsCollapsed}
+                router={this.props.router}
                 />
             ) : !this.state.items.loading && (
                 <div className="noSelectionMessage">
