@@ -52,7 +52,7 @@ var ExternalVocabularySelector = React.createClass({
         }
         log.trace("Retrieved data", data);
 
-        var vocabularies = data.response.docs;
+        var vocabularies = data.vocabularies;
         log.debug("Retrieved vocabularies", vocabularies);
 
         var selected = this.state.selected;
@@ -74,7 +74,7 @@ var ExternalVocabularySelector = React.createClass({
     },
 
     selectItem: function(item) {
-      if(this.state.selected && this.state.selected.uuid === item.uuid) {
+      if(this.state.selected && this.state.selected.id === item.id) {
         //unselect
         this.setState({selected: null});
       } else {
@@ -110,9 +110,9 @@ var ExternalVocabularySelector = React.createClass({
               {this.state.vocabularies.map(function(item, idx){
                 var title = item['title@en'] || item['title'] || "[No title]";
                 var description = item['description@en'];
-                var vocabPageUrl = getConfiguration().vocabulariesUrl + '/vocabpage?id=' + item['uuid'];
+                var vocabPageUrl = getConfiguration().vocabularyPageUrl + '?id=' + item['id'];
                 var itemClasses = classnames('external-vocabulary-item', {
-                  selected: this.state.selected && this.state.selected.uuid === item.uuid
+                  selected: this.state.selected && this.state.selected.id === item.id
                 });
                 return (
                   <div onClick={this.selectItem.bind(null, item)} className={itemClasses} key={idx}>
