@@ -689,11 +689,11 @@ queryVocabularies: function(cb) {
   }, corsRequestParams()));
 },
 
-queryVocabularyItems: function(scheme, properties, success, failure, maxResults) {
+queryVocabularyItems: function(vocabUri, properties, success, failure, index) {
   $.ajax($.extend({
     type: 'GET',
     url: getConfiguration().vocabularyItemsUrl,
-    data: {scheme: scheme, fields: 'uri,' + _.compact(properties).join(), maxResults: maxResults},
+    data: {uri: vocabUri, index: index || 0, fields: 'uri,' + _.compact(properties).join()},
     contentType: false,
     dataType: "json",
     success: function(data) {

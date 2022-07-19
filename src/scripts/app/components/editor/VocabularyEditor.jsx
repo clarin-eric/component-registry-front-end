@@ -264,7 +264,7 @@ var VocabularyEditor = React.createClass({
         });
       }.bind(this);
 
-      ComponentRegistryClient.queryVocabularyItems(vocabUri, [vocabValueProp], onSuccess, onFailure, 1);
+      ComponentRegistryClient.queryVocabularyItems(vocabUri, [vocabValueProp], onSuccess, onFailure, 0);
     },
 
     renderExternalVocabularyEditor: function(vocabType, vocabUri, vocabValueProp, vocabValueLang) {

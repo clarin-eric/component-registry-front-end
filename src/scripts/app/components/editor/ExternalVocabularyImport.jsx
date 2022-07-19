@@ -80,6 +80,12 @@ var ExternalVocabularyImport = React.createClass({
 
     processRetrievedVocabItems: function(uri, valueProp, language, displayProp, data) {
       log.debug("Retrieved vocabulary item", data);
+      if(data.indexConcepts) {
+        var concepts = data.indexConcepts;
+      } else {
+        var concepts = null;
+      }
+
 
       //async state update and processing of retrieved items
       var deferProgress = $.Deferred();
@@ -88,14 +94,14 @@ var ExternalVocabularyImport = React.createClass({
         this.setState({
           progress: {
             itemsDownloaded: true,
-            itemsCount: data.length,
-            done: false
+            itemsCount: concepts.length,
+            done: false,
           }
         });
       }.bind(this));
 
       var deferItems = $.Deferred();
-      deferProgress.then(this.transformVocabItems.bind(this, data, valueProp, language, displayProp, deferItems.resolve));
+      deferProgress.then(this.transformVocabItems.bind(this, concepts, valueProp, language, displayProp, deferItems.resolve));
 
       deferItems.then(function(items) {
         log.debug("Items", items);
