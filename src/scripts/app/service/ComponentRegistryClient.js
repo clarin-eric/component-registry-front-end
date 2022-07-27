@@ -653,12 +653,12 @@ setSuccessor: function(componentId, type, successorId, success, failure) {
 },
 
 queryCCR: function(searchQuery, cb) {
-  var url = getConfiguration().ccrUrl + '?type=container&keywords=' + searchQuery;
-
-  if(searchQuery != null || searchQuery != "")
+  if(searchQuery != null || searchQuery != "") {
+    var reqUrl = getConfiguration().ccrUrl + '?type=container&keywords=' + searchQuery;
+    log.debug('Sending ajax request to', reqUrl);
     $.ajax($.extend({
       type: 'GET',
-      url: url,
+      url: reqUrl,
       processData: false,
       contentType: false,
       dataType: "json",
@@ -670,12 +670,15 @@ queryCCR: function(searchQuery, cb) {
         cb(null);
       }.bind(this)
     }, corsRequestParams()));
+  }
 },
 
 queryVocabularies: function(cb) {
+  var reqUrl = getConfiguration().vocabulariesUrl;
+  log.debug('Sending ajax request to', reqUrl);
   $.ajax($.extend({
     type: 'GET',
-    url: getConfiguration().vocabulariesUrl,
+    url: reqUrl,
     processData: false,
     contentType: false,
     dataType: "json",
@@ -690,10 +693,13 @@ queryVocabularies: function(cb) {
 },
 
 queryVocabularyItems: function(vocabUri, properties, success, failure, index) {
+  var reqUrl = getConfiguration().vocabularyItemsUrl;
+  var reqData = {uri: vocabUri, index: index || 0, fields: 'uri,' + _.compact(properties).join()};
+  log.debug('Sending ajax request to', reqUrl, 'with data', reqData);
   $.ajax($.extend({
     type: 'GET',
-    url: getConfiguration().vocabularyItemsUrl,
-    data: {uri: vocabUri, index: index || 0, fields: 'uri,' + _.compact(properties).join()},
+    url: reqUrl,
+    data: reqData,
     contentType: false,
     dataType: "json",
     success: function(data) {

@@ -78,14 +78,11 @@ var ExternalVocabularyImport = React.createClass({
       }
     },
 
-    processRetrievedVocabItems: function(uri, valueProp, language, displayProp, data) {
-      log.debug("Retrieved vocabulary item", data);
-      if(data.indexConcepts) {
-        var concepts = data.indexConcepts;
-      } else {
-        var concepts = null;
+    processRetrievedVocabItems: function(uri, valueProp, language, displayProp, concepts) {
+      log.debug("Retrieved vocabulary item", concepts);
+      if (!concepts) {
+        log.error('Expecting array of concepts but got', concepts);
       }
-
 
       //async state update and processing of retrieved items
       var deferProgress = $.Deferred();
@@ -165,37 +162,83 @@ var ExternalVocabularyImport = React.createClass({
      * @return {[type]}           value if found, otherwise null
      */
     attemptGetPropertyValue: function(item, valueProp, language) {
-      if(language == null || language === '') {
-        var valueProperty = valueProp;
-      } else {
-        var valueProperty = valueProp + '@' + language;
-      }
-
-      var value = item[valueProperty];
-      if(value == null) {
-        //try without language if not already tried
-        if(language != null && item.hasOwnProperty(valueProp)) {
-          value = item[valueProp];
-          log.debug("Fallback to {", valueProp, "}, value", value);
-        }
-        //try english if not preferred language
-        else if(language != 'en' && item.hasOwnProperty(valueProp + '@en')) {
-          value = item[valueProp + '@en'];
-          log.debug("Fallback to english {", valueProp, "}, value", value);
-        }
-        //try any other language
-        else {
-          log.debug("Looking for other versions of property {", valueProp, "} in", item);
-          var otherLanguageKey = _.chain(item).keys().find(function(k) {
-            return _.startsWith(k, valueProp + '@')
-          }).value();
-          if(otherLanguageKey != null) {
-            value = item[otherLanguageKey];
-            log.debug("Fallback to key", otherLanguageKey, "value", value);
+      if (typeof item == 'object' && item.hasOwnProperty(valueProp)) {
+        var prop = item[valueProp];
+        if (Array.isArray(prop)) {
+          log.debug('Property is array, looking for best value of', valueProp, 'with language', language, 'in', prop);
+          var result = null;
+          for(var i=0; i < prop.length; i++) {
+            var valueObj = prop[i];
+            if (valueObj.hasOwnProperty('@value')) {
+              var value = valueObj['@value'];
+              var valueLang = valueObj['@language'];
+              if (valueLang === language) {
+                // language match
+                log.debug('Value found with exact language match: ', value);
+                return value;
+              } else {
+                if (result === null || !valueLang || valueLang === '') {
+                  // no result yet OR value with no language
+                  result = value['@value'];
+                }
+              }
+            } else {
+              log.warn('Expecting value object but no @value in', valueObj, '- Skipping.');
+            }
+          }
+          if (!result) {
+            log.warn('No result extracted from', prop);
+            return null;
+          } else {
+            log.debug('Value found without exact language match: ', result);
+            return result;
+          }
+        } else {
+          if (typeof prop == 'object') {
+            log.debug('Single object Property, selecting its value', valueProp, prop);
+            return item['@value'] || null;
+          } else if (typeof prop == 'string') {
+            log.debug('String Property, selecting its value', valueProp, prop);
+            return prop;
+          } else {
+            return null;
           }
         }
+      } else {
+        log.debug('Property ', valueProp, 'not in item', item);
+        return null;
       }
-      return value;
+      // if(language == null || language === '') {
+      //   var valueProperty = valueProp;
+      // } else {
+      //   var valueProperty = valueProp + '@' + language;
+      // }
+      //
+      // var value = item[valueProperty];
+      // if(value == null) {
+      //   //try without language if not already tried
+      //   if(language != null && item.hasOwnProperty(valueProp)) {
+      //     value = item[valueProp];
+      //     log.debug("Fallback to {", valueProp, "}, value", value);
+      //   }
+      //   //try english if not preferred language
+      //   else if(language != 'en' && item.hasOwnProperty(valueProp + '@en')) {
+      //     value = item[valueProp + '@en'];
+      //     log.debug("Fallback to english {", valueProp, "}, value", value);
+      //   }
+      //   //try any other language
+      //   else {
+      //     log.debug("Looking for other versions of property {", valueProp, "} in", item);
+      //     var otherLanguageKey = _.chain(item).keys().find(function(k) {
+      //       return _.startsWith(k, valueProp + '@')
+      //     }).value();
+      //     if(otherLanguageKey != null) {
+      //       value = item[otherLanguageKey];
+      //       log.debug("Fallback to key", otherLanguageKey, "value", value);
+      //     }
+      //   }
+      // }
+      // return value;
     },
 
     applyVocabularyImport: function() {

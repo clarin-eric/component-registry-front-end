@@ -80,7 +80,7 @@ var ExternalVocabularySelector = React.createClass({
     },
 
     submitSelection: function(item) {
-      this.props.onSelect(this.state.selected['@id'], 'prefLabel', 'en');
+      this.props.onSelect(this.state.selected['@id'], 'http://www.w3.org/2004/02/skos/core#prefLabel', 'en');
       this.props.onClose();
     },
 
@@ -99,7 +99,7 @@ var ExternalVocabularySelector = React.createClass({
         <Modal.Body>
           <div className={classes}>
             <div>
-              {this.state.loading && <strong>Retrieving vocabularies</strong>}
+              {this.state.loading && <strong>Retrieving vocabularies...</strong>}
               {this.state.error && <div className="error">{this.state.error}<br /><a onClick={this.doQuery}>Try again</a></div>}
             </div>
             <div className="external-vocabulary-items">
