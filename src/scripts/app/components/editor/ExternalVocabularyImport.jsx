@@ -120,10 +120,10 @@ var ExternalVocabularyImport = React.createClass({
      * @return {array}             Array of transformed items if no callback provided
      */
     transformVocabItems: function(data, valueProp, language, displayProp, cb) {
-      log.debug("Map item data with", 'uri', valueProp, language, displayProp);
+      log.debug("Map item data with", data, valueProp, language, displayProp);
 
       var items = data.map(function(item, idx) {
-        var conceptLink = item.uri;
+        var conceptLink = item['@id'];
         var value = this.attemptGetPropertyValue(item, valueProp, language);
         if(value == null) {
           //no value or fallback value is present, return null for the entire item
@@ -162,9 +162,16 @@ var ExternalVocabularyImport = React.createClass({
      * @return {[type]}           value if found, otherwise null
      */
     attemptGetPropertyValue: function(item, valueProp, language) {
+        //TODO: normalise (fix) valueProp:
+        // - if starting with `skos:`, replace with full namespace
+        //    e.g. `skos:prefLabel` -> `http://www.w3.org/2004/02/skos/core#prefLabel`
+        // - if not a URI, prepend skos namespace
+        //    e.g. `prefLabel` -> `http://www.w3.org/2004/02/skos/core#prefLabel`
+
       if (typeof item == 'object' && item.hasOwnProperty(valueProp)) {
         var prop = item[valueProp];
         if (Array.isArray(prop)) {
+          //TODO: Make this more elegent with _.findWhere() ?
           log.debug('Property is array, looking for best value of', valueProp, 'with language', language, 'in', prop);
           var result = null;
           for(var i=0; i < prop.length; i++) {
