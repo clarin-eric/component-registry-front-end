@@ -17,5 +17,11 @@ module.exports = merge(common, {
       '/ds/ComponentRegistry/ccr': compRegBase,
       '/ds/ComponentRegistry/vocabulary': compRegBase
     },
+    headers: {
+      "Access-Control-Allow-Origin": "http://0.0.0.0:3000",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
+      "Access-Control-Allow-Credentials": "true"
+    },
   }
 })
