@@ -35,7 +35,6 @@
     "clipboard": "^1.5.x",
     "clone": "^1.0.2",
     "core-js": "^3.4.0",
-    "detect-browser": "^1.12.0",
     "fluxxor": "^1.7.x",
     "immutable": "^3.7.x",
     "lodash": "^4.17.21",
