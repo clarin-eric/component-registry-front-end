@@ -24,6 +24,8 @@ var ComponentRegistryClient = require('../../service/ComponentRegistryClient');
 var update = require('react-addons-update');
 var classNames = require('classnames');
 
+var CONCEPT_IDENTIFIER_PROPERTY = '@id';
+
 require('../../../../styles/EditorDialog.sass');
 /**
 * ConceptRegistryModal - Bootstrap Modal dialog for setting the Concept Registry (CCR) link.
@@ -109,7 +111,7 @@ var ConceptRegistryModal = React.createClass({
           {/*<Table   data={this.state.rows} header={conceptRegHeader}  />*/}
           <Table.Provider id="ccrTable" ref="table" className={tableClasses} columns={this.state.columns}>
             <Table.Header />
-            <Table.Body rows={this.state.rows} rowKey="identifier" onRow={onRow} />
+            <Table.Body rows={this.state.rows} rowKey={CONCEPT_IDENTIFIER_PROPERTY} onRow={onRow} />
           </Table.Provider>
           <a onClick={this.toggleHelp}><Glyphicon glyph='question-sign' /></a>
           {this.state.helpShown &&
@@ -131,7 +133,7 @@ var ConceptRegistryModal = React.createClass({
         </Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={this.confirm} disabled={this.state.selectedRow.pid == null}>Ok</Button>
+          <Button onClick={this.confirm} disabled={this.state.selectedRow[CONCEPT_IDENTIFIER_PROPERTY] == null}>Ok</Button>
           <Button onClick={this.clear}>Clear Setting</Button>
           <Button onClick={this.close}>Cancel</Button>
         </Modal.Footer>
@@ -172,7 +174,7 @@ var ConceptRegistryModal = React.createClass({
   },
 
   confirm: function(evt) {
-    var selectedValue = this.state.selectedRow.pid || "";
+    var selectedValue = this.state.selectedRow[CONCEPT_IDENTIFIER_PROPERTY] || "";
     this.assignValue(selectedValue);
     this.close();
   },
@@ -195,7 +197,7 @@ var ConceptRegistryModal = React.createClass({
   getColumnsDefinition: function() {
     return [
       {
-        property: 'name',
+        property: 'http://www.w3.org/2004/02/skos/core#prefLabel',
         header: {label: 'Name'},
         cell: {format: this.handleCellWithTooltip}
       },
@@ -205,29 +207,29 @@ var ConceptRegistryModal = React.createClass({
         cell: {format: this.handleCellWithTooltip}
       },
       {
-        property: 'identifier',
+        property: '@id',
         header: {label:  'Identifier'},
         cell: {format: this.handleCellWithTooltip}
+      // },
+      // {
+      //   property: 'owner',
+      //   header: {label: 'Owner'},
+      //   cell: {format: this.handleCell}
       },
       {
-        property: 'owner',
-        header: {label: 'Owner'},
-        cell: {format: this.handleCell}
-      },
-      {
-        property: 'pid',
+        property: '@id',
         header: {label: 'PersistentId'},
         cell: {format: this.handlePidLink}
-      },
-      {
-        property: 'type',
-        header: {label: 'Type'},
-        cell: {format: this.handleCell}
-      },
-      {
-        property: 'version',
-        header: {label: 'Version'},
-        cell: {format: this.handleCell}
+      // },
+      // {
+      //   property: 'type',
+      //   header: {label: 'Type'},
+      //   cell: {format: this.handleCell}
+      // },
+      // {
+      //   property: 'version',
+      //   header: {label: 'Version'},
+      //   cell: {format: this.handleCell}
       }
     ];
   },
@@ -265,7 +267,8 @@ var ConceptRegistryModal = React.createClass({
       className: classNames(
         extras.rowIndex % 2 ? 'odd' : 'even',
         {
-          'selected-row': selectedRow.identifier && row.identifier === selectedRow.identifier
+          'selected-row': (selectedRow[CONCEPT_IDENTIFIER_PROPERTY] && 
+            row[CONCEPT_IDENTIFIER_PROPERTY] === selectedRow[CONCEPT_IDENTIFIER_PROPERTY])
         }
       ),
       onClick: function(){this.onSelectRow(extras.rowIndex)}.bind(this)

@@ -2,6 +2,8 @@
 var log = require('loglevel');
 var React = require('react');
 
+var VOCABULARY_TITLE_PROPERTY='http://purl.org/dc/terms/title';
+
 //bootstrap
 var Modal = require('react-bootstrap/lib/Modal');
 var Button = require('react-bootstrap/lib/Button');
@@ -107,7 +109,7 @@ var ExternalVocabularySelector = React.createClass({
               {this.state.vocabularies.map(function(item, idx){
                 var vocabId = item['@id'];
                 var title =  null;
-                var labels = item['http://www.w3.org/2000/01/rdf-schema#label']
+                var labels = item[VOCABULARY_TITLE_PROPERTY]
                 if(labels) {
                   for(var i=0; i < labels.length; i++) {
                     var label = labels[i];
