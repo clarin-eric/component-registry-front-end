@@ -66,14 +66,22 @@ var AutoValueEditor = React.createClass({
               }.bind(this))
             }
             <div>
-              {this.isCmdi12Mode() ?
+            {this.isCmdi12Mode() ?
+              <div>
                 <div className="additional-autovalue-expression">
-                    <a onClick={this.addAutoValueExpression}>
-                      {(!this.props.autoValue || this.props.autoValue.length == 0) ? <span>Create an automatic value expression</span> : <span>Add an automatic value expression</span>} <Glyphicon glyph="plus" />
-                    </a>
+                  <a onClick={this.addAutoValueExpression}>
+                    {(!this.props.autoValue || this.props.autoValue.length == 0) ? <span>Create an automatic value expression</span> : <span>Add an automatic value expression</span>} <Glyphicon glyph="plus" />
+                  </a>
                 </div>
-                : <strong>Automatic value expressions are not supported in CMDI 1.1. Switch to CMDI 1.2 mode to edit.</strong>
-              }
+                {$.isArray(this.props.autoValue) && this.props.autoValue.length > 0 &&
+                  <p className="help-block">
+                    Automatic value expressions must be <em>prefixed</em> with a string of alphanumeric characters, followed by an underscore: <tt>[prefix]_[name]</tt>.
+                    Please choose a sufficiently unique prefix and use it consistently within the chosen context.
+                  </p>
+                }
+              </div>
+              : <strong>Automatic value expressions are not supported in CMDI 1.1. Switch to CMDI 1.2 mode to edit.</strong>
+            }
             </div>
           </div>
       </div>
