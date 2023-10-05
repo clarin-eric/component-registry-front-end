@@ -113,23 +113,6 @@ var ConceptRegistryModal = React.createClass({
             <Table.Header />
             <Table.Body rows={this.state.rows} rowKey={CONCEPT_IDENTIFIER_PROPERTY} onRow={onRow} />
           </Table.Provider>
-          <a onClick={this.toggleHelp}><Glyphicon glyph='question-sign' /></a>
-          {this.state.helpShown &&
-            <div>
-              <p>Hover the mouse over the search results to see full labels. Click the PersistentId to go to the concept's entry in the concept registry</p>
-              <p>You can use wildcards, parentheses and the special keywords 'AND', 'OR' and 'NOT' in your query as well as the '-' prefix to exclude terms. <br />
-              Some examples of valid queries:</p>
-              <ul>
-                <li>convers*</li>
-                <li>person AND name</li>
-                <li>subject OR topic</li>
-                <li>language AND (code OR name)</li>
-                <li>language NOT (code OR name)</li>
-                <li>language -code</li>
-              </ul>
-              <p>Click the 'Clear setting' button to unset the current concept for the current component, element or attribute.</p>
-            </div>
-        }
         </Modal.Body>
 
         <Modal.Footer>
@@ -160,10 +143,6 @@ var ConceptRegistryModal = React.createClass({
         log.error("Failed to query CCR");
       }
     });
-  },
-
-  toggleHelp: function(evt) {
-    this.setState({helpShown: !this.state.helpShown});
   },
 
   handleEnter: function(evt) {
