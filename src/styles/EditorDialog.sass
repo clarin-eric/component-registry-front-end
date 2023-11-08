@@ -1,3 +1,5 @@
+@import './variables';
+
 //Modal container position
 #typeModalContainer {
   .modal-dialog {
@@ -47,7 +49,7 @@
   min-height: 170px;
 }
 .registry-dialog .modal-dialog {
-  min-width: 750px;
+  min-width: $ccr-table-dialog-witdh;
 }
 .registry-dialog .modal-body {
   padding-left: 1px;
@@ -189,7 +191,7 @@ div.external-vocabulary-import {
 
   th, td {
     display: inline-block;
-    width: calc(720px/7);
+    width: #{($ccr-table-dialog-witdh - $ccr-table-scroll-border-space)/4};
     line-height: 1.6em;
     min-height: 28px;
     font-size: 0.8em;
