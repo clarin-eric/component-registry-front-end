@@ -181,7 +181,7 @@ var ConceptRegistryModal = React.createClass({
         cell: {format: this.handleCellWithTooltip}
       },
       {
-        property: 'definition',
+        property: 'http://www.w3.org/2004/02/skos/core#definition',
         header: {label: 'Definition'},
         cell: {format: this.handleCellWithTooltip}
       },
