@@ -20,8 +20,8 @@
     "jquery": "^2.2.4",
     "jsonix": "^3.0.0",
     "jsx-loader": "~0.12.x",
-    "sass-loader": "~7.3.x",
     "sass": "^1.22.10",
+    "sass-loader": "~7.3.x",
     "spinkit": "^1.2.x",
     "style-loader": "~0.8.0",
     "url-loader": "~0.5.5",
@@ -37,6 +37,7 @@
     "core-js": "^3.4.0",
     "fluxxor": "^1.7.x",
     "immutable": "^3.7.x",
+    "jsonld": "^8.3.1",
     "lodash": "^4.17.21",
     "loglevel": "^1.7.0",
     "moment-timezone": "^0.3.1",
@@ -70,7 +71,7 @@
   "repository": "",
   "src": "src",
   "test": "test",
-  "version": "2.5-dev",
+  "version": "2.5.0-dev",
   "babel": {
     "presets": [
       [
