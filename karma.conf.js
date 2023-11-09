@@ -8,6 +8,7 @@ module.exports = function (config) {
     frameworks: ['jasmine'],
     files: [
       'test/helpers/**/*.js',
+      'test/service/**/*.js',
       'test/spec/components/**/*.js'
     ],
     preprocessors: {
