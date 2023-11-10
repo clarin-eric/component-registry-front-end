@@ -7,7 +7,8 @@ const compRegBase = 'http://localhost:8080';
 
 module.exports = merge(common, {
   mode: 'development',
-  devtool: 'cheap-module-eval-source-map',
+  // devtool: 'cheap-module-eval-source-map',
+  devtool: 'source-map',
   devServer: {
     host: '0.0.0.0',
     port: 3000,
