@@ -131,11 +131,9 @@ var ConceptRegistryModal = React.createClass({
     var self = this;
     this.setState({ rows: [], selectedRow: {} });
     ComponentRegistryClient.queryCCR(this.state.inputSearch, function(data) {
-      if(data != null) {
+      if(data != null && data["results"]) {
         var indexedData =
-          _.map(data, function(row ,index) {
-            return _.merge(row, {index: index});
-          });
+          _.map(data["results"], self.postProcessQueryResults);
         log.debug("CCR response", indexedData);
         self.setState({ rows: indexedData, queryDone: true, queryError: null });
       } else {
@@ -143,6 +141,22 @@ var ConceptRegistryModal = React.createClass({
         log.error("Failed to query CCR");
       }
     });
+  },
+
+  postProcessQueryResults: function(row, index) {
+    var prefLabel = row["prefLabel"];
+    if(prefLabel !== null) {  
+      //TODO: find best matching prefLabel based on language
+      prefLabel = prefLabel[0];
+    }
+
+    return {
+      "@id": row["uri"],
+      "index": index,
+      "pid": row["uri"],
+      "name": prefLabel,
+      "definition": row["definition"]
+    };
   },
 
   handleEnter: function(evt) {
@@ -176,12 +190,12 @@ var ConceptRegistryModal = React.createClass({
   getColumnsDefinition: function() {
     return [
       {
-        property: 'http://www.w3.org/2004/02/skos/core#prefLabel',
+        property: 'name',
         header: {label: 'Name'},
         cell: {format: this.handleCellWithTooltip}
       },
       {
-        property: 'http://www.w3.org/2004/02/skos/core#definition',
+        property: 'definition',
         header: {label: 'Definition'},
         cell: {format: this.handleCellWithTooltip}
       },

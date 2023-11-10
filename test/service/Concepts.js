@@ -114,11 +114,19 @@ async function test() {
 
   const compacted = await processor.compact(testData, context);
   console.log('Compacted:\n');
-  printJson(compacted);
+  // printJson(compacted);
 
-  const expanded = await processor.expand(testData);
-  console.log('\nExpanded:\n');
-  printJson(expanded);
+  // const expanded = await processor.expand(testData);
+  // console.log('\nExpanded:\n');
+  // printJson(expanded);
+
+  const results = compacted["result"];
+  const processed = results.map((result) => ({
+    "id": result["uri"],
+    "label": result["prefLabel"][0]
+  }));
+  printJson(processed);
+
 }
 
 test().then(() => console.log('\nDone'));
