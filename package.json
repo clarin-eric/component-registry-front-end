@@ -71,7 +71,7 @@
   "repository": "",
   "src": "src",
   "test": "test",
-  "version": "2.5.0-dev",
+  "version": "2.4.6-beta1",
   "babel": {
     "presets": [
       [
