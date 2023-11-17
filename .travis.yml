@@ -1,4 +1,6 @@
 language: bash
 services:
   - docker
-script: bash build.sh install build
+script:
+  - shellcheck *.sh
+  - bash build.sh install build
