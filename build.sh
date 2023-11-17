@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+SCRIPT_DIR="$( cd "$(dirname "$0")" || exit 1 ; pwd -P )"
 
 INSTALL=0
 BUILD=0
@@ -23,7 +23,7 @@ esac
 shift # past argument or value
 done
 
-[ "${INSTALL}" = 1 ] && bash "${SCRIPT_DIR}/npm-docker.sh" install
-[ "${BUILD}" = 1 ] && bash "${SCRIPT_DIR}/npm-docker.sh" run build
+[ "${INSTALL}" = 1 ] && bash "${SCRIPT_DIR}/npm-docker.sh" "install"
+[ "${BUILD}" = 1 ] && bash "${SCRIPT_DIR}/npm-docker.sh" "run" "build"
 
 

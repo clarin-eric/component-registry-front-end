@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+SCRIPT_DIR="$( cd "$(dirname "$0")" || exit 1 ; pwd -P )"
 
 bash "${SCRIPT_DIR}/npm-docker.sh" start
 
