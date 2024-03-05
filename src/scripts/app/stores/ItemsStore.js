@@ -32,6 +32,9 @@ var ItemsStore = Fluxxor.createStore({
       Constants.LOAD_ITEMS, this.handleLoadItems,
       Constants.LOAD_ITEMS_SUCCESS, this.handleLoadItemsSuccess,
       Constants.LOAD_ITEMS_FAILURE, this.handleLoadItemsFailure,
+      Constants.LOAD_ITEM_RIGHTS, this.handleLoadItemRights,
+      Constants.LOAD_ITEM_RIGHTS_SUCCESS, this.handleLoadItemRightsSuccess,
+      Constants.LOAD_ITEM_RIGHTS_FAILURE, this.handleLoadItemRightsFailure,
       Constants.SWITCH_SPACE, this.handleSwitchSpace,
       Constants.JUMP_TO_ITEM, this.handleJumpToItem,
       Constants.JUMP_TO_ITEM_SUCCESS, this.handleJumpToItemSuccess,
@@ -223,6 +226,18 @@ var ItemsStore = Fluxxor.createStore({
     this.loading = false;
     this.emit("change");
   },
+
+  handleLoadItemRights: function() {
+    this.emit("change");
+  },
+
+  handleLoadItemRightsSuccess: function() {
+    this.emit("change");
+  },
+
+  handleLoadItemRightsFailure: function() {
+    this.emit("change");
+  }
 });
 
 module.exports = ItemsStore;

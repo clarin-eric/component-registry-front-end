@@ -51,6 +51,19 @@ var RestActions = {
     );
   },
 
+  loadItemRights: function(itemId) {
+    this.dispatch(Constants.LOAD_ITEM_RIGHTS, itemId);
+    ComponentRegistryClient.loadItemRights(itemId, function(item){
+        // Success
+        this.dispatch(Constants.LOAD_ITEM_RIGHTS_SUCCESS, item);
+      }.bind(this),
+      function(message) {
+        // Failure
+        this.dispatch(Constants.LOAD_ITEM_RIGHTS_FAILURE, message);
+      }.bind(this)
+    );
+  },
+
   loadComponentSpec: function(type, itemId, successCb) {
     this.dispatch(Constants.LOAD_COMPONENT_SPEC);
     // load the (JSON) spec for this item
