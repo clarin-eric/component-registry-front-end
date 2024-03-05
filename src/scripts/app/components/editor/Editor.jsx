@@ -76,6 +76,7 @@ var Editor = React.createClass({
 
     //initialisation for data grid
     this.getFlux().actions.checkUserItemOwnership(this.state.editor.item, this.state.auth.authState);
+    this.getFlux().actions.loadItemRights(this.state.editor.item);
     this.getFlux().actions.loadTeams();
     this.getFlux().actions.loadEditorGridItems(this.state.editor.grid.space, this.state.editor.grid.team, this.state.editor.grid.statusFilter);
   },
@@ -121,7 +122,7 @@ var Editor = React.createClass({
                 derivedFromId={this.state.editor.item == null ? null : this.state.editor.item.id}
                 cmdiVersionMode={this.state.editor.cmdiVersionMode}
                 onCmdiVersionModeChange={this.handleCmdiVersionModeChange}
-                userHasSaveRights={this.state.editor.userOwnsItem}
+                userHasSaveRights={this.userHasSaveRights()}
               />
             <div className={"browserGroup space-" + this.state.editor.grid.space}>
               {gridExpanded && (
@@ -250,6 +251,14 @@ var Editor = React.createClass({
       log.error("No path for route", lastRoute);
     }
     return path.indexOf("editor/new") == 0 || path.indexOf("editor/component/new") == 0 || path.indexOf("editor/profile/new") == 0;
+  },
+
+  userHasSaveRights: function () {
+    if (this.state.editor.itemRights) {
+      return this.state.editor.itemRights.canWrite === "true";
+    } else {
+      return this.state.editor.userOwnsItem;
+    }
   },
 
   initFromParams: function() {

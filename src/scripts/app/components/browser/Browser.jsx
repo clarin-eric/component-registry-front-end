@@ -220,7 +220,7 @@ var Browser = React.createClass({
   handleRowSelect: function(item, multiSelect) {
     this.getFlux().actions.selectBrowserItem(item, multiSelect);
     if(item) {
-      this.getFlux().actions.loadItemRights(item.id);
+      this.getFlux().actions.loadItemRights(item);
     }
 
     log.debug("Item", item);

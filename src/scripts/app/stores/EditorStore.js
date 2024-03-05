@@ -14,6 +14,7 @@ var EditorStore = Fluxxor.createStore({
   initialize: function(options) {
     this.type = Constants.TYPE_COMPONENT; //components or profiles
     this.item = null;
+    this.itemRights = null;
     this.processing = false;
     this.componentLinkingMode = false;
     this.selectedComponentId = null; //selected for linking
@@ -52,7 +53,9 @@ var EditorStore = Fluxxor.createStore({
       Constants.RESET_EDITOR_STATUS_FILTER, this.handleResetStatusFilter,
       Constants.SET_EDITOR_STATUS_FILTER, this.handleSetStatusFilter,
       Constants.SET_CMDI_VERSION_MODE, this.handleSetCmdiVersionMode,
-      Constants.CHECK_USER_ITEM_OWNSERSHIP_SUCCESS, this.handleCheckUserItemOwnership
+      Constants.CHECK_USER_ITEM_OWNSERSHIP_SUCCESS, this.handleCheckUserItemOwnership,
+      // Constants.LOAD_ITEM_RIGHTS, this.handleLoadingItemRights,
+      Constants.LOAD_ITEM_RIGHTS_SUCCESS, this.handleItemRightsLoaded
     );
   },
 
@@ -65,6 +68,7 @@ var EditorStore = Fluxxor.createStore({
     return {
       type: this.type,
       item: this.item,
+      itemRights: this.itemRights,
       componentLinkingMode: this.componentLinkingMode,
       selectedComponentId: this.selectedComponentId,
       processing: this.processing,
@@ -207,6 +211,12 @@ var EditorStore = Fluxxor.createStore({
 
   handleCheckUserItemOwnership: function(hasRights) {
     this.userOwnsItem = hasRights;
+    this.emit("change");
+  },
+
+  handleItemRightsLoaded: function(rights) {
+    log.debug("Item rights loaded", rights);
+    this.itemRights = rights;
     this.emit("change");
   }
 

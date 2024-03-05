@@ -51,13 +51,17 @@ var RestActions = {
     );
   },
 
-  loadItemRights: function (itemId) {
-    this.dispatch(Constants.LOAD_ITEM_RIGHTS);
-    ComponentRegistryClient.loadItemRights(itemId, function (rights) {
-      this.dispatch(Constants.LOAD_ITEM_RIGHTS_SUCCESS, rights);
-    }.bind(this), function (err) {
-      this.dispatch(Constants.LOAD_ITEM_RIGHTS_FAILURE, rights);
-    }.bind(this));
+  loadItemRights: function (item) {
+    if (item === null || !item.hasOwnProperty('id')) {
+      this.dispatch(Constants.LOAD_ITEM_RIGHTS_SUCCESS, null);
+    } else {
+      this.dispatch(Constants.LOAD_ITEM_RIGHTS);
+      ComponentRegistryClient.loadItemRights(item.id, function (rights) {
+        this.dispatch(Constants.LOAD_ITEM_RIGHTS_SUCCESS, rights);
+      }.bind(this), function (err) {
+        this.dispatch(Constants.LOAD_ITEM_RIGHTS_FAILURE, rights);
+      }.bind(this));
+    }
   },
 
   loadComponentSpec: function(type, itemId, successCb) {
