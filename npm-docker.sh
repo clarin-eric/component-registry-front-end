@@ -4,21 +4,20 @@
 # Script for building the Component Registry without depending on a local node enviroment.
 # Requires docker to be installed and available to the current user!
 #####################################################################################
-
 #configuration
 APP_NAME="component-registry-frontend"
 BUILD_IMAGE="registry.gitlab.com/clarin-eric/docker-alpine-clrs-build_env:2.1.0"
 CLEAN_CACHE=${CLEAN_CACHE:-false}
 
-SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+SCRIPT_DIR="$( cd "$(dirname "$0")" || exit 1; pwd -P )"
 BUILD_CACHE_VOLUME="${APP_NAME}-node-build-cache"
 BUILD_CONTAINER_NAME="${APP_NAME}-npm-build"
 
-BUILD_OPTS="$@"
-BUILD_CMD="npm ${BUILD_OPTS}"
+BUILD_CMD=("npm")
+BUILD_CMD+=("$@")
 
 if ! [ "${SRC_DIR}" ]; then
-  SRC_DIR="$( cd ${SCRIPT_DIR} ; pwd -P )"
+  SRC_DIR="$( cd "${SCRIPT_DIR}" || exit 1 ; pwd -P )"
 fi
 
 if ! [ -d "${SRC_DIR}" ]; then
@@ -34,7 +33,7 @@ main() {
 	prepare_cache_volume
 
 	echo "Source dir: ${SRC_DIR}"
-	echo "Build command: ${BUILD_CMD}"
+	echo "Build commands:" "${BUILD_CMD[@]}"
 	echo "Build image: ${BUILD_IMAGE}"
 
 	docker_run
@@ -77,8 +76,7 @@ docker_run() {
 		-v "${SRC_DIR}":/var/src  \
 		-w /var/src \
 		-p 3000:3000 \
-		${DOCKER_OPTS} \
-		"${BUILD_IMAGE}" ${BUILD_CMD}
+		"${BUILD_IMAGE}" "${BUILD_CMD[@]}"
 }
 
 # Execute main

@@ -17,6 +17,8 @@ var CmdiVersionModeMixin = require('../../mixins/CmdiVersionModeMixin');
 //utils
 var update = require('react-addons-update');
 
+const autoValueExpr = /^[A-Za-z][A-Za-z\d-]*_[A-Za-z\d-]+$/; // e.g. test-123_Abc-123
+
 /**
  * AutoValueEditor
  * @type {[type]}
@@ -49,6 +51,19 @@ var AutoValueEditor = React.createClass({
     this.props.onChange(update(this.props.autoValue, {$splice: [[index, 1]]}));
   },
 
+  validateAutoValueCue: function(val, targetName, feedback) {
+    log.debug('validateAutoValueCue', val, targetName, feedback);
+
+    if(val != null && autoValueExpr.test(val)) {
+      return !this.props.validate || this.props.validate(val, targetName, feedback);
+    } else {
+      if(feedback != undefined) {
+        feedback('Not a valid auto value expression');
+      }
+      return false;
+    }    
+  },
+
   render: function () {
     return (
       <div className="auto-value">
@@ -59,21 +74,33 @@ var AutoValueEditor = React.createClass({
                 return (
                   <ValidatingTextInput key={idx} name="AutoValue" type="text" value={value}
                     disabled={!this.isCmdi12Mode()}
-                  wrapperClassName="editorFormField" onChange={this.updateAutoValueExpression.bind(this, idx)} validate={this.props.validate}
-                  addonAfter={<a className="delete" onClick={this.removeAutoValueExpression.bind(this, idx)}><Glyphicon glyph="trash"/></a>}
+                  wrapperClassName="editorFormField" onChange={this.updateAutoValueExpression.bind(this, idx)} 
+                  validate={this.validateAutoValueCue}
+                  addonAfter={
+                    <a className="delete" 
+                    onClick={this.removeAutoValueExpression.bind(this, idx)}><Glyphicon glyph="trash"/></a>
+                  }
                   />
                 );
               }.bind(this))
             }
             <div>
-              {this.isCmdi12Mode() ?
+            {this.isCmdi12Mode() ?
+              <div>
                 <div className="additional-autovalue-expression">
-                    <a onClick={this.addAutoValueExpression}>
-                      {(!this.props.autoValue || this.props.autoValue.length == 0) ? <span>Create an automatic value expression</span> : <span>Add an automatic value expression</span>} <Glyphicon glyph="plus" />
-                    </a>
+                  <a onClick={this.addAutoValueExpression}>
+                    {(!this.props.autoValue || this.props.autoValue.length == 0) ? <span>Create an automatic value expression</span> : <span>Add an automatic value expression</span>} <Glyphicon glyph="plus" />
+                  </a>
                 </div>
-                : <strong>Automatic value expressions are not supported in CMDI 1.1. Switch to CMDI 1.2 mode to edit.</strong>
-              }
+                {$.isArray(this.props.autoValue) && this.props.autoValue.length > 0 &&
+                  <p className="help-block">
+                    Automatic value expressions must be <em>prefixed</em> with a string of alphanumeric characters, followed by an underscore: <tt>[prefix]_[name]</tt>.
+                    Please choose a sufficiently unique prefix and use it consistently within the chosen context.
+                  </p>
+                }
+              </div>
+              : <strong>Automatic value expressions are not supported in CMDI 1.1. Switch to CMDI 1.2 mode to edit.</strong>
+            }
             </div>
           </div>
       </div>

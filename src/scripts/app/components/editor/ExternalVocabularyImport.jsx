@@ -78,8 +78,11 @@ var ExternalVocabularyImport = React.createClass({
       }
     },
 
-    processRetrievedVocabItems: function(uri, valueProp, language, displayProp, data) {
-      log.debug("Retrieved vocabulary item", data);
+    processRetrievedVocabItems: function(uri, valueProp, language, displayProp, concepts) {
+      log.debug("Retrieved vocabulary item", concepts);
+      if (!concepts) {
+        log.error('Expecting array of concepts but got', concepts);
+      }
 
       //async state update and processing of retrieved items
       var deferProgress = $.Deferred();
@@ -88,14 +91,14 @@ var ExternalVocabularyImport = React.createClass({
         this.setState({
           progress: {
             itemsDownloaded: true,
-            itemsCount: data.length,
-            done: false
+            itemsCount: concepts.length,
+            done: false,
           }
         });
       }.bind(this));
 
       var deferItems = $.Deferred();
-      deferProgress.then(this.transformVocabItems.bind(this, data, valueProp, language, displayProp, deferItems.resolve));
+      deferProgress.then(this.transformVocabItems.bind(this, concepts, valueProp, language, displayProp, deferItems.resolve));
 
       deferItems.then(function(items) {
         log.debug("Items", items);
@@ -117,10 +120,10 @@ var ExternalVocabularyImport = React.createClass({
      * @return {array}             Array of transformed items if no callback provided
      */
     transformVocabItems: function(data, valueProp, language, displayProp, cb) {
-      log.debug("Map item data with", 'uri', valueProp, language, displayProp);
+      log.debug("Map item data with", data, valueProp, language, displayProp);
 
       var items = data.map(function(item, idx) {
-        var conceptLink = item.uri;
+        var conceptLink = item['@id'];
         var value = this.attemptGetPropertyValue(item, valueProp, language);
         if(value == null) {
           //no value or fallback value is present, return null for the entire item
@@ -159,37 +162,90 @@ var ExternalVocabularyImport = React.createClass({
      * @return {[type]}           value if found, otherwise null
      */
     attemptGetPropertyValue: function(item, valueProp, language) {
-      if(language == null || language === '') {
-        var valueProperty = valueProp;
-      } else {
-        var valueProperty = valueProp + '@' + language;
-      }
+        //TODO: normalise (fix) valueProp:
+        // - if starting with `skos:`, replace with full namespace
+        //    e.g. `skos:prefLabel` -> `http://www.w3.org/2004/02/skos/core#prefLabel`
+        // - if not a URI, prepend skos namespace
+        //    e.g. `prefLabel` -> `http://www.w3.org/2004/02/skos/core#prefLabel`
 
-      var value = item[valueProperty];
-      if(value == null) {
-        //try without language if not already tried
-        if(language != null && item.hasOwnProperty(valueProp)) {
-          value = item[valueProp];
-          log.debug("Fallback to {", valueProp, "}, value", value);
-        }
-        //try english if not preferred language
-        else if(language != 'en' && item.hasOwnProperty(valueProp + '@en')) {
-          value = item[valueProp + '@en'];
-          log.debug("Fallback to english {", valueProp, "}, value", value);
-        }
-        //try any other language
-        else {
-          log.debug("Looking for other versions of property {", valueProp, "} in", item);
-          var otherLanguageKey = _.chain(item).keys().find(function(k) {
-            return _.startsWith(k, valueProp + '@')
-          }).value();
-          if(otherLanguageKey != null) {
-            value = item[otherLanguageKey];
-            log.debug("Fallback to key", otherLanguageKey, "value", value);
+      if (typeof item == 'object' && item.hasOwnProperty(valueProp)) {
+        var prop = item[valueProp];
+        if (Array.isArray(prop)) {
+          //TODO: Make this more elegent with _.findWhere() ?
+          log.debug('Property is array, looking for best value of', valueProp, 'with language', language, 'in', prop);
+          var result = null;
+          for(var i=0; i < prop.length; i++) {
+            var valueObj = prop[i];
+            if (valueObj.hasOwnProperty('@value')) {
+              var value = valueObj['@value'];
+              var valueLang = valueObj['@language'];
+              if (valueLang === language) {
+                // language match
+                log.debug('Value found with exact language match: ', value);
+                return value;
+              } else {
+                if (result === null || !valueLang || valueLang === '') {
+                  // no result yet OR value with no language
+                  result = value['@value'];
+                }
+              }
+            } else {
+              log.warn('Expecting value object but no @value in', valueObj, '- Skipping.');
+            }
+          }
+          if (!result) {
+            log.warn('No result extracted from', prop);
+            return null;
+          } else {
+            log.debug('Value found without exact language match: ', result);
+            return result;
+          }
+        } else {
+          if (typeof prop == 'object') {
+            log.debug('Single object Property, selecting its value', valueProp, prop);
+            return item['@value'] || null;
+          } else if (typeof prop == 'string') {
+            log.debug('String Property, selecting its value', valueProp, prop);
+            return prop;
+          } else {
+            return null;
           }
         }
+      } else {
+        log.debug('Property ', valueProp, 'not in item', item);
+        return null;
       }
-      return value;
+      // if(language == null || language === '') {
+      //   var valueProperty = valueProp;
+      // } else {
+      //   var valueProperty = valueProp + '@' + language;
+      // }
+      //
+      // var value = item[valueProperty];
+      // if(value == null) {
+      //   //try without language if not already tried
+      //   if(language != null && item.hasOwnProperty(valueProp)) {
+      //     value = item[valueProp];
+      //     log.debug("Fallback to {", valueProp, "}, value", value);
+      //   }
+      //   //try english if not preferred language
+      //   else if(language != 'en' && item.hasOwnProperty(valueProp + '@en')) {
+      //     value = item[valueProp + '@en'];
+      //     log.debug("Fallback to english {", valueProp, "}, value", value);
+      //   }
+      //   //try any other language
+      //   else {
+      //     log.debug("Looking for other versions of property {", valueProp, "} in", item);
+      //     var otherLanguageKey = _.chain(item).keys().find(function(k) {
+      //       return _.startsWith(k, valueProp + '@')
+      //     }).value();
+      //     if(otherLanguageKey != null) {
+      //       value = item[otherLanguageKey];
+      //       log.debug("Fallback to key", otherLanguageKey, "value", value);
+      //     }
+      //   }
+      // }
+      // return value;
     },
 
     applyVocabularyImport: function() {

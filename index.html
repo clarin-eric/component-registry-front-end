@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CLARIN Component Registry</title>
+  <meta name="description" content="Browser and editor for Component Metadata profiles and components. Central registry for the Component Metadata Infrastructure (CMDI) of CLARIN. More information about CMDI can be found at https://www.clarin.eu/cmdi">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- jquery -->
+  <script src="libjs/jquery/jquery-2.2.4.min.js"></script>
+  <!-- jsonix -->
+  <script src="libjs/jsonix/Jsonix-min.js"></script>
+  <!-- bootstrap -->
+  <script src="libjs/bootstrap-clarin-0.4.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="libjs/bootstrap-clarin-0.4.0/css/bootstrap.min.css">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script>
+      (function(){
+        var ef = function(){};
+        window.console = window.console || {log:ef,warn:ef,error:ef,dir:ef};
+      }());
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv-printshiv.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div id="app">Loading Component Registry...</div>
+  <script type="text/javascript">
+    if(parent != null) {
+      //make react devtools work when app is embedded in iframe (as is the case with webpack-dev-server)
+      __REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__
+    }
+  </script>
+
+  <!-- Piwik -->
+  <script type="text/javascript">
+    var _paq = _paq || [];
+    _paq.push(["setDomains", ["*.catalog.clarin.eu/ds/ComponentRegistry"]]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//stats.clarin.eu/";
+      _paq.push(['setTrackerUrl', u+'piwik.php']);
+      _paq.push(['setSiteId', 17]);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <noscript>
+    <p>
+      <span>Javascript is required to run this application</span>
+      <img src="//stats.clarin.eu/piwik.php?idsite=17" style="border:0;" alt="" />
+    </p>
+  </noscript>
+  <!-- End Piwik Code -->
+
+<script type="text/javascript" src="main.6a478760bf00b8a642eb.js"></script></body>
+</html>

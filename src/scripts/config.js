@@ -33,8 +33,9 @@ var configRetrieval = $.ajax({
 
     ConfigObject.Config = result;
     ConfigObject.ccrUrl = getUrl() + "/ccr";
-    ConfigObject.vocabulariesUrl = getUrl() + "/vocabulary/conceptscheme";
+    ConfigObject.vocabulariesUrl = getUrl() + "/vocabulary/vocabularies";
     ConfigObject.vocabularyItemsUrl = getUrl() + "/vocabulary/items";
+    ConfigObject.vocabularyPageUrl = getUrl() + "/vocabulary/page";
     ConfigObject.restUrl = getUrl() + "/rest";
     ConfigObject.adminUrl = getUrl() + "/admin";
     ConfigObject.webappUrl = getUrl();

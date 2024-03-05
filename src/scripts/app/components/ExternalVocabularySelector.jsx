@@ -2,6 +2,8 @@
 var log = require('loglevel');
 var React = require('react');
 
+var VOCABULARY_TITLE_PROPERTY='http://purl.org/dc/terms/title';
+
 //bootstrap
 var Modal = require('react-bootstrap/lib/Modal');
 var Button = require('react-bootstrap/lib/Button');
@@ -43,16 +45,13 @@ var ExternalVocabularySelector = React.createClass({
         loading: true,
         error: null}
       );
-      ComponentRegistryClient.queryVocabularies(function(data) {
-        if(data == null) {
+      ComponentRegistryClient.queryVocabularies(function(vocabularies) {
+        if(vocabularies == null) {
           this.setState({
             loading: false,
             error: "Failed to retrieve vocabularies"
           });
         }
-        log.trace("Retrieved data", data);
-
-        var vocabularies = data.response.docs;
         log.debug("Retrieved vocabularies", vocabularies);
 
         var selected = this.state.selected;
@@ -60,7 +59,7 @@ var ExternalVocabularySelector = React.createClass({
           log.debug("Initial selection:", this.props.initialSelectionUri);
           var targetUri = this.props.initialSelectionUri;
           for(var i=0;i<vocabularies.length;i++) {
-            if(vocabularies[i].uri === targetUri) {
+            if(vocabularies[i]['@id'] === targetUri) {
               selected = vocabularies[i];
             }
           }
@@ -74,7 +73,7 @@ var ExternalVocabularySelector = React.createClass({
     },
 
     selectItem: function(item) {
-      if(this.state.selected && this.state.selected.uuid === item.uuid) {
+      if(this.state.selected && this.state.selected['@id'] === item['@id']) {
         //unselect
         this.setState({selected: null});
       } else {
@@ -83,7 +82,7 @@ var ExternalVocabularySelector = React.createClass({
     },
 
     submitSelection: function(item) {
-      this.props.onSelect(this.state.selected['uri'], 'prefLabel', 'en');
+      this.props.onSelect(this.state.selected['@id'], 'http://www.w3.org/2004/02/skos/core#prefLabel', 'en');
       this.props.onClose();
     },
 
@@ -102,17 +101,29 @@ var ExternalVocabularySelector = React.createClass({
         <Modal.Body>
           <div className={classes}>
             <div>
-              {this.state.loading && <strong>Retrieving vocabularies</strong>}
+              {this.state.loading && <strong>Retrieving vocabularies...</strong>}
               {this.state.error && <div className="error">{this.state.error}<br /><a onClick={this.doQuery}>Try again</a></div>}
             </div>
             <div className="external-vocabulary-items">
               {!this.state.loading && this.state.vocabularies.length == 0 && <strong>No vocabularies found</strong>}
               {this.state.vocabularies.map(function(item, idx){
-                var title = item['title@en'] || item['title'] || "[No title]";
-                var description = item['description@en'];
-                var vocabPageUrl = getConfiguration().vocabulariesUrl + '/vocabpage?id=' + item['uuid'];
+                var vocabId = item['@id'];
+                var title =  null;
+                var labels = item[VOCABULARY_TITLE_PROPERTY]
+                if(labels) {
+                  for(var i=0; i < labels.length; i++) {
+                    var label = labels[i];
+                    // take first label but prefer english label
+                    if(label['@value'] && (title === null || label['@language'] == 'en')) {
+                      title = label['@value'];
+                    }
+                  }
+                }
+                title = title || 'No title';
+                var description = item['description@en'] || '';
+                var vocabPageUrl = getConfiguration().vocabularyPageUrl + '?uri=' + vocabId;
                 var itemClasses = classnames('external-vocabulary-item', {
-                  selected: this.state.selected && this.state.selected.uuid === item.uuid
+                  selected: this.state.selected && this.state.selected['@id'] === item['@id']
                 });
                 return (
                   <div onClick={this.selectItem.bind(null, item)} className={itemClasses} key={idx}>

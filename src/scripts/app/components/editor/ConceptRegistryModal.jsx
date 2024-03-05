@@ -24,6 +24,8 @@ var ComponentRegistryClient = require('../../service/ComponentRegistryClient');
 var update = require('react-addons-update');
 var classNames = require('classnames');
 
+var CONCEPT_IDENTIFIER_PROPERTY = '@id';
+
 require('../../../../styles/EditorDialog.sass');
 /**
 * ConceptRegistryModal - Bootstrap Modal dialog for setting the Concept Registry (CCR) link.
@@ -109,29 +111,12 @@ var ConceptRegistryModal = React.createClass({
           {/*<Table   data={this.state.rows} header={conceptRegHeader}  />*/}
           <Table.Provider id="ccrTable" ref="table" className={tableClasses} columns={this.state.columns}>
             <Table.Header />
-            <Table.Body rows={this.state.rows} rowKey="identifier" onRow={onRow} />
+            <Table.Body rows={this.state.rows} rowKey={CONCEPT_IDENTIFIER_PROPERTY} onRow={onRow} />
           </Table.Provider>
-          <a onClick={this.toggleHelp}><Glyphicon glyph='question-sign' /></a>
-          {this.state.helpShown &&
-            <div>
-              <p>Hover the mouse over the search results to see full labels. Click the PersistentId to go to the concept's entry in the concept registry</p>
-              <p>You can use wildcards, parentheses and the special keywords 'AND', 'OR' and 'NOT' in your query as well as the '-' prefix to exclude terms. <br />
-              Some examples of valid queries:</p>
-              <ul>
-                <li>convers*</li>
-                <li>person AND name</li>
-                <li>subject OR topic</li>
-                <li>language AND (code OR name)</li>
-                <li>language NOT (code OR name)</li>
-                <li>language -code</li>
-              </ul>
-              <p>Click the 'Clear setting' button to unset the current concept for the current component, element or attribute.</p>
-            </div>
-        }
         </Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={this.confirm} disabled={this.state.selectedRow.pid == null}>Ok</Button>
+          <Button onClick={this.confirm} disabled={this.state.selectedRow[CONCEPT_IDENTIFIER_PROPERTY] == null}>Ok</Button>
           <Button onClick={this.clear}>Clear Setting</Button>
           <Button onClick={this.close}>Cancel</Button>
         </Modal.Footer>
@@ -146,11 +131,9 @@ var ConceptRegistryModal = React.createClass({
     var self = this;
     this.setState({ rows: [], selectedRow: {} });
     ComponentRegistryClient.queryCCR(this.state.inputSearch, function(data) {
-      if(data != null) {
+      if(data != null && data["results"]) {
         var indexedData =
-          _.map(data, function(row ,index) {
-            return _.merge(row, {index: index});
-          });
+          _.map(data["results"], self.postProcessQueryResults);
         log.debug("CCR response", indexedData);
         self.setState({ rows: indexedData, queryDone: true, queryError: null });
       } else {
@@ -160,8 +143,20 @@ var ConceptRegistryModal = React.createClass({
     });
   },
 
-  toggleHelp: function(evt) {
-    this.setState({helpShown: !this.state.helpShown});
+  postProcessQueryResults: function(row, index) {
+    var prefLabel = row["prefLabel"];
+    if(prefLabel !== null) {  
+      //TODO: find best matching prefLabel based on language
+      prefLabel = prefLabel[0];
+    }
+
+    return {
+      "@id": row["uri"],
+      "index": index,
+      "pid": row["uri"],
+      "name": prefLabel,
+      "definition": row["definition"]
+    };
   },
 
   handleEnter: function(evt) {
@@ -172,7 +167,7 @@ var ConceptRegistryModal = React.createClass({
   },
 
   confirm: function(evt) {
-    var selectedValue = this.state.selectedRow.pid || "";
+    var selectedValue = this.state.selectedRow[CONCEPT_IDENTIFIER_PROPERTY] || "";
     this.assignValue(selectedValue);
     this.close();
   },
@@ -205,29 +200,29 @@ var ConceptRegistryModal = React.createClass({
         cell: {format: this.handleCellWithTooltip}
       },
       {
-        property: 'identifier',
+        property: '@id',
         header: {label:  'Identifier'},
         cell: {format: this.handleCellWithTooltip}
+      // },
+      // {
+      //   property: 'owner',
+      //   header: {label: 'Owner'},
+      //   cell: {format: this.handleCell}
       },
       {
-        property: 'owner',
-        header: {label: 'Owner'},
-        cell: {format: this.handleCell}
-      },
-      {
-        property: 'pid',
+        property: '@id',
         header: {label: 'PersistentId'},
         cell: {format: this.handlePidLink}
-      },
-      {
-        property: 'type',
-        header: {label: 'Type'},
-        cell: {format: this.handleCell}
-      },
-      {
-        property: 'version',
-        header: {label: 'Version'},
-        cell: {format: this.handleCell}
+      // },
+      // {
+      //   property: 'type',
+      //   header: {label: 'Type'},
+      //   cell: {format: this.handleCell}
+      // },
+      // {
+      //   property: 'version',
+      //   header: {label: 'Version'},
+      //   cell: {format: this.handleCell}
       }
     ];
   },
@@ -265,7 +260,8 @@ var ConceptRegistryModal = React.createClass({
       className: classNames(
         extras.rowIndex % 2 ? 'odd' : 'even',
         {
-          'selected-row': selectedRow.identifier && row.identifier === selectedRow.identifier
+          'selected-row': (selectedRow[CONCEPT_IDENTIFIER_PROPERTY] && 
+            row[CONCEPT_IDENTIFIER_PROPERTY] === selectedRow[CONCEPT_IDENTIFIER_PROPERTY])
         }
       ),
       onClick: function(){this.onSelectRow(extras.rowIndex)}.bind(this)
