@@ -7,8 +7,8 @@ var ComponentRegistryClient = require('../service/ComponentRegistryClient');
  */
 module.exports = {
 
-  selectBrowserItem: function(item, requestMulti) {
-    this.dispatch(Constants.SELECT_BROWSER_ITEM, {item: item, multi: requestMulti});
+  selectBrowserItem: function (item, requestMulti) {
+    this.dispatch(Constants.SELECT_BROWSER_ITEM, { item: item, multi: requestMulti });
   },
 
   selectBrowserItemId: function(type, id, space, team) {

@@ -51,17 +51,13 @@ var RestActions = {
     );
   },
 
-  loadItemRights: function(itemId) {
-    this.dispatch(Constants.LOAD_ITEM_RIGHTS, itemId);
-    ComponentRegistryClient.loadItemRights(itemId, function(item){
-        // Success
-        this.dispatch(Constants.LOAD_ITEM_RIGHTS_SUCCESS, item);
-      }.bind(this),
-      function(message) {
-        // Failure
-        this.dispatch(Constants.LOAD_ITEM_RIGHTS_FAILURE, message);
-      }.bind(this)
-    );
+  loadItemRights: function (itemId) {
+    this.dispatch(Constants.LOAD_ITEM_RIGHTS);
+    ComponentRegistryClient.loadItemRights(itemId, function (rights) {
+      this.dispatch(Constants.LOAD_ITEM_RIGHTS_SUCCESS, rights);
+    }.bind(this), function (err) {
+      this.dispatch(Constants.LOAD_ITEM_RIGHTS_FAILURE, rights);
+    }.bind(this));
   },
 
   loadComponentSpec: function(type, itemId, successCb) {

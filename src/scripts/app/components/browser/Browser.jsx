@@ -139,6 +139,7 @@ var Browser = React.createClass({
                   type={this.state.items.type}
                   space={this.state.items.space}
                   items={this.state.selection.selectedItems}
+                  selectedItemRights={this.state.selection.currentItemRights}
                   teams={this.state.team.teams}
                   selectedTeam={selectedTeam}
                   loggedIn={this.state.auth.authState.uid != null}
@@ -218,6 +219,9 @@ var Browser = React.createClass({
 
   handleRowSelect: function(item, multiSelect) {
     this.getFlux().actions.selectBrowserItem(item, multiSelect);
+    if(item) {
+      this.getFlux().actions.loadItemRights(item.id);
+    }
 
     log.debug("Item", item);
 

@@ -34,6 +34,7 @@ var BrowserMenuGroup = React.createClass({
     type: React.PropTypes.string.isRequired,
     space: React.PropTypes.string.isRequired,
     items: React.PropTypes.object,
+    selectedItemRights: React.PropTypes.object,
     teams: React.PropTypes.array,
     loggedIn: React.PropTypes.bool.isRequired,
     userId:  React.PropTypes.number,
@@ -106,9 +107,17 @@ var BrowserMenuGroup = React.createClass({
 
   renderEditorLink: function(singleItem) {
     if(singleItem) {
-      var isEditable =
-        (this.props.userId == null || this.props.userId === singleItem.userId || this.props.space == Constants.SPACE_TEAM)
-        && singleItem.status.toLowerCase() == Constants.STATUS_DEVELOPMENT.toLowerCase()
+      var rights = this.props.selectedItemRights;
+
+      var isEditable;
+      if (rights !== undefined && rights !== null) {
+        log.debug("Setting edit state from item rights provided by service:", rights);
+        isEditable = (rights.canWrite === "true");
+      } else {
+        isEditable =
+          (this.props.userId == null || this.props.userId === singleItem.userId || this.props.space == Constants.SPACE_TEAM)
+          && singleItem.status.toLowerCase() == Constants.STATUS_DEVELOPMENT.toLowerCase();
+      }
 
       var editBtnLabel = isEditable ? "Edit" : "Edit as new";
 

@@ -151,6 +151,21 @@ loadItem: function(id, handleSuccess, handleFailure) {
   }, corsRequestParams()));
 },
 
+loadItemRights: function(id, handleSuccess, handleFailure) {
+  var requestUrl = getConfiguration().restUrl + "/items/" + id + "/rights";
+  $.ajax($.extend({
+    url: requestUrl,
+    dataType: "json",
+    success: function(data) {
+      log.trace("Successfully loaded ", requestUrl);
+      handleSuccess(data);
+    }.bind(this),
+    error: function(xhr, status, err) {
+      handleFailure("Error loading item information for " + id + ": " + err);
+    }.bind(this)
+  }, corsRequestParams()));
+},
+
 saveComponent: function(spec, item, profileId, update, publish, handleSuccess, handleFailure) {
   var actionType = (publish) ? "publish" : "update";
   var registry = item;

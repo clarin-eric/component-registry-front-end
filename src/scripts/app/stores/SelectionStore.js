@@ -16,13 +16,16 @@ var SelectionStore = Fluxxor.createStore({
     this.selectedItems = {};
     this.allowMultiple = false;
     this.currentItem = null;
+    this.currentItemRights = null;
 
     this.bindActions(
       Constants.SELECT_BROWSER_ITEM, this.handleSelectItem,
       Constants.SWITCH_MULTIPLE_SELECT, this.handleSwitchMultipleSelect,
       Constants.SWITCH_SPACE, this.handleSwitchSpace,
       Constants.DELETE_COMPONENTS_SUCCESS, this.handleDeleteItemsSuccess,
-      Constants.SAVE_COMPONENT_SPEC_SUCCESS, this.handleComponentSaved
+      Constants.SAVE_COMPONENT_SPEC_SUCCESS, this.handleComponentSaved,
+      Constants.LOAD_ITEM_RIGHTS, this.handleLoadingItemRights,
+      Constants.LOAD_ITEM_RIGHTS_SUCCESS, this.handleItemRightsLoaded
     );
   },
 
@@ -30,7 +33,8 @@ var SelectionStore = Fluxxor.createStore({
     return {
       selectedItems: this.selectedItems,
       allowMultiple: this.allowMultiple,
-      currentItem: this.currentItem
+      currentItem: this.currentItem,
+      currentItemRights: this.currentItemRights
     };
   },
 
@@ -39,6 +43,7 @@ var SelectionStore = Fluxxor.createStore({
     var multi = obj.multi;
 
     this.currentItem = item;
+    this.currentItemRights = null;
     this.allowMultiple = (multi === true);
 
     if(this.allowMultiple) {
@@ -84,6 +89,17 @@ var SelectionStore = Fluxxor.createStore({
     //select the newly saved component
     this.allowMultiple = false;
     this.handleSelectItem({item: result.item});
+  },
+
+  handleLoadingItemRights: function() {
+    this.currentItemRights = null;
+    this.emit("change");
+  },
+
+  handleItemRightsLoaded: function(rights) {
+    log.debug("Item rights loaded", rights);
+    this.currentItemRights = rights;
+    this.emit("change");
   }
 
 });
