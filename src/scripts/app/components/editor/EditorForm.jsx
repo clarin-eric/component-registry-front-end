@@ -127,6 +127,11 @@ var EditorForm = React.createClass({
             }
           </div>
 
+          {
+            !this.props.isNew && this.props.item && this.props.item.isPublic === 'true' && 
+            <div className="publicItemEditingWarning danger"><Glyphicon glyph="warning-sign"/>You are editing an item that has been published!</div>
+          }
+
           <EditorMenuGroup
             forceNew={this.props.isNew || !this.props.userHasSaveRights || saveDisallowed}
             onSave={this.handleSave}
