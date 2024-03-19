@@ -325,6 +325,15 @@ var Validation = {
     }
   },
 
+  checkConceptLink: function(uri, feedback) {
+    if(testConceptLink(uri)) {
+      return true;
+    } else {
+      feedback("Invalid concept link")
+      return false;
+    }
+  },
+
   validate: function(data) {
     log.debug('validate data');
 

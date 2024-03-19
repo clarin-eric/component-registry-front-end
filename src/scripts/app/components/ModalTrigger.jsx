@@ -29,7 +29,8 @@ var ModalTrigger = React.createClass({
     onClose: React.PropTypes.func,
     disabled: React.PropTypes.bool,
     bsSize: React.PropTypes.string,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    bsStyle: React.PropTypes.string
   },
   getDefaultProps: function() {
     return {
@@ -76,7 +77,7 @@ var ModalTrigger = React.createClass({
       )
     else
       return (
-        <Button onClick={this.toggleModal} disabled={this.props.disabled} bsSize={this.props.bsSize} title={this.props.title}>
+        <Button onClick={this.toggleModal} disabled={this.props.disabled} bsSize={this.props.bsSize} title={this.props.title} bsStyle={this.props.bsStyle}>
           {this.props.label}
         </Button>
       );
