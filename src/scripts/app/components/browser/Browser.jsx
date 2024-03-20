@@ -60,6 +60,7 @@ var Browser = React.createClass({
   componentDidMount: function() {
     this.loadItems();
     this.loadTeams();
+    this.loadRightsForSelection(this.state.selection);    
   },
 
   componentWillUpdate: function(nextProps, nextState) {
@@ -76,7 +77,11 @@ var Browser = React.createClass({
       || this.state.items.team != prevState.items.team
     ) {
       this.loadItems();
-      //this.clearItemSelection();
+    }
+    
+    if(prevState.selection.selectedItems != this.state.selection.selectedItems) {
+      log.debug("Item selection changed - (re)loading rights")
+      this.loadRightsForSelection(this.state.selection);
     }
   },
 
@@ -210,6 +215,21 @@ var Browser = React.createClass({
     this.getFlux().actions.loadComments(this.state.items.type, itemId);
   },
 
+  loadRights: function(item) {
+    this.getFlux().actions.loadItemRights(item);
+  },
+
+  loadRightsForSelection: function (selection) {
+    if (selection.selectedItems) {
+      var ids = Object.keys(selection.selectedItems);
+      if (ids && ids.length == 1) {
+        this.loadRights(selection.selectedItems[ids[0]]);
+        return;
+      }
+    } // fallback: no (single) selection to load rights for
+    this.loadRights(null);
+  },
+
   handleSpaceSelect: function(type, space, team) {
     if(space != this.state.items.space || team != this.state.items.team) {
       this.getFlux().actions.resetStatusFilter();
@@ -219,9 +239,6 @@ var Browser = React.createClass({
 
   handleRowSelect: function(item, multiSelect) {
     this.getFlux().actions.selectBrowserItem(item, multiSelect);
-    if(item) {
-      this.getFlux().actions.loadItemRights(item);
-    }
 
     log.debug("Item", item);
 
