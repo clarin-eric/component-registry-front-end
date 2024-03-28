@@ -220,13 +220,17 @@ var Browser = React.createClass({
   },
 
   loadRightsForSelection: function (selection) {
-    if (selection.selectedItems) {
-      var ids = Object.keys(selection.selectedItems);
-      if (ids && ids.length == 1) {
-        this.loadRights(selection.selectedItems[ids[0]]);
-        return;
+    // refuse to load rights if not logged in
+    if (this.state.auth.authState.uid != null) {
+      if (selection.selectedItems) {
+        var ids = Object.keys(selection.selectedItems);
+        if (ids && ids.length == 1) {
+          this.loadRights(selection.selectedItems[ids[0]]);
+          return;
+        }
       }
-    } // fallback: no (single) selection to load rights for
+    }
+    // fallback: no current user OR no (single) selection to load rights for
     this.loadRights(null);
   },
 

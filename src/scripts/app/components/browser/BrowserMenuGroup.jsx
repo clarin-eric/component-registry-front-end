@@ -110,13 +110,17 @@ var BrowserMenuGroup = React.createClass({
       var rights = this.props.selectedItemRights;
 
       var isEditable;
-      if (rights !== undefined && rights !== null) {
-        log.debug("Setting edit state from item rights provided by service:", rights);
-        isEditable = (rights.canWrite === "true");
+      if (this.props.loggedIn) {
+        if (rights !== undefined && rights !== null) {
+          log.debug("Setting edit state from item rights provided by service:", rights);
+          isEditable = (rights.canWrite === "true");
+        } else {
+          isEditable =
+            (this.props.userId == null || this.props.userId === singleItem.userId || this.props.space == Constants.SPACE_TEAM)
+            && singleItem.status.toLowerCase() == Constants.STATUS_DEVELOPMENT.toLowerCase();
+        }
       } else {
-        isEditable =
-          (this.props.userId == null || this.props.userId === singleItem.userId || this.props.space == Constants.SPACE_TEAM)
-          && singleItem.status.toLowerCase() == Constants.STATUS_DEVELOPMENT.toLowerCase();
+        isEditable = false;
       }
 
       var editBtnLabel = isEditable ? "Edit" : "Edit as new";
