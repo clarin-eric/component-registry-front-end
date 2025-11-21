@@ -1,0 +1,45 @@
+services:
+  ui:
+    image: "registry.gitlab.com/clarin-eric/docker-alpine-clrs-build_env:2.1.0"
+    command: "npm start"
+    working_dir: "/app/src"
+    ports:
+      - 3000:3000
+    volumes:
+      - "${UI_SOURCE_LOCATION}:/app/src"
+    networks:
+      - network_compreg
+  rest:
+    image: "registry.gitlab.com/clarin-eric/docker-alpine-supervisor-java-tomcat-base:9.0-java21_1.2.3"
+    volumes:
+      - "${REST_BUILD_TARGET_LOCATION}:/srv/tomcat/webapps/ds#ComponentRegistry"
+      - "./docker/rest/tomcat/context.xml:/srv/tomcat/conf/context.xml"
+      - "./docker/rest/tomcat/tomcat-users.xml:/srv/tomcat/conf/tomcat-users.xml"
+      - "./docker/rest/tomcat/postgresql-42.7.3.jar:/srv/tomcat/lib/postgresql.jar"
+    ports:
+      - 8181:8080
+    networks:
+      - network_compreg
+  database:
+    image: "registry.gitlab.com/clarin-eric/docker-postgres:15.11_1.1.0"
+    restart: always
+    environment:
+      - "POSTGRES_DB=${DB_NAME:-compreg}"
+      - "POSTGRES_USER=${DB_USERNAME:-compreg}"
+      - "POSTGRES_PASSWORD=${DB_PASSWORD:-compreg}"
+    volumes:
+      - "${PG_DATA_VOLUME:-pg-data}:/var/lib/postgresql/data:rw"
+      - "${DB_CREATE_SCRIPT:-./db/create-noop.sql}:/docker-entrypoint-initdb.d/${DB_CREATE_SCRIPT_NAME:-compreg-create.sql}"
+    ports:
+      - 5442:5432
+    networks:
+      - network_compreg
+volumes:
+  pg-data:
+    external: false
+
+networks:
+  network_compreg:
+    driver: bridge
+    internal: false
+
