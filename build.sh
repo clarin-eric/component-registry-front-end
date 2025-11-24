@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 SCRIPT_DIR="$( cd "$(dirname "$0")" || exit 1 ; pwd -P )"
 
 INSTALL=0
@@ -25,5 +27,3 @@ done
 
 [ "${INSTALL}" = 1 ] && (cd "$SCRIPT_DIR" && docker compose run --rm ui npm install)
 [ "${BUILD}" = 1 ] && (cd "$SCRIPT_DIR" && docker compose run --rm ui npm run build)
-
-
