@@ -1,5 +1,7 @@
 # CLARIN Component Registry - React.js front end
 
+[![CI](https://github.com/clarin-eric/component-registry-front-end/actions/workflows/build.yml/badge.svg)](https://github.com/clarin-eric/component-registry-front-end/actions/workflows/build.yml)
+
 This project implements a front end for the
 [CLARIN Component Registry](https://catalog.clarin.eu/ds/ComponentRegistry), part of 
 CLARIN's [Component Metadata Infrastructure](https://www.clarin.eu/cmdi) (CMDI).
@@ -26,6 +28,23 @@ More information, including UML diagrams, can be found in the project's [wiki](.
 
 ## Getting started quickly
 To run the application in development mode:
+
+### Using docker compose (recommended)
+
+Setup (on first run):
+- Edit `.env`
+  - Configure the build output location of the REST service ([component-registry-rest](https://github.com/clarin-eric/component-registry-rest) )
+  - Configure the location of a database backup
+- Run `build.sh install build`
+- Run `run.sh`
+- Restore the component registry database backup using the `pg_restore` command inside the database container
+- Stop the compose project with CTRL-C
+
+After initial setup:
+- Simply run `run.sh`
+- Access the front end at [localhost:3000](http://localhost:3000)
+
+### Locally
 - Start the Component Registry back end/REST service (see 
 [component-registry-rest](https://github.com/clarin-eric/component-registry-rest))
 - If necessary, adapt the configuration in `webpack.dev.js` to match the back end root
