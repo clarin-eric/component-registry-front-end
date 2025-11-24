@@ -10,5 +10,7 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v5
-      - name: Run the build script
-        run: bash build.sh install build
+      - name: Install dependencies
+        run: bash build.sh install
+      - name: Build the application
+        run: bash build.sh build
