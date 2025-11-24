@@ -21,6 +21,6 @@ fi
 echo 'Starting project'
 (
     cd "${SRC_DIR}" \
-        && docker-compose up \
-        && docker-compose down
+        && docker compose up \
+        && docker compose down
 )
