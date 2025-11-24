@@ -23,7 +23,7 @@ esac
 shift # past argument or value
 done
 
-[ "${INSTALL}" = 1 ] && bash "${SCRIPT_DIR}/npm-docker.sh" "install"
-[ "${BUILD}" = 1 ] && bash "${SCRIPT_DIR}/npm-docker.sh" "run" "build"
+[ "${INSTALL}" = 1 ] && (cd "$SCRIPT_DIR" && docker-compose run --rm ui npm install)
+[ "${BUILD}" = 1 ] && (cd "$SCRIPT_DIR" && docker-compose run --rm ui npm run build)
 
 
