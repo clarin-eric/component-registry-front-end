@@ -25,5 +25,10 @@ esac
 shift # past argument or value
 done
 
-[ "${INSTALL}" = 1 ] && (cd "$SCRIPT_DIR" && docker compose run --rm ui npm install)
-[ "${BUILD}" = 1 ] && (cd "$SCRIPT_DIR" && docker compose run --rm ui npm run build)
+if [ "${INSTALL}" = 1 ]; then
+    (cd "$SCRIPT_DIR" && docker compose run --rm ui npm install)
+fi
+
+if [ "${BUILD}" = 1 ]; then
+    (cd "$SCRIPT_DIR" && docker compose run --rm ui npm run build)
+fi
