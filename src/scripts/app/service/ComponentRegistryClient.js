@@ -667,9 +667,9 @@ setSuccessor: function(componentId, type, successorId, success, failure) {
   }, corsRequestParams()));
 },
 
-queryCCR: function(searchQuery, cb) {
+queryCCR: function(searchQuery, type, cb) {
   if(searchQuery != null || searchQuery != "") {
-    var reqUrl = getConfiguration().conceptSearchUrl + '?type=container&q=' + searchQuery;
+    var reqUrl = getConfiguration().conceptSearchUrl + '?type=' + type + '&q=' + searchQuery;
     log.debug('Sending ajax request to', reqUrl);
     $.ajax($.extend({
       type: 'GET',

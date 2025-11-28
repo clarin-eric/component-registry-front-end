@@ -130,7 +130,7 @@ var ConceptRegistryModal = React.createClass({
     log.debug('search query: ' + this.state.inputSearch);
     var self = this;
     this.setState({ rows: [], selectedRow: {} });
-    ComponentRegistryClient.queryCCR(this.state.inputSearch, function(data) {
+    ComponentRegistryClient.queryCCR(this.state.inputSearch, 'all', function(data) {
       if($.isArray(data)) {
         var indexedData =
           _.map(data, self.postProcessQueryResults);
