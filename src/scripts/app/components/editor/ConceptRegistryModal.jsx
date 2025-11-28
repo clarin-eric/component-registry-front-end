@@ -131,9 +131,9 @@ var ConceptRegistryModal = React.createClass({
     var self = this;
     this.setState({ rows: [], selectedRow: {} });
     ComponentRegistryClient.queryCCR(this.state.inputSearch, function(data) {
-      if(data != null && data["results"]) {
+      if($.isArray(data)) {
         var indexedData =
-          _.map(data["results"], self.postProcessQueryResults);
+          _.map(data, self.postProcessQueryResults);
         log.debug("CCR response", indexedData);
         self.setState({ rows: indexedData, queryDone: true, queryError: null });
       } else {
@@ -144,17 +144,11 @@ var ConceptRegistryModal = React.createClass({
   },
 
   postProcessQueryResults: function(row, index) {
-    var prefLabel = row["prefLabel"];
-    if(prefLabel !== null) {  
-      //TODO: find best matching prefLabel based on language
-      prefLabel = prefLabel[0];
-    }
-
     return {
       "@id": row["uri"],
       "index": index,
-      "pid": row["uri"],
-      "name": prefLabel,
+      "pid": row["id"],
+      "name": row["label"],
       "definition": row["definition"]
     };
   },
