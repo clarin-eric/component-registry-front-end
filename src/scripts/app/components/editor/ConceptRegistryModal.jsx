@@ -24,7 +24,7 @@ var ComponentRegistryClient = require('../../service/ComponentRegistryClient');
 var update = require('react-addons-update');
 var classNames = require('classnames');
 
-var CONCEPT_IDENTIFIER_PROPERTY = '@id';
+var CONCEPT_IDENTIFIER_PROPERTY = 'pid';
 
 require('../../../../styles/EditorDialog.sass');
 /**
@@ -145,11 +145,11 @@ var ConceptRegistryModal = React.createClass({
 
   postProcessQueryResults: function(row, index) {
     return {
-      "@id": row["uri"],
+      "@id": row["id"],
       "index": index,
-      "pid": row["id"],
+      "pid": row["uri"],
       "name": row["label"],
-      "definition": row["definition"]
+      "description": row["description"]
     };
   },
 
@@ -189,8 +189,8 @@ var ConceptRegistryModal = React.createClass({
         cell: {format: this.handleCellWithTooltip}
       },
       {
-        property: 'definition',
-        header: {label: 'Definition'},
+        property: 'description',
+        header: {label: 'Description'},
         cell: {format: this.handleCellWithTooltip}
       },
       {
@@ -204,7 +204,7 @@ var ConceptRegistryModal = React.createClass({
       //   cell: {format: this.handleCell}
       },
       {
-        property: '@id',
+        property: 'pid',
         header: {label: 'PersistentId'},
         cell: {format: this.handlePidLink}
       // },

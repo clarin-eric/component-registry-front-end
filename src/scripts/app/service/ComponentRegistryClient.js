@@ -669,7 +669,7 @@ setSuccessor: function(componentId, type, successorId, success, failure) {
 
 queryCCR: function(searchQuery, cb) {
   if(searchQuery != null || searchQuery != "") {
-    var reqUrl = getConfiguration().ccrUrl + '?type=container&q=' + searchQuery;
+    var reqUrl = getConfiguration().conceptSearchUrl + '?type=container&q=' + searchQuery;
     log.debug('Sending ajax request to', reqUrl);
     $.ajax($.extend({
       type: 'GET',

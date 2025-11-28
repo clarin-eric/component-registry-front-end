@@ -38,7 +38,7 @@ var configRetrieval = $.ajax({
     ConfigObject.restUrl = getUrl() + "/rest";
     ConfigObject.adminUrl = getUrl() + "/admin";
     ConfigObject.webappUrl = getUrl();
-    ConfigObject.ccrUrl = ConfigObject.restUrl + "/concepts/search";
+    ConfigObject.conceptSearchUrl = ConfigObject.restUrl + "/concepts/search";
 
     console.log("Configuration object constructed: " + JSON.stringify(ConfigObject));
 
