@@ -10,11 +10,11 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var Glyphicon = require('react-bootstrap/lib/Glyphicon');
 
 /**
-* ConceptLinkInput - Text input with button to trigger CCR search
+* DocumentationView - Text input with button to trigger CCR search
 *
 * @constructor
 */
-var ConceptLinkInput = React.createClass({
+var DocumentationView = React.createClass({
   mixins: [ImmutableRenderMixin],
 
   propTypes: {
@@ -44,4 +44,4 @@ var ConceptLinkInput = React.createClass({
   }
 });
 
-module.exports = ConceptLinkInput;
+module.exports = DocumentationView;
