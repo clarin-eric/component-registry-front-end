@@ -8,6 +8,7 @@ var Table = require('reactabular').Table;
 var select = require('selectabular');
 var byArrowKeys = require('reactabular-select').byArrowKeys;
 var sortColumn = require('reactabular').sortColumn;
+var Spinner = require('../../util/Spinner');
 
 
 //mixins
@@ -49,6 +50,7 @@ var ConceptRegistryModal = React.createClass({
       helpShown: false,
       queryError: null,
       queryDone: false,
+      busy: false,
       selectedRow: {}
     }
   },
@@ -72,7 +74,10 @@ var ConceptRegistryModal = React.createClass({
 
   render: function() {
     var self = this;
-    var tableClasses = classNames('table', 'table-bordered', 'table-hover', 'table-striped', 'table-condensed');
+    var tableClasses = classNames({
+      'table': true, 'table-bordered': true, 'table-hover': true, 'table-striped': true, 'table-condensed': true, 'busy': this.state.busy
+    });
+    
     var conceptRegHeader = {
       onClick: function(col) {
         sortColumn(self.state.columns, col, self.state.rows, self.setState.bind(self));
@@ -103,6 +108,7 @@ var ConceptRegistryModal = React.createClass({
               <Button onClick={this.inputSearchUpdate} disabled={this.state.inputSearch.length <= 1}>Search</Button>
             }
             />
+
           {this.state.queryDone && this.state.rows != null && <div>
             {this.state.rows.length} results:
           </div>}
@@ -112,6 +118,7 @@ var ConceptRegistryModal = React.createClass({
           {/*<Table   data={this.state.rows} header={conceptRegHeader}  />*/}
           <Table.Provider id="ccrTable" ref="table" className={tableClasses} columns={this.state.columns}>
             <Table.Header />
+          { this.state.busy && <Spinner /> }
             <Table.Body rows={this.state.rows} rowKey={CONCEPT_IDENTIFIER_PROPERTY} onRow={onRow} />
           </Table.Provider>
         </Modal.Body>
@@ -130,15 +137,15 @@ var ConceptRegistryModal = React.createClass({
   inputSearchUpdate: function(evt) {
     log.debug('search query: ' + this.state.inputSearch);
     var self = this;
-    this.setState({ rows: [], selectedRow: {} });
+    this.setState({ busy: true });
     ComponentRegistryClient.queryCCR(this.state.inputSearch, this.props.conceptTypes, function(data) {
       if($.isArray(data)) {
         var indexedData =
           _.map(data, self.postProcessQueryResults);
         log.debug("CCR response", indexedData);
-        self.setState({ rows: indexedData, queryDone: true, queryError: null });
+        self.setState({ rows: indexedData, queryDone: true, queryError: null, busy: false });
       } else {
-        self.setState({rows: null, queryError: "Failed to query concept registry"})
+        self.setState({rows: null, queryError: "Failed to query concept registry", busy: false })
         log.error("Failed to query CCR");
       }
     });
