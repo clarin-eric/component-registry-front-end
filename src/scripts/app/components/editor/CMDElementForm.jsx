@@ -105,6 +105,7 @@ var CMDElementForm = React.createClass({
                   labelClassName="editorFormLabel" wrapperClassName="editorFormField"
                   onChange={this.updateElementValue} validate={this.validate} />
                 <ConceptLinkInput name="@ConceptLink" type="text" label="ConceptLink" value={(elem['@ConceptLink']) ? elem['@ConceptLink'] : ""}
+                  conceptTypes={['property', 'item']}
                   labelClassName="editorFormLabel" wrapperClassName="editorFormField"
                   onChange={this.updateElementValueWithDefault.bind(this, "")} validate={this.validate}
                   updateConceptLink={this.updateConceptLink} />

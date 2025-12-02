@@ -116,6 +116,7 @@ var CMDComponentForm = React.createClass({
           labelClassName="editorFormLabel" wrapperClassName="editorFormField"
           onChange={this.updateComponentValue} validate={this.validate}  />
         <ConceptLinkInput name="@ConceptLink" label="ConceptLink" value={(comp['@ConceptLink']) ? comp['@ConceptLink'] : ""}
+          conceptTypes={['item', 'property']}
           labelClassName="editorFormLabel" wrapperClassName="editorFormField" ref="conceptRegInput"
           onChange={this.updateComponentValue} validate={this.validate}
           updateConceptLink={this.updateConceptLink} />

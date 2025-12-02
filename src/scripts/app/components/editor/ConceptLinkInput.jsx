@@ -22,6 +22,7 @@ var ConceptLinkInput = React.createClass({
     name: React.PropTypes.string.isRequired,
     label: React.PropTypes.string.isRequired,
     value: React.PropTypes.string.isRequired,
+    conceptTypes: React.PropTypes.array.isRequired,
     onChange: React.PropTypes.func.isRequired,
     updateConceptLink: React.PropTypes.func.isRequired
   },
@@ -33,7 +34,7 @@ var ConceptLinkInput = React.createClass({
 
     var {
       updateConceptLink, bsStyle, //wrap
-      buttonAfter, type, //swallow
+      buttonAfter, type, conceptTypes, //swallow
       ...otherProps //rest for passing on
       } = this.props;
 
@@ -42,13 +43,13 @@ var ConceptLinkInput = React.createClass({
         type="text"
         bsStyle={isocatLink ? "warning" : bsStyle}
         addonAfter={isocatLink ? "ISOcat links are deprecated!" : null}
-        buttonAfter={this.newConceptLinkDialogueButton(updateConceptLink)}
+        buttonAfter={this.newConceptLinkDialogueButton(updateConceptLink, conceptTypes)}
         {...otherProps}
         />
     );
   },
 
-  newConceptLinkDialogueButton: function(changeHandler, closeHandler, label, ref) {
+  newConceptLinkDialogueButton: function(changeHandler, conceptTypes, label, ref, closeHandler) {
     if(ref == null) {
      ref = "modalTrigger";
    }
@@ -64,6 +65,7 @@ var ConceptLinkInput = React.createClass({
         <ConceptRegistryModal
           onClose={closeHandler}
           onSelect={changeHandler}
+          conceptTypes={conceptTypes}
           container={this} />
       } />
   },

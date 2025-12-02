@@ -37,7 +37,8 @@ var ConceptRegistryModal = React.createClass({
 
   propTypes: {
     onSelect: React.PropTypes.func.isRequired,
-    container: React.PropTypes.object.isRequired
+    container: React.PropTypes.object.isRequired,
+    conceptTypes: React.PropTypes.array.isRequired
   },
 
   getInitialState: function() {
@@ -130,7 +131,7 @@ var ConceptRegistryModal = React.createClass({
     log.debug('search query: ' + this.state.inputSearch);
     var self = this;
     this.setState({ rows: [], selectedRow: {} });
-    ComponentRegistryClient.queryCCR(this.state.inputSearch, 'all', function(data) {
+    ComponentRegistryClient.queryCCR(this.state.inputSearch, this.props.conceptTypes, function(data) {
       if($.isArray(data)) {
         var indexedData =
           _.map(data, self.postProcessQueryResults);

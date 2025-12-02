@@ -80,6 +80,7 @@ var CMDAttributeForm = React.createClass({
           onChange={this.updateAttributeValue} validate={this.validate} />
         <ConceptLinkInput name="@ConceptLink" type="text" label="ConceptLink" value={(attr['@ConceptLink']) ? attr['@ConceptLink'] : ""}
           labelClassName="editorFormLabel" wrapperClassName="editorFormField"
+          conceptTypes={['property','item']}
           onChange={this.updateAttributeValue} validate={this.validate}
           updateConceptLink={this.propagateValue.bind(this, "@ConceptLink")} />
         <DocumentationInput
