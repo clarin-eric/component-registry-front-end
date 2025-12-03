@@ -146,6 +146,8 @@ module.exports = {
   /* ITEM TYPES */
   TYPE_PROFILE: "profile",
   TYPE_COMPONENT: "component",
+  TYPE_ELEMENT: "element",
+  TYPE_ATTRIBUTE: "attribute",
 
   TYPE_ICON_PROFILE: "file",
   TYPE_ICON_COMPONENT: "th",

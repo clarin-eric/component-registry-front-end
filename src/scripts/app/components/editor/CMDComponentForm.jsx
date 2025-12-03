@@ -36,6 +36,7 @@ var classNames = require('classnames');
 var Validation = require('../../service/Validation');
 var changeObj = require('../../util/ImmutabilityUtil').changeObj;
 var ReactAlert = require('../../util/ReactAlert');
+var Constants = require('../../constants');
 
 require('../../../../styles/CMDComponent.sass');
 
@@ -116,7 +117,7 @@ var CMDComponentForm = React.createClass({
           labelClassName="editorFormLabel" wrapperClassName="editorFormField"
           onChange={this.updateComponentValue} validate={this.validate}  />
         <ConceptLinkInput name="@ConceptLink" label="ConceptLink" value={(comp['@ConceptLink']) ? comp['@ConceptLink'] : ""}
-          conceptTypes={['item', 'property']}
+          parentType={Constants.TYPE_COMPONENT} conceptTypes={['item', 'property']}
           labelClassName="editorFormLabel" wrapperClassName="editorFormField" ref="conceptRegInput"
           onChange={this.updateComponentValue} validate={this.validate}
           updateConceptLink={this.updateConceptLink} />

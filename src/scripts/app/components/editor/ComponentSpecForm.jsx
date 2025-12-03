@@ -26,7 +26,6 @@ var Validation = require('../../service/Validation');
 var update = require('react-addons-update');
 var classNames = require('classnames');
 var changeObj = require('../../util/ImmutabilityUtil').changeObj;
-
 var domains = require('../../../domains.js');
 
 require('../../../../styles/ComponentViewer.sass');
@@ -114,7 +113,7 @@ var ComponentSpecForm = React.createClass({
               })}
             </Input>
             <ConceptLinkInput name="Component.@ConceptLink" label="ConceptLink" value={(spec.Component['@ConceptLink']) ? spec.Component['@ConceptLink'] : ""}
-              conceptTypes={['item']}
+              parentType={Constants.TYPE_COMPONENT} conceptTypes={['item']}
               labelClassName="editorFormLabel" wrapperClassName="editorFormField"
               onChange={this.handleConceptLinkChange} validate={this.validate}
               updateConceptLink={this.updateConceptLinkValue}

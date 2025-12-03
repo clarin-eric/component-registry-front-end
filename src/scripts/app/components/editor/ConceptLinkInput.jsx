@@ -5,11 +5,10 @@ var React = require('react');
 
 var ModalTrigger = require('../ModalTrigger');
 var ConceptRegistryModal = require('./ConceptRegistryModal');
+var ConceptEvaluator = require('../../service/ConceptEvaluator');
 
 //bootstrap
 var ValidatingTextInput = require('./ValidatingTextInput');
-
-var isocatPattern = /^http(s?):\/\/www\.isocat\.org/;
 
 
 /**
@@ -24,13 +23,19 @@ var ConceptLinkInput = React.createClass({
     value: React.PropTypes.string.isRequired,
     conceptTypes: React.PropTypes.array.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    updateConceptLink: React.PropTypes.func.isRequired
+    updateConceptLink: React.PropTypes.func.isRequired,
+    parentType:  React.PropTypes.string.isRequired
   },
 
   render: function() {
-    // if link is an old ISOcat link, user should be warned
-    // /<https://github.com/clarin-eric/react-webpack-comp-reg/issues/15>
-    var isocatLink = isocatPattern.test(this.props.value);
+    // Some concepts are (contextually) discouraged
+    // TODO: provide a reason
+    // <https://github.com/clarin-eric/component-registry-front-end/issues/175>
+    var discouragedConceptClass = ConceptEvaluator.isDiscouraged(this.props.value, {
+      "name": this.props.name,
+      "parentType": this.props.parentType,
+      "conceptTypes": this.props.conceptTypes
+    });
 
     var {
       updateConceptLink, bsStyle, //wrap
@@ -41,8 +46,8 @@ var ConceptLinkInput = React.createClass({
     return (
       <ValidatingTextInput
         type="text"
-        bsStyle={isocatLink ? "warning" : bsStyle}
-        addonAfter={isocatLink ? "ISOcat links are deprecated!" : null}
+        bsStyle={discouragedConceptClass ? "warning" : bsStyle}
+        addonAfter={discouragedConceptClass ? "Discouraged concept link!" : null}
         buttonAfter={this.newConceptLinkDialogueButton(updateConceptLink, conceptTypes)}
         {...otherProps}
         />

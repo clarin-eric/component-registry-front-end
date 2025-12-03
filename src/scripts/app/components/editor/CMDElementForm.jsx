@@ -32,6 +32,7 @@ var CuesEditor = require('./CuesEditor');
 var classNames = require('classnames');
 var Validation = require('../../service/Validation');
 var changeObj = require('../../util/ImmutabilityUtil').changeObj;
+var Constants = require('../../constants');
 
 require('../../../../styles/CMDElement.sass');
 
@@ -105,7 +106,7 @@ var CMDElementForm = React.createClass({
                   labelClassName="editorFormLabel" wrapperClassName="editorFormField"
                   onChange={this.updateElementValue} validate={this.validate} />
                 <ConceptLinkInput name="@ConceptLink" type="text" label="ConceptLink" value={(elem['@ConceptLink']) ? elem['@ConceptLink'] : ""}
-                  conceptTypes={['property', 'item']}
+                  parentType={Constants.TYPE_ELEMENT} conceptTypes={['property', 'item']}
                   labelClassName="editorFormLabel" wrapperClassName="editorFormField"
                   onChange={this.updateElementValueWithDefault.bind(this, "")} validate={this.validate}
                   updateConceptLink={this.updateConceptLink} />

@@ -30,6 +30,7 @@ var CuesEditor = require('./CuesEditor');
 var classNames = require('classnames');
 var changeObj = require('../../util/ImmutabilityUtil').changeObj;
 var Validation = require('../../service/Validation');
+var Constants = require('../../constants');
 
 require('../../../../styles/CMDAttribute.sass');
 
@@ -79,8 +80,8 @@ var CMDAttributeForm = React.createClass({
         <ValidatingTextInput type="text" label="Name" name="@name" value={attr['@name']} wrapperClassName="editorFormField"
           onChange={this.updateAttributeValue} validate={this.validate} />
         <ConceptLinkInput name="@ConceptLink" type="text" label="ConceptLink" value={(attr['@ConceptLink']) ? attr['@ConceptLink'] : ""}
+          parentType={Constants.TYPE_ATTRIBUTE} conceptTypes={['property','item']}
           labelClassName="editorFormLabel" wrapperClassName="editorFormField"
-          conceptTypes={['property','item']}
           onChange={this.updateAttributeValue} validate={this.validate}
           updateConceptLink={this.propagateValue.bind(this, "@ConceptLink")} />
         <DocumentationInput
