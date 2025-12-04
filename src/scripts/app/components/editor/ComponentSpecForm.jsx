@@ -113,7 +113,7 @@ var ComponentSpecForm = React.createClass({
               })}
             </Input>
             <ConceptLinkInput name="Component.@ConceptLink" label="ConceptLink" value={(spec.Component['@ConceptLink']) ? spec.Component['@ConceptLink'] : ""}
-              parentType={Constants.TYPE_COMPONENT} conceptTypes={['item']}
+              parentType={Constants.TYPE_PROFILE} conceptTypes={['item']}
               labelClassName="editorFormLabel" wrapperClassName="editorFormField"
               onChange={this.handleConceptLinkChange} validate={this.validate}
               updateConceptLink={this.updateConceptLinkValue}

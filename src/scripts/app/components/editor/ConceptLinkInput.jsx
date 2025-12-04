@@ -5,11 +5,10 @@ var React = require('react');
 
 var ModalTrigger = require('../ModalTrigger');
 var ConceptRegistryModal = require('./ConceptRegistryModal');
+var getConfiguration = require('../../../config');
 var ConceptEvaluator = require('../../service/ConceptEvaluator');
-
 //bootstrap
 var ValidatingTextInput = require('./ValidatingTextInput');
-
 
 /**
 * ConceptLinkInput - Text input with button to trigger CCR search
@@ -31,11 +30,9 @@ var ConceptLinkInput = React.createClass({
     // Some concepts are (contextually) discouraged
     // TODO: provide a reason
     // <https://github.com/clarin-eric/component-registry-front-end/issues/175>
-    var discouragedConceptClass = ConceptEvaluator.isDiscouraged(this.props.value, {
-      "name": this.props.name,
-      "parentType": this.props.parentType,
-      "conceptTypes": this.props.conceptTypes
-    });
+    var evaluator = ConceptEvaluator.evaluator(getConfiguration().conceptRules);
+    var conceptEvaluation = evaluator.evaluateConceptLink(this.props.value, this.props.parentType);
+    var discouraged = conceptEvaluation && conceptEvaluation['discouraged'];
 
     var {
       updateConceptLink, bsStyle, //wrap
@@ -46,8 +43,8 @@ var ConceptLinkInput = React.createClass({
     return (
       <ValidatingTextInput
         type="text"
-        bsStyle={discouragedConceptClass ? "warning" : bsStyle}
-        addonAfter={discouragedConceptClass ? "Discouraged concept link!" : null}
+        bsStyle={discouraged ? "warning" : bsStyle}
+        addonAfter={discouraged ? conceptEvaluation['reason'] : null}
         buttonAfter={this.newConceptLinkDialogueButton(updateConceptLink, conceptTypes)}
         {...otherProps}
         />
