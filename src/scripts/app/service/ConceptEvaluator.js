@@ -3,41 +3,34 @@ var log = require('loglevel');
 var Constants = require("../constants");
 var _ = require('lodash');
 
-function discourage(reason) {
-  return {
-    "discouraged": true,
-    "reason": reason
+module.exports = {
+  evaluator: function (rules) {
+    return {
+      evaluateConceptLink: function (link, parentType) {
+        if (link != '' && rules != null && rules['ruleSets'] != null) {
+          return evaluate(link, parentType, rules['ruleSets']);
+        } else {
+          //no link to evaluate, or no rules to check against
+          return {
+            "discouraged": false
+          };
+        }
+      }
+    }
   }
-}
-
-function evaluateRule(link, rule, index, collection) {
-  log.debug('Evaluating rule:', rule, 'for link:', link);
-  return _.some(_.get(rule, 'discouraged.regex'), function(regex) {
-    return new RegExp(regex).test(link);
-  });
-}
-
+};
 
 function evaluate(link, type, ruleSets) {
-  var ruleSetsForType = _.filter(ruleSets, function (rule) {
-    return _.includes(rule.types, type);
-  });
+  var discouragement = findDiscouragement(link, ruleSets, type);
 
-  log.debug('Rulesets for type:', type, ruleSetsForType);
-  
-  var rulesForType = _.flatten(_.map(ruleSetsForType, 'rules'));
-  log.debug('Rules for type:', type, rulesForType);
+  log.trace("Matching rule with discouragement:", discouragement);
 
-  var matchingRule = _.find(rulesForType, evaluateRule.bind(null, link));
-
-  log.debug("Matching rule:", matchingRule);
-
-  if (matchingRule) {
-    log.info('Concept link discouraged:', link, "Rule:", matchingRule);
-    if (matchingRule['reason']) {
-      return discourage(matchingRule['reason']);
+  if (discouragement) {
+    log.info('Concept link discouraged:', link, "Rule:", discouragement);
+    if (discouragement['reason']) {
+      return discourage(discouragement['reason']);
     } else {
-      log.warn('Matched rule has no reason:', matchingRule);
+      log.warn('Matched rule has no reason:', discouragement);
       return discourage('Discouraged according to rules');
     }
   } else {
@@ -49,19 +42,32 @@ function evaluate(link, type, ruleSets) {
   }
 }
 
-module.exports = {
+function findDiscouragement(link, ruleSets, type) {
+  log.trace("Evaluating concept rules for link", link);
+  // looking for a matching rule with discouragement
+  var discouragement = _(ruleSets)
+    //consider only rulesets that match the type context (e.g. element) or those with a wildcard
+    .filter(function (rule) {
+      return _.includes(rule.types, '*') || _.includes(rule.types, type);
+    })
+    //combine rules from all matching rule sets
+    .map('rules').flatten()
+    //find any rule with a matching regex
+    .filter(
+      rule => _(rule)
+        //consider only the regex for discouragement
+        .get('discouraged.regex')
+        //does the link match at least one regex?
+        .some(
+          regex => new RegExp(regex).test(link)))
+    //use first matching rule
+    .head();
+  return discouragement;
+}
 
-  evaluator: function (rules) {
-    return {
-      evaluateConceptLink: function (link, parentType) {
-        if (link != '' && rules != null && rules['ruleSets'] != null) {
-          return evaluate(link, parentType, rules['ruleSets']);
-        }
-
-        return {
-          "discouraged": false
-        };
-      }
-    }
+function discourage(reason) {
+  return {
+    "discouraged": true,
+    "reason": reason
   }
-};
+}
