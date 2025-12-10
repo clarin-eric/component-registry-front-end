@@ -40,13 +40,15 @@ var ValidatingTextInput = React.createClass({
 
   doValidate: function() {
     var val = this.props.value;
+    var name = this.props.name;
 
     // validation method has the option to provide a feedback message
     var msgContainer = { message: null }
     var setMsg = function(message) { msgContainer.message = message; }
 
     //do validation
-    var valid = this.props.validate(val, this.props.name, setMsg);
+    log.trace("Sending to the validator:", name, "=", val);
+    var valid = this.props.validate(val, name, setMsg);
 
     log.trace("Validated",val,":",valid);
     this.setValidation(valid, msgContainer.message);

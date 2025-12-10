@@ -28,7 +28,6 @@ var ConceptLinkInput = React.createClass({
 
   render: function() {
     // Some concepts are (contextually) discouraged
-    // TODO: provide a reason
     // <https://github.com/clarin-eric/component-registry-front-end/issues/175>
     var evaluator = ConceptEvaluator.evaluator(getConfiguration().conceptRules);
     var conceptEvaluation = evaluator.evaluateConceptLink(this.props.value, this.props.parentType);

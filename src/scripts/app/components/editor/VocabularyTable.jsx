@@ -11,7 +11,8 @@ var Table = require('reactabular').Table;
 var sortColumn = require('reactabular').sortColumn;
 
 //service
-var Validation = require('../../service/Validation')
+var Validation = require('../../service/Validation');
+var ConceptEvaluator = require('../../service/ConceptEvaluator');
 
 //bootstrap
 var Glyphicon = require('react-bootstrap/lib/Glyphicon');
@@ -25,6 +26,7 @@ var _ = require('lodash');
 var edit = require('react-edit');
 var cloneDeep = require('lodash/cloneDeep');
 var findIndex = require('lodash/findIndex');
+var getConfiguration = require('../../../config');
 
 var TABKEY = 9;
 
@@ -257,14 +259,32 @@ var VocabularyTable = React.createClass({
     return this.props.addConceptLink(rowIndex, e.target.value);
   },
 
+  validateConceptLink: function(uri, targetName, feedback) {
+    log.debug('Evaluating concept link', uri);
+    if(!Validation.checkConceptLink(uri, feedback)) {
+      return false;
+    } else {
+          // Some concepts are (contextually) discouraged
+          // <https://github.com/clarin-eric/component-registry-front-end/issues/175>
+          var evaluator = ConceptEvaluator.evaluator(getConfiguration().conceptRules);
+          var conceptEvaluation = evaluator.evaluateConceptLink(uri, 'vocabulary');
+          if(conceptEvaluation && conceptEvaluation['discouraged']) {
+            feedback(conceptEvaluation['reason']);
+            return false;
+          }
+    }
+
+    return true;
+  },
+
   renderConceptLinkColumn: function (value, extra) {
     if (this.state.editConceptLink === extra.rowIndex) {
       // edit mode is enabled for current row
       const disabled = this.props.readOnly || !this.props.addConceptLink;
       return (
-        <ValidatingTextInput type="text" name="URI" defaultValue={value} disabled={disabled}
+        <ValidatingTextInput type="text" name="URI" defaultValue={value} value={value} disabled={disabled}
           onChange={this.updateConceptLink.bind(null, extra.rowIndex)}
-          validate={Validation.checkConceptLink}
+          validate={this.validateConceptLink}
           addonAfter={
             <Glyphicon
               glyph="pencil"
@@ -301,7 +321,8 @@ var VocabularyTable = React.createClass({
               <ConceptRegistryModal
                 onClose={closeHandler}
                 onSelect={this.props.addConceptLink.bind(null, extra.rowIndex)}
-                container={this} />
+                container={this}
+                conceptTypes={['item']} />
             } />
         );
       }

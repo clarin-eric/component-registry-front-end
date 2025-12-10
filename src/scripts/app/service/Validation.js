@@ -329,7 +329,7 @@ var Validation = {
     if(testConceptLink(uri)) {
       return true;
     } else {
-      feedback("Invalid concept link")
+      feedback("Invalid concept link");
       return false;
     }
   },
