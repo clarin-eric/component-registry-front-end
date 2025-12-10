@@ -61,41 +61,60 @@ var conceptRules = {
 
   "ruleSets": [
     {
-      "types": ['profile'],
+      "types": ['*'],
       rules: [{
-        "reason": "test rule",
+        "reason": "ISOCat has been deprecated",
         "discouraged": {
           regex: [
-            "^A"
+            "^http(s?):\/\/www\.isocat\.org"
           ]
         }
       }]
-    },
-    {
-      "types": ['element', 'attribute'],
+    }, {
+      "types": ['*'],
       rules: [{
-        "reason": "Wikidata properties are recommended",
+        "reason": "The CLARIN Concept Registry has been deprecated",
         "discouraged": {
           regex: [
-            '^http.*www.wikidata.org/entity/Q' //TODO: case insensitive for domain part
+            "^http(s?):\/\/hdl\.handle\.net\/11459\/CCR"
+          ]
+        }
+      }]
+    }, {
+      "types": ['element', 'attribute'],
+      rules: [{
+        "reason": "Wikidata properties are recommended for elements and attributes",
+        "discouraged": {
+          regex: [
+            '^http(s?)://.*wikidata\.org/entity/Q' //TODO: case insensitive for domain part
           ]
         }
       }, {
-        "reason": "Classes are not recommended",
+        "reason": "Classes are not recommended for elements and attributes",
         "discouraged": {
           regex: [
-            '^http.*schema.org/[A-Z]' //TODO: case insensitive for domain part
+            '^http(s?):\/\/schema\.org\/[A-Z]' //TODO: case insensitive for domain part
           ]
         }
       }
       ]
     }, {
-      "types": ['profile', 'vocabulary'],
+      "types": ['vocabulary'],
       "rules": [{
-        "reason": "Wikidata items are recommended",
+        "reason": "Wikidata items are recommended for vocabulary items",
         "discouraged": {
           regex: [
-            '^http.*www.wikidata.org/entity/P' //TODO: case insensitive for domain part
+            '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part
+          ]
+        }
+      }]
+    }, {
+      "types": ['profile'],
+      "rules": [{
+        "reason": "Wikidata items are recommended at the profile level",
+        "discouraged": {
+          regex: [
+            '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part
           ]
         }
       }]
