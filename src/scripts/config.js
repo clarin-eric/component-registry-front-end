@@ -65,9 +65,9 @@ var conceptRules = {
       rules: [{
         "reason": "ISOCat has been deprecated",
         "discouraged": {
-          regex: [
+          "regex": [
             "^http(s?):\/\/www\.isocat\.org"
-          ]
+          ],
         }
       }]
     }, {
@@ -75,7 +75,7 @@ var conceptRules = {
       rules: [{
         "reason": "The CLARIN Concept Registry has been deprecated",
         "discouraged": {
-          regex: [
+          "regex": [
             "^http(s?):\/\/hdl\.handle\.net\/11459\/CCR"
           ]
         }
@@ -85,15 +85,16 @@ var conceptRules = {
       rules: [{
         "reason": "Wikidata properties are recommended for elements and attributes",
         "discouraged": {
-          regex: [
-            '^http(s?)://.*wikidata\.org/entity/Q' //TODO: case insensitive for domain part
+          "regex": [
+            '^http(s?)://.*wikidata\.org/entity/Q' //TODO: case insensitive for domain part?
           ]
         }
       }, {
         "reason": "Classes are not recommended for elements and attributes",
+        "caseSensitive": true,
         "discouraged": {
-          regex: [
-            '^http(s?):\/\/schema\.org\/[A-Z]' //TODO: case insensitive for domain part
+          "regex": [
+            '^http(s?):\/\/schema\.org\/[A-Z]' //TODO: case insensitive for domain part?
           ]
         }
       }
@@ -103,8 +104,8 @@ var conceptRules = {
       "rules": [{
         "reason": "Wikidata items are recommended for vocabulary items",
         "discouraged": {
-          regex: [
-            '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part
+          "regex": [
+            '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part?
           ]
         }
       }]
@@ -113,8 +114,8 @@ var conceptRules = {
       "rules": [{
         "reason": "Wikidata items are recommended at the profile level",
         "discouraged": {
-          regex: [
-            '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part
+          "regex": [
+            '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part?
           ]
         }
       }]

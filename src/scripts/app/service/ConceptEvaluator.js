@@ -59,10 +59,18 @@ function findDiscouragement(link, ruleSets, type) {
         .get('discouraged.regex')
         //does the link match at least one regex?
         .some(
-          regex => new RegExp(regex).test(link)))
+          regex => new RegExp(regex, getFlags(rule)).test(link)))
     //use first matching rule
     .head();
   return discouragement;
+}
+
+function getFlags(rule) {
+  if(rule['caseSensitive']) {
+    return '';
+  } else {
+    return 'i';
+  }
 }
 
 function discourage(reason) {
