@@ -9,6 +9,7 @@ var getConfiguration = require('../../../config');
 var ConceptEvaluator = require('../../service/ConceptEvaluator');
 //bootstrap
 var ValidatingTextInput = require('./ValidatingTextInput');
+var Glyphicon = require('react-bootstrap/lib/Glyphicon');
 
 /**
 * ConceptLinkInput - Text input with button to trigger CCR search
@@ -40,13 +41,26 @@ var ConceptLinkInput = React.createClass({
       } = this.props;
 
     return (
-      <ValidatingTextInput
-        type="text"
-        bsStyle={discouraged ? "warning" : bsStyle}
-        addonAfter={discouraged ? conceptEvaluation['reason'] : null}
-        buttonAfter={this.newConceptLinkDialogueButton(updateConceptLink, conceptTypes)}
-        {...otherProps}
-        />
+      <div>
+        <ValidatingTextInput
+          type="text"
+          bsStyle={discouraged ? "warning" : bsStyle}
+          buttonAfter={this.newConceptLinkDialogueButton(updateConceptLink, conceptTypes)}
+          {...otherProps}
+          />
+          {discouraged && this.renderWarning(conceptEvaluation)}
+      </div>
+    );
+  },
+
+  renderWarning(evaluation) {
+    return (
+      <div className='conceptLinkEvaluationWarning form-group'>
+        <div className='control-label editorFormLabel'></div>
+        <div className='editorFormField alert alert-warning'>
+          <Glyphicon glyph="warning-sign"/> {evaluation['reason']}
+        </div>
+      </div>
     );
   },
 
