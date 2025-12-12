@@ -264,11 +264,11 @@ var VocabularyTable = React.createClass({
     if(!Validation.checkConceptLink(uri, feedback)) {
       return false;
     } else {
-          // Some concepts are (contextually) discouraged
+          // Some concepts are (contextually) discouraged with a warning
           // <https://github.com/clarin-eric/component-registry-front-end/issues/175>
           var evaluator = ConceptEvaluator.evaluator(getConfiguration().conceptRules);
           var conceptEvaluation = evaluator.evaluateConceptLink(uri, 'vocabulary');
-          if(conceptEvaluation && conceptEvaluation['discouraged']) {
+          if(conceptEvaluation && conceptEvaluation['warning']) {
             feedback(conceptEvaluation['reason']);
             return false;
           }

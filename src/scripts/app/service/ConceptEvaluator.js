@@ -12,7 +12,7 @@ module.exports = {
         } else {
           //no link to evaluate, or no rules to check against
           return {
-            "discouraged": false
+            "warning": false
           };
         }
       }
@@ -21,31 +21,31 @@ module.exports = {
 };
 
 function evaluate(link, type, ruleSets) {
-  var discouragement = findDiscouragement(link, ruleSets, type);
+  var warning = findWarning(link, ruleSets, type);
 
-  log.trace("Matching rule with discouragement:", discouragement);
+  log.trace("Matching rule with warning:", warning);
 
-  if (discouragement) {
-    log.info('Concept link discouraged:', link, "Rule:", discouragement);
-    if (discouragement['reason']) {
-      return discourage(discouragement['reason']);
+  if (warning) {
+    log.info('Warning for concept link:', link, "Rule:", warning);
+    if (warning['reason']) {
+      return warn(warning['reason']);
     } else {
-      log.warn('Matched rule has no reason:', discouragement);
-      return discourage('Discouraged according to rules');
+      log.warn('Matched rule has no reason:', warning);
+      return warn('Discouraged according to rules');
     }
   } else {
     log.debug('No matching rules for link', link);
-    //no rules found that apply, we won't discourage
+    //no rules found that apply, we won't warn
     return {
-      "discouraged": false
+      "warning": false
     };
   }
 }
 
-function findDiscouragement(link, ruleSets, type) {
+function findWarning(link, ruleSets, type) {
   log.trace("Evaluating concept rules for link", link);
-  // looking for a matching rule with discouragement
-  var discouragement = _(ruleSets)
+  // looking for a matching rule with warning
+  var warning = _(ruleSets)
     //consider only rulesets that match the type context (e.g. element) or those with a wildcard
     .filter(function (rule) {
       return _.includes(rule.types, '*') || _.includes(rule.types, type);
@@ -55,14 +55,14 @@ function findDiscouragement(link, ruleSets, type) {
     //find any rule with a matching regex
     .filter(
       rule => _(rule)
-        //consider only the regex for discouragement
-        .get('discouraged.regex')
+        //consider only the regex for warning
+        .get('warning.regex', [])
         //does the link match at least one regex?
         .some(
           regex => new RegExp(regex, getFlags(rule)).test(link)))
     //use first matching rule
     .head();
-  return discouragement;
+  return warning;
 }
 
 function getFlags(rule) {
@@ -73,9 +73,9 @@ function getFlags(rule) {
   }
 }
 
-function discourage(reason) {
+function warn(reason) {
   return {
-    "discouraged": true,
+    "warning": true,
     "reason": reason
   }
 }

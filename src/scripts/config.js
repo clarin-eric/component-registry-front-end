@@ -64,7 +64,7 @@ var conceptRules = {
       "types": ['*'],
       rules: [{
         "reason": "ISOCat has been deprecated",
-        "discouraged": {
+        "warning": {
           "regex": [
             "^http(s?):\/\/www\.isocat\.org"
           ],
@@ -74,7 +74,7 @@ var conceptRules = {
       "types": ['*'],
       rules: [{
         "reason": "The CLARIN Concept Registry has been deprecated",
-        "discouraged": {
+        "warning": {
           "regex": [
             "^http(s?):\/\/hdl\.handle\.net\/11459\/CCR"
           ]
@@ -84,7 +84,7 @@ var conceptRules = {
       "types": ['element', 'attribute'],
       rules: [{
         "reason": "Wikidata properties are recommended for elements and attributes",
-        "discouraged": {
+        "warning": {
           "regex": [
             '^http(s?)://.*wikidata\.org/entity/Q' //TODO: case insensitive for domain part?
           ]
@@ -92,7 +92,7 @@ var conceptRules = {
       }, {
         "reason": "Classes are not recommended for elements and attributes",
         "caseSensitive": true,
-        "discouraged": {
+        "warning": {
           "regex": [
             '^http(s?):\/\/schema\.org\/[A-Z]' //TODO: case insensitive for domain part?
           ]
@@ -103,7 +103,7 @@ var conceptRules = {
       "types": ['vocabulary'],
       "rules": [{
         "reason": "Wikidata items are recommended for vocabulary items",
-        "discouraged": {
+        "warning": {
           "regex": [
             '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part?
           ]
@@ -113,7 +113,7 @@ var conceptRules = {
       "types": ['profile'],
       "rules": [{
         "reason": "Wikidata items are recommended at the profile level",
-        "discouraged": {
+        "warning": {
           "regex": [
             '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part?
           ]
