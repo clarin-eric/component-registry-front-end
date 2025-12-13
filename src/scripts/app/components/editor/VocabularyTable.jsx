@@ -285,6 +285,7 @@ var VocabularyTable = React.createClass({
         <ValidatingTextInput type="text" name="URI" defaultValue={value} value={value} disabled={disabled}
           onChange={this.updateConceptLink.bind(null, extra.rowIndex)}
           validate={this.validateConceptLink}
+          validationMessageInAddon={false}
           addonAfter={
             <Glyphicon
               glyph="pencil"

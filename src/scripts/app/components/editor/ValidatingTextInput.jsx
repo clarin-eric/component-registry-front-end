@@ -6,6 +6,7 @@ var React = require('react');
 
 //bootstrap
 var Input = require('react-bootstrap/lib/Input');
+var Glyphicon = require('react-bootstrap/lib/Glyphicon');
 
 //mixins
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
@@ -28,10 +29,29 @@ var ValidatingTextInput = React.createClass({
     //value (any type)
   },
 
+  getDefaultProps: function () {
+    return {
+      validationMessageInAddon: true
+    };
+  },
+
   render: function() {
-    var {validate, bsStyle, addonAfter, ...other} = this.props;
+    var {validate, bsStyle, addonAfter, validationMessageInAddon, ...other} = this.props;
     var bsStyleOverride = (this.isValidated() && !this.isValid())?"error":bsStyle;
-    return <Input ref="input" bsStyle={bsStyleOverride} hasFeedback={true} addonAfter={this.getValidationMessage() || addonAfter} onBlur={this.onBlur} {...other} />;
+    var validationMessage = this.getValidationMessage();
+    if(!this.isValid() && validationMessage) {
+      if(validationMessageInAddon) {
+        effectiveAddonAfter = validationMessage;
+      } else {
+        effectiveAddonAfter = <Glyphicon title={validationMessage} glyph="warning-sign" />
+      }
+    } else if(addonAfter) {
+      var effectiveAddonAfter = addonAfter;
+    } else {
+      effectiveAddonAfter = null;
+    }
+
+    return <Input ref="input" bsStyle={bsStyleOverride} hasFeedback={true} addonAfter={effectiveAddonAfter} onBlur={this.onBlur} {...other} />;
   },
 
   onBlur: function(evt) {
