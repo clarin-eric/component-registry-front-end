@@ -16,9 +16,15 @@ var ConfigObject = {
 
 var configUrl = './compRegConfig.jsp' + window.location.search; //pass all query params
 
+var errorHandler = function (jqxhr, status, error) {
+  console.log("Configuration could not be loaded: " + error);
+  ConfigObject.loadingState.rejectWith(jqxhr, { status: status, error: error });
+};
+
 var configRetrieval = $.ajax({
   url: configUrl,
   dataType: "json",
+  error: errorHandler,
   success: function (result) {
     console.log("Read configuration from '" + configUrl + "': ", JSON.stringify(result));
 
@@ -33,94 +39,32 @@ var configRetrieval = $.ajax({
     };
 
     ConfigObject.Config = result;
+
+    var restUrl = getUrl() + "/rest";
+    ConfigObject.restUrl = restUrl;
+    ConfigObject.conceptSearchUrl = restUrl + "/concepts/search";
     ConfigObject.vocabulariesUrl = getUrl() + "/vocabulary/vocabularies";
     ConfigObject.vocabularyItemsUrl = getUrl() + "/vocabulary/items";
     ConfigObject.vocabularyPageUrl = getUrl() + "/vocabulary/page";
-    ConfigObject.restUrl = getUrl() + "/rest";
     ConfigObject.adminUrl = getUrl() + "/admin";
     ConfigObject.webappUrl = getUrl();
-    ConfigObject.conceptSearchUrl = ConfigObject.restUrl + "/concepts/search";
-    ConfigObject.conceptRules = conceptRules;
 
-    console.log("Configuration object constructed: " + JSON.stringify(ConfigObject));
-
-    ConfigObject.loadingState.resolve();
-  },
-  error: function (jqxhr, status, error) {
-    console.log("Configuration could not be loaded: " + error);
-    ConfigObject.loadingState.rejectWith(jqxhr, { status: status, error: error });
+    //load concept URI rules to finalize
+    var conceptRulesUrl = restUrl + "/concepts/rules";
+    $.ajax({
+      url: conceptRulesUrl,
+      dataType: "json",
+      error: function() {
+        console.log("FAILED to retrieve concept URI rules. Configuration object constructed: " + JSON.stringify(ConfigObject));
+        ConfigObject.loadingState.resolve();
+      },
+      success: function (conceptRules) {
+        ConfigObject.conceptRules = conceptRules;
+        console.log("Configuration object constructed: " + JSON.stringify(ConfigObject));
+        ConfigObject.loadingState.resolve();
+      }
+    });
   }
 });
-
-
-//TODO: read from configx`
-var conceptRules = {
-
-  //TODO: isocat
-  // var isocatPattern = /^http(s?):\/\/www\.isocat\.org/;
-
-  "ruleSets": [
-    {
-      "types": ['*'],
-      rules: [{
-        "reason": "ISOCat has been deprecated",
-        "warning": {
-          "regex": [
-            "^http(s?):\/\/www\.isocat\.org"
-          ],
-        }
-      }]
-    }, {
-      "types": ['*'],
-      rules: [{
-        "reason": "The CLARIN Concept Registry has been deprecated",
-        "warning": {
-          "regex": [
-            "^http(s?):\/\/hdl\.handle\.net\/11459\/CCR"
-          ]
-        }
-      }]
-    }, {
-      "types": ['element', 'attribute'],
-      rules: [{
-        "reason": "Wikidata properties are recommended for elements and attributes",
-        "warning": {
-          "regex": [
-            '^http(s?)://.*wikidata\.org/entity/Q' //TODO: case insensitive for domain part?
-          ]
-        }
-      }, {
-        "reason": "Classes are not recommended for elements and attributes",
-        "caseSensitive": true,
-        "warning": {
-          "regex": [
-            '^http(s?):\/\/schema\.org\/[A-Z]' //TODO: case insensitive for domain part?
-          ]
-        }
-      }
-      ]
-    }, {
-      "types": ['vocabulary'],
-      "rules": [{
-        "reason": "Wikidata items are recommended for vocabulary items",
-        "warning": {
-          "regex": [
-            '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part?
-          ]
-        }
-      }]
-    }, {
-      "types": ['profile'],
-      "rules": [{
-        "reason": "Wikidata items are recommended at the profile level",
-        "warning": {
-          "regex": [
-            '^http(s?):\/\/.*wikidata.org\/entity\/P' //TODO: case insensitive for domain part?
-          ]
-        }
-      }]
-    }
-  ]
-};
 
 module.exports = function () { return ConfigObject; };
