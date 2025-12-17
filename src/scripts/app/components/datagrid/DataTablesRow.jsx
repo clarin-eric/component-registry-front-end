@@ -48,8 +48,13 @@ var DataTablesRow = React.createClass({
   render: function(){
     var data = this.props.data;
 
-    //TODO: parse registration date
-    var registrationDate = data.registrationDate.substr(0,10);
+    var registrationDate = '';
+    if (typeof data.registrationDate === 'string') {
+      //TODO: properly parse
+      registrationDate == data.registrationDate.substr(0,10);
+    }  else {
+      registrationDate = data.registrationDate;
+    }
 
     var domain = this.props.domainMap[data.domainName];
     var domainName = (domain != null)? domain.label : data.domainName;
