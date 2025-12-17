@@ -669,7 +669,7 @@ var ComponentRegistryClient = {
     }, corsRequestParams()));
   },
 
-  queryCCR: function (searchQuery, type, cb) {
+  queryConcepts: function (searchQuery, type, cb) {
     if (searchQuery != null || searchQuery != "") {
       var params = new URLSearchParams([
         ["q", searchQuery]
@@ -691,8 +691,13 @@ var ComponentRegistryClient = {
         contentType: false,
         dataType: "json",
         success: function (data) {
-          if (cb)
-            cb(data);
+          if (cb) {
+            if(data && data['Concept']) {
+              cb(data['Concept']);
+            } else {
+              cb([]);
+            }
+          }
         }.bind(this),
         error: function (xhr, status, err) {
           cb(null);
