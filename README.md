@@ -35,14 +35,17 @@ Setup (on first run):
 - Edit `.env`
   - Configure the build output location of the REST service ([component-registry-rest](https://github.com/clarin-eric/component-registry-rest) )
   - Configure the location of a database backup
-- Run `build.sh install build`
-- Run `run.sh`
-- Restore the component registry database backup using the `pg_restore` command inside the database container
+- Run `bash build.sh install build`
+- Run `bash run.sh`
+- Restore a component registry database backup, for instance: `bash pgrestore.sh compreg_20250714T090501.sqlz`
 - Stop the compose project with CTRL-C
 
 After initial setup:
 - Simply run `run.sh`
 - Access the front end at [localhost:3000](http://localhost:3000)
+
+To clear the database volume (for instance before restoring a backup):
+- Run `docker-compose down -v`
 
 ### Locally
 - Start the Component Registry back end/REST service (see 
