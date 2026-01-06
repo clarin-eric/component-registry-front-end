@@ -29,7 +29,7 @@ var CONCEPT_IDENTIFIER_PROPERTY = 'pid';
 
 require('../../../../styles/EditorDialog.sass');
 /**
-* ConceptRegistryModal - Bootstrap Modal dialog for setting the Concept Registry (CCR) link.
+* ConceptRegistryModal - Bootstrap Modal dialog for setting the concept link.
 * @constructor
 * @mixes require('react-addons-linked-state-mixin')
 */
@@ -57,7 +57,7 @@ var ConceptRegistryModal = React.createClass({
 
   getDefaultProps: function() {
     return {
-      title: "Search in CLARIN Concept Registry",
+      title: "Search concepts",
       show: true
     };
   },

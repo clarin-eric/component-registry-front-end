@@ -352,7 +352,7 @@ var Validation = {
     if(!testConceptLink(componentDesc['@ConceptLink']))
       addError(err.IllegalConceptLink);
     else
-      log.debug('Test Passed: Concept Registry field');
+      log.debug('Test Passed: concept link field');
 
     /*if(!testCardinalitySettings(componentDesc['@CardinalityMin'], componentDesc['@CardinalityMax']))
       addError(err.CardinalitySettings);

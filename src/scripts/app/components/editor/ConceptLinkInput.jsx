@@ -75,7 +75,7 @@ var ConceptLinkInput = React.createClass({
     return <ModalTrigger
       ref={ref}
       modalTarget="ccrModalContainer"
-      label={label != null ? label : "Search in concept registry..."}
+      label={label != null ? label : "Search for concepts..."}
       modal={
         <ConceptRegistryModal
           onClose={closeHandler}
