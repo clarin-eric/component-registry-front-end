@@ -3,10 +3,13 @@ var log = require('loglevel');
 
 var React = require('react');
 
+var getConfig = require("../../../config");
+
 var ModalTrigger = require('../ModalTrigger');
 var ConceptRegistryModal = require('./ConceptRegistryModal');
 var getConfiguration = require('../../../config');
 var ConceptEvaluator = require('../../service/ConceptEvaluator');
+
 //bootstrap
 var ValidatingTextInput = require('./ValidatingTextInput');
 var Glyphicon = require('react-bootstrap/lib/Glyphicon');
@@ -28,6 +31,9 @@ var ConceptLinkInput = React.createClass({
   },
 
   render: function() {
+    var config = getConfiguration();
+    var helpLink = config.helpUrl + "#ConceptLinks";
+
     // Some concepts are (contextually) discouraged
     // <https://github.com/clarin-eric/component-registry-front-end/issues/175>
     var evaluator = ConceptEvaluator.evaluator(getConfiguration().conceptRules);
@@ -48,15 +54,17 @@ var ConceptLinkInput = React.createClass({
           buttonAfter={this.newConceptLinkDialogueButton(updateConceptLink, conceptTypes)}
           {...otherProps}
           />
-          {discouraged && this.renderWarning(conceptEvaluation)}
+          {discouraged && this.renderWarning(conceptEvaluation, helpLink)}
       </div>
     );
   },
 
-  renderWarning(evaluation) {
+  renderWarning(evaluation, helpLink) {
     return (
       <div className='conceptLinkEvaluationWarning form-group'>
-        <div className='control-label editorFormLabel'></div>
+        <div className='control-label editorFormLabel'>
+          <a title="How to use concept links" href={helpLink} target="_blank"><Glyphicon glyph="question-sign" /></a>
+        </div>
         <div className='editorFormField alert alert-warning'>
           <Glyphicon glyph="warning-sign"/> {evaluation['reason']}
         </div>

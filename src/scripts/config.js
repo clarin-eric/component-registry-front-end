@@ -48,6 +48,7 @@ var configRetrieval = $.ajax({
     ConfigObject.vocabularyPageUrl = getUrl() + "/vocabulary/page";
     ConfigObject.adminUrl = getUrl() + "/admin";
     ConfigObject.webappUrl = getUrl();
+    ConfigObject.helpUrl = getUrl() + "/documentation.jsp";
 
     //load concept URI rules to finalize
     var conceptRulesUrl = restUrl + "/concepts/rules";

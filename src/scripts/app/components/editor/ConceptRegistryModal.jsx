@@ -2,6 +2,8 @@
 var log = require('loglevel');
 var _ = require('lodash');
 
+var getConfiguration = require('../../../config');
+
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Table = require('reactabular').Table;
@@ -9,7 +11,6 @@ var select = require('selectabular');
 var byArrowKeys = require('reactabular-select').byArrowKeys;
 var sortColumn = require('reactabular').sortColumn;
 var Spinner = require('../../util/Spinner');
-
 
 //mixins
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
@@ -73,6 +74,8 @@ var ConceptRegistryModal = React.createClass({
   },
 
   render: function() {
+    var config = getConfiguration();
+    var helpLink = config.helpUrl + "#ConceptLinks";
     var self = this;
     var tableClasses = classNames({
       'table': true, 'table-bordered': true, 'table-hover': true, 'table-striped': true, 'table-condensed': true, 'busy': this.state.busy
@@ -97,6 +100,10 @@ var ConceptRegistryModal = React.createClass({
 
         <Modal.Header closeButton={true} onHide={this.close}>
           <Modal.Title>{this.props.title}</Modal.Title>
+          <p>
+            <Glyphicon glyph="info-sign" /> Concepts are represented by common identifiers and definitions for robust semantics at the profile, concept, element, attribute or vocabulary item level.
+            <strong>Use the search function below to find recommended concepts</strong>, and pay attention to warnings and errors in the editor. <a target="_blank" href="helpLink">Learn more.</a>
+          </p>
         </Modal.Header>
 
         <Modal.Body>

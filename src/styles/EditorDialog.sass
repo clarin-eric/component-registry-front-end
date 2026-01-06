@@ -48,12 +48,19 @@
 .registry-dialog .modal-body, .type-dialog .modal-body {
   min-height: 170px;
 }
-.registry-dialog .modal-dialog {
-  min-width: $ccr-table-dialog-witdh;
-}
-.registry-dialog .modal-body {
-  padding-left: 1px;
-  width: 748px;
+
+.registry-dialog {
+  .modal-dialog {
+    min-width: $ccr-table-dialog-witdh;
+  }
+  .modal-body {
+    padding-left: 1px;
+    width: 748px;
+  }
+  .modal-header p {
+    margin-top: 3px;
+    margin-bottom: 1px;
+  }
 }
 
 #typeTable, #ccrTable {
@@ -172,7 +179,6 @@ div.external-vocabulary-import {
     margin-left: 2em;
   }
 }
-
 
 #ccrTable {
   margin-bottom: 30px;

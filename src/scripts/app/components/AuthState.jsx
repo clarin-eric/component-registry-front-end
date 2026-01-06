@@ -38,7 +38,7 @@ var AuthState = React.createClass({
     var authState = this.props.authState;
 
     var helpLink = (
-      <a target="_blank" href={config.webappUrl + "/documentation.jsp"}><Glyphicon glyph="question-sign" />&nbsp;help</a>
+      <a target="_blank" href={config.helpUrl}><Glyphicon glyph="question-sign" />&nbsp;help</a>
     );
 
     if(authState.authenticated) {
