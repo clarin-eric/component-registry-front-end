@@ -63,10 +63,11 @@ var ConceptLinkInput = React.createClass({
     return (
       <div className='conceptLinkEvaluationWarning form-group'>
         <div className='control-label editorFormLabel'>
-          <a title="How to use concept links" href={helpLink} target="_blank"><Glyphicon glyph="question-sign" /></a>
+          
         </div>
         <div className='editorFormField alert alert-warning'>
           <Glyphicon glyph="warning-sign"/> {evaluation['reason']}
+          <a className="alert-help" title="How to use concept links" href={helpLink} target="_blank"><Glyphicon glyph="question-sign" /></a>
         </div>
       </div>
     );
