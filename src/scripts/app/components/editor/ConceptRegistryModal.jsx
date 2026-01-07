@@ -102,7 +102,7 @@ var ConceptRegistryModal = React.createClass({
           <Modal.Title>{this.props.title}</Modal.Title>
           <p>
             <Glyphicon glyph="info-sign" /> Concepts are represented by common identifiers and definitions for robust semantics at the profile, concept, element, attribute or vocabulary item level.
-            <strong>Use the search function below to find recommended concepts</strong>, and pay attention to warnings and errors in the editor. <a target="_blank" href="helpLink">Learn more.</a>
+            <strong>Use the search function below to find recommended concepts</strong>, and pay attention to warnings and errors in the editor. <a target="_blank" href={helpLink}>Learn more.</a>
           </p>
         </Modal.Header>
 
