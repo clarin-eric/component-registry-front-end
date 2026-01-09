@@ -23,7 +23,7 @@ services:
     networks:
       - network_compreg
   database:
-    image: "registry.gitlab.com/clarin-eric/docker-postgres:15.11_1.1.0"
+    image: "registry.gitlab.com/clarin-eric/docker-postgres:15.15_1.0.0"
     restart: always
     environment:
       - "POSTGRES_DB=${DB_NAME:-compreg}"
